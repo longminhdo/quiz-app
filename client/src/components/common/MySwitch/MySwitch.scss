@@ -1,0 +1,24 @@
+@import '@/assets/styles/global.scss';
+
+.my-switch {
+  .ant-switch {
+    height: toRem(14);
+    min-width: toRem(34);
+
+    .ant-switch-handle {
+      transform: translateY(toRem(-4));
+      inset-inline-start: 0;
+    }
+  }
+
+  .ant-switch-checked {
+    background-color: $purple-color-0;
+    .ant-switch-handle {
+      inset-inline-start: toRem(18);
+
+      &::before {
+        background-color: $purple-color-1;
+      }
+    }
+  }
+}

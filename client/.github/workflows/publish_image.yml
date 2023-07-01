@@ -1,0 +1,27 @@
+name: Publish Image to GHCR
+env:
+  IMAGE_REPOSITORY: form-hust/form-portal
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+      push-store-image:
+        runs-on: self-hosted
+        steps:
+          - name: 'Checkout GitHub Action'
+            uses: actions/checkout@v3
+
+          - name: 'Login to GitHub Container Registry'
+            uses: docker/login-action@v1
+            with:
+              registry: ghcr.io
+              username: ${{github.actor}}
+              password: "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"
+
+          - name: 'Build Inventory Image'
+            run: |
+              docker build . -f Dockerfile.frontend -t ghcr.io/${{ env.IMAGE_REPOSITORY }}:latest
+              docker push ghcr.io/${{ env.IMAGE_REPOSITORY }}:latest

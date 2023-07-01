@@ -1,0 +1,97 @@
+@use 'sass:math';
+
+/********** COLOR **********/
+$main-black-color: #0b0c0d;
+$main-white-color: white;
+
+$red-color-0: #fde8ed;
+$red-color-0_5: #e65062bb;
+$red-color-1: #e65061;
+$red-color-2: #be0f0f;
+
+$gray-color-0: #fafafa;
+$gray-color-0_5: #efefef;
+$gray-color-1: #d9dbdc;
+$gray-color-2: #b2b8b9;
+$gray-color-3: #707070;
+$gray-color-4: #3f4445;
+
+$orange-color-6: #fa8c16;
+
+$purple-color-0: rgb(225, 216, 241);
+$purple-color-1: rgb(103, 58, 183);
+
+$blue-color-1: #e6f7ff;
+$blue-color-2: #bae7ff;
+$blue-color-5: #40a9ff;
+$blue-color-6: #1890ff;
+$blue-color-7: #096dd9;
+
+/********** COLOR **********/
+
+/********** RESPONSIVE **********/
+$max-content-width: 1300px;
+$min-content-width: 800px;
+
+$mobile-width: 560px;
+$tablet-width: 768px;
+$desktop-width: 1024px;
+
+@mixin mobile {
+  @media (max-width: #{$mobile-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) and (max-width: #{$desktop-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop-width}) {
+    @content;
+  }
+}
+
+/********** RESPONSIVE **********/
+
+@mixin my-transition($time) {
+  //write CSS code here
+  -webkit-transition: all $time ease-in-out;
+  -moz-transition: all $time ease-in-out;
+  -o-transition: all $time ease-in-out;
+  -ms-transition: all $time ease-in-out;
+  transition: all $time ease-in-out;
+}
+
+@mixin select-restricted() {
+  /* Keyword values */
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+@mixin hover-shadow {
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 0 rgba(0, 0, 0, 0.19);
+  transition: 0.3s ease-in-out;
+
+  &:hover {
+    box-shadow: 0 0px 2px 0 rgba(74, 74, 74, 0.2),
+      0 0px 4px 2px rgba(94, 94, 94, 0.19);
+  }
+}
+
+@mixin content-container {
+  position: relative;
+  width: 95%;
+  max-width: toRem(920);
+  margin: 0 auto;
+}
+
+@function toRem($value) {
+  $remValue: math.div($value, 16) + rem;
+
+  @return $remValue;
+}

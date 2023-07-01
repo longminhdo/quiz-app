@@ -1,0 +1,9 @@
+@import '@/assets/styles/global.scss';
+
+.collection-list {
+  margin-top: toRem(20);
+
+  .ant-table-body {
+    height: toRem(500);
+  }
+}

@@ -1,0 +1,11 @@
+@import '@/assets/styles/global.scss';
+
+.link-attachment-button {
+  font-size: toRem(20) !important;
+}
+
+.link-attachment-overlay {
+  .ant-popover-title {
+    margin: 0;
+  }
+}

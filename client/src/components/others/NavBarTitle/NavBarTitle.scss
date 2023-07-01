@@ -1,0 +1,8 @@
+@import '@/assets/styles/global.scss';
+
+.nav-bar-title {
+  display: flex;
+  align-items: center;
+  color: $blue-color-6;
+  gap: toRem(8);
+}

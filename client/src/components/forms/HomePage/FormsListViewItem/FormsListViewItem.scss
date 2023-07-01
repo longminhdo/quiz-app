@@ -1,0 +1,120 @@
+@import '@/assets/styles/global.scss';
+
+.forms-list-view-item {
+  &:hover {
+    cursor: pointer;
+  }
+
+  .title {
+    padding: toRem(24) toRem(16);
+    display: block;
+    font-size: toRem(16);
+    margin-left: toRem(4);
+  }
+
+  .item-row {
+    padding: toRem(6) toRem(20);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: ' ';
+      width: 100%;
+      height: toRem(1);
+      background-color: $gray-color-1;
+      position: absolute;
+      bottom: 0;
+      left: toRem(60);
+    }
+
+    &:last-child {
+      border: none;
+    }
+
+    &:hover {
+      border: none;
+      background-color: $red-color-0;
+      border-radius: toRem(50);
+    }
+
+    .item-row-icon {
+      background-color: $red-color-2;
+      border-radius: toRem(4);
+      margin: toRem(2) toRem(4);
+      padding: toRem(6) toRem(4);
+      color: $main-white-color;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: toRem(11);
+    }
+
+    .item-row-more-icon {
+      transform: translateX(toRem(4));
+      &:hover {
+        background-color: $gray-color-1;
+      }
+    }
+
+    .item-row-title {
+      font-weight: 600;
+      margin-left: toRem(24);
+    }
+
+    .item-row-date {
+      margin-left: auto;
+      margin-right: toRem(110);
+    }
+  }
+
+  @include mobile {
+    .item-row {
+      .item-row-date {
+        display: none;
+      }
+    }
+
+    .item-row-more-icon {
+      margin-left: auto;
+    }
+  }
+}
+
+.my-popover-overlay-content-item-new-tab {
+  color: $main-black-color;
+
+  .my-popover-overlay-content-item-new-tab-icon {
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+  }
+
+  &:hover {
+    color: $main-black-color;
+  }
+}
+
+.form-rename-modal {
+  .ant-modal-content {
+    padding: toRem(30) toRem(36);
+
+    .ant-modal-header {
+      .ant-modal-title {
+        font-size: toRem(20);
+      }
+    }
+
+    .ant-modal-body {
+      p {
+        margin-top: toRem(16);
+        color: $gray-color-4;
+      }
+
+      input {
+        margin: toRem(24) 0;
+      }
+    }
+  }
+}

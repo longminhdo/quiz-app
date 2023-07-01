@@ -1,0 +1,42 @@
+@import '@/assets/styles/global.scss';
+
+.not-found {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  .not-found-illustration {
+    max-width: 40%;
+    width: auto;
+    height: auto;
+    max-height: 40%;
+  }
+
+  .not-found-text-1,
+  .not-found-text-2 {
+    color: $main-black-color;
+  }
+
+  .not-found-text-1 {
+    margin-top: toRem(40);
+    margin-bottom: toRem(10);
+  }
+
+  .go-back {
+    margin-top: toRem(60);
+    color: $blue-color-5;
+    @include select-restricted;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

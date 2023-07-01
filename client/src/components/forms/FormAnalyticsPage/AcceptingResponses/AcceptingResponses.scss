@@ -1,0 +1,14 @@
+@import '@/assets/styles/global.scss';
+
+.accepting-responses {
+  .active-accepting-responses {
+    width: fit-content;
+    margin-left: auto;
+    display: flex;
+    gap: toRem(14);
+    align-items: center;
+  }
+
+  .inactive-accepting-responses {
+  }
+}

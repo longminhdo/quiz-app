@@ -1,0 +1,21 @@
+# Stage 1: Generate build files
+FROM node:16.16-alpine AS build-step
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+RUN npm run build
+
+# Stage 2: Run app with nginx
+FROM nginx
+
+EXPOSE 3000
+
+COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=build-step /app/build /usr/share/nginx/html

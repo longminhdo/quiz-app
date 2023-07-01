@@ -1,0 +1,9 @@
+@import '@/assets/styles/global.scss';
+
+.my-radio-icon {
+  height: toRem(16);
+  width: toRem(16);
+  border: toRem(1.2) solid $gray-color-2;
+  border-radius: 50%;
+  box-shadow: 0 0 toRem(1) $gray-color-1;
+}

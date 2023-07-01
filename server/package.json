@@ -1,0 +1,46 @@
+{
+  "name": "quiz-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:prod-tmp": "cp example.env .env && cross-env PM2_PUBLIC_KEY=ga9ukrx0kt280h5&& && cross-env PM2_SECRET_KEY=s678wtzoxz0pzno && pm2-runtime start app.js --name Backend ",
+    "start:prod": "concurrently \"cp example.env .env\" \"pm2-runtime start app.js --name Backend --secrete s678wtzoxz0pzno --public ga9ukrx0kt280h5\"",
+    "start:prod-test": "cp example.env .env && nodemon app.js",
+    "start:dev": "cp example.dev.env .env && nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
+    "ajv-keywords": "^5.1.0",
+    "axios": "^1.2.2",
+    "cloudinary": "^1.30.0",
+    "concurrently": "^8.0.1",
+    "cors": "^2.8.5",
+    "cron": "^2.0.0",
+    "cross-env": "^7.0.3",
+    "dayjs": "^1.11.2",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.38.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "express": "^4.18.1",
+    "firebase": "^9.9.0",
+    "firebase-admin": "^11.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "lodash.isequal": "^4.5.0",
+    "mongoose": "^6.3.3",
+    "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "nodemon": "^1.3.3"
+  }
+}

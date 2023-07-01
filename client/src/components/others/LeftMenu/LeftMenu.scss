@@ -1,0 +1,14 @@
+@import '@/assets/styles/global.scss';
+
+.left-menu {
+  margin-top: toRem(10);
+
+  .ant-menu {
+    border-inline-end: none;
+  }
+
+  .ant-menu-item-selected {
+    font-weight: 700;
+    color: $blue-color-7;
+  }
+}

@@ -1,0 +1,7 @@
+@import '@/assets/styles/global.scss';
+
+.my-pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: toRem(20);
+}

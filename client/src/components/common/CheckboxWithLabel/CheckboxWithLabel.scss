@@ -1,0 +1,21 @@
+@import "@/assets/styles/global.scss";
+
+.checkbox-with-label {
+  .ant-checkbox-wrapper {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &-contents {
+    &-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      margin-bottom: toRem(8);
+    }
+  }
+
+  .ant-checkbox {
+    margin-bottom: toRem(4);
+  }
+}

@@ -1,0 +1,42 @@
+@import '@/assets/styles/global.scss';
+
+.library-page {
+  height: calc(100% - toRem(35));
+
+  .ant-tabs-nav {
+    margin-bottom: 0;
+    border-bottom: none;
+    position: relative;
+    z-index: 1;
+
+    &::before {
+      border-bottom: none !important;
+    }
+
+    .ant-tabs-tab {
+      border-radius: toRem(6) toRem(6) 0 0 !important;
+      border-bottom: none !important;
+    }
+
+    .ant-tabs-tab-active {
+      border-color: $gray-color-1 !important;
+    }
+  }
+
+  .card-content {
+    transform: translateY(toRem(-1));
+    border-radius: 0 toRem(8) toRem(8) toRem(8);
+    height: 100%;
+    display: block;
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      flex-direction: row-reverse;
+
+      .ant-input-affix-wrapper {
+        max-width: toRem(320);
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+@import '@/assets/styles/global.scss';
+
+.access-denied {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  height: 100vh;
+  position: relative;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+
+  .access-denied-illustration {
+    max-width: 40%;
+    width: 100%;
+  }
+
+  .access-denied-text-1,
+  .access-denied-text-2 {
+    color: $main-black-color;
+  }
+
+  .access-denied-text-1 {
+    margin-top: toRem(40);
+    margin-bottom: toRem(10);
+  }
+
+  .go-back {
+    margin-top: toRem(60);
+    color: $blue-color-5;
+    @include select-restricted;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

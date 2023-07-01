@@ -1,0 +1,34 @@
+@import '@/assets/styles/global.scss';
+
+.logo {
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  img {
+    height: inherit;
+  }
+
+  .logo-text {
+    b {
+      display: block;
+      line-height: toRem(14);
+      font-size: toRem(11);
+    }
+
+    p {
+      font-size: toRem(8);
+      line-height: toRem(12);
+    }
+
+    gap: toRem(2);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}

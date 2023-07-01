@@ -1,0 +1,25 @@
+@import '@/assets/styles/global.scss';
+
+.my-tooltip-icon {
+}
+
+.custom-tooltip-overlay {
+  .ant-tooltip-arrow {
+    display: none;
+  }
+  .ant-tooltip-content {
+    transform: translateY(toRem(-4));
+
+    .ant-tooltip-inner {
+      background-color: $gray-color-3;
+      font-size: toRem(11);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include select-restricted;
+      padding: toRem(6) toRem(10);
+      min-height: auto;
+      color: $main-white-color;
+    }
+  }
+}

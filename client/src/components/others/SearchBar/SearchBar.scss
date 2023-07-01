@@ -1,0 +1,49 @@
+@import '@/assets/styles/global.scss';
+
+.search-bar {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: calc(100vw - toRem(160));
+  height: 100%;
+  max-width: toRem(600);
+
+  .search-bar-icon {
+    position: absolute;
+    z-index: 2;
+    left: toRem(12);
+    font-size: toRem(18);
+    color: $gray-color-3;
+  }
+
+  .search-bar-input {
+    display: flex;
+    align-items: center;
+    width: 100% !important;
+    height: 100%;
+
+    .ant-select-selector {
+      height: 70%;
+      padding-left: toRem(40);
+      width: 100%;
+      .ant-select-selection-search {
+        padding-top: toRem(3);
+        input {
+          font-size: toRem(16);
+          padding-left: toRem(30);
+          padding-top: toRem(6);
+        }
+      }
+      .ant-select-selection-placeholder {
+        padding-top: toRem(6);
+        font-size: toRem(16);
+      }
+    }
+
+    .ant-select-clear {
+      font-size: toRem(15);
+      transform: translate(toRem(-5), toRem(-2));
+    }
+  }
+}

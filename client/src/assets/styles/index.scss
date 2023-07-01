@@ -1,0 +1,112 @@
+@import '@/assets/styles/global.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  background-color: $gray-color-1;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.icon {
+  font-size: toRem(18);
+  color: $gray-color-4;
+  padding: toRem(12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: $gray-color-0;
+    border-radius: 50%;
+  }
+}
+
+.my-popover {
+  .ant-popover-title {
+    margin: 0;
+    color: $gray-color-2;
+    padding: toRem(4) toRem(16);
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+  }
+
+  .ant-popover-inner {
+    padding: toRem(8) 0;
+
+    .ant-popover-inner-content {
+      width: toRem(200);
+    }
+  }
+
+  .question-more-settings-item {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 20% 80%;
+    padding: toRem(8) toRem(16);
+    @include select-restricted;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $red-color-0;
+    }
+  }
+
+  .question-more-settings-item-selected {
+    background-color: $red-color-0;
+  }
+}
+
+.my-popover-overlay-content {
+  .ant-popover-inner {
+    padding: toRem(8) 0;
+
+    .ant-popover-inner-content {
+      width: toRem(200);
+    }
+  }
+
+  .my-popover-overlay-content-item {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 20% 80%;
+    padding: toRem(8) toRem(16);
+    @include select-restricted;
+
+    &:hover {
+      cursor: pointer;
+      background-color: $red-color-0;
+    }
+  }
+}
+
+.l-flex {
+  display: flex;
+  align-items: center;
+  &.l-flex-column {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  &.space-between {
+    justify-content: space-between;
+  }
+}
+
+.ant-tabs-tab {
+  user-select: none;
+}

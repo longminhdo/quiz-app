@@ -1,0 +1,12 @@
+@import '@/assets/styles/global.scss';
+
+.my-upload-image {
+  padding: 0 toRem(4);
+  font-size: toRem(20);
+  @include select-restricted;
+  cursor: pointer;
+  color: $gray-color-4;
+}
+
+.my-upload-image-modal {
+}

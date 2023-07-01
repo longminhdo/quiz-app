@@ -1,0 +1,14 @@
+@import '@/assets/styles/global.scss';
+
+.my-collapse {
+  .ant-collapse-item {
+    .ant-collapse-header {
+      align-items: center;
+      padding: 0;
+    }
+
+    .ant-collapse-content {
+      padding-left: toRem(18);
+    }
+  }
+}

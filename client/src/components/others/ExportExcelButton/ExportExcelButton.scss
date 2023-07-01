@@ -1,0 +1,8 @@
+@import '@/assets/styles/global.scss';
+
+.export-excel-button {
+  display: flex;
+  gap: toRem(4);
+  justify-content: center;
+  align-items: center;
+}
