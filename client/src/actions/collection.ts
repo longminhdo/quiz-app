@@ -34,7 +34,7 @@ export const updateCollection = (newCollection: { _id: string; title: string }) 
   };
   return {
     type: CollectionAction.UPDATE_COLLECTION,
-    promise: PUT(`/forms/${newCollection._id}`, {
+    promise: PUT(`/collections/${newCollection._id}`, {
       body: data,
     }),
   };

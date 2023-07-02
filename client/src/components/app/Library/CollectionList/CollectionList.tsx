@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Space, Table } from 'antd';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
@@ -7,15 +7,29 @@ import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
 import { convertTime } from '@/utilities/helpers';
 import './CollectionList.scss';
+import { updateCollection } from '@/actions/collection';
 
 const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, total: number, tableLoading?: boolean}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedCollection, setSelectedCollection] = useState<Collection>();
   const { updateQuery } = useUpdateUrlQuery();
   const [run, loading] = useDispatchAsyncAction();
+  const titleInputRef = useRef<any>();
+
+  useEffect(() => {
+    setTimeout(() => {
+      titleInputRef.current.focus();
+    }, 0);
+  }, [isModalOpen]);
 
   const handleOk = async () => {
-    // await run(updateForm(selectedForm));
+    const newTitle = selectedCollection?.title;
+
+    if (!newTitle) {
+      return;
+    }
+
+    await run(updateCollection({ _id: selectedCollection?._id, title: newTitle }));
     updateQuery({ query: { timestamp: Date.now() } });
     setIsModalOpen(false);
   };
@@ -68,10 +82,13 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       width: 250,
       render: (_, record) => (
         <Space size="middle">
-          <Button onClick={() => {
-            setSelectedCollection(record);
-            setIsModalOpen(true);
-          }}
+          <Button
+            onClick={() => {
+              setSelectedCollection(record);
+              setIsModalOpen(true);
+            }}
+            type="primary"
+            ghost
           >
             <FontSizeOutlined />
             Rename
@@ -98,6 +115,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       <MyPagination total={total} />
 
       <Modal
+        forceRender
         confirmLoading={loading}
         title="Rename"
         okButtonProps={{ disabled: !selectedCollection?.title }}
@@ -112,6 +130,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
           value={selectedCollection?.title}
           onKeyDown={handleKeyDown}
           onChange={handleTitleChange}
+          ref={titleInputRef}
         />
       </Modal>
     </div>
