@@ -1,11 +1,11 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const Form = require('../model/form');
+const Collection = require('../model/collection');
 const Page = require('../model/page');
 const Question = require('../model/question');
 const AppError = require('../helper/AppError');
 const Response = require('../model/response');
 const Answer = require('../model/answer');
-const Collection = require('../model/collection');
 
 //validate form id
 exports.validateFormId = async (req, res, next) => {
@@ -75,7 +75,7 @@ exports.validatePageId = async (req, res, next) => {
 
 // for edit and delete question
 exports.validateQuestionId = async (req, res, next) => {
-  const { questionId, pageId } = req.params;
+  const { questionId, collectionId } = req.params;
   if (!ObjectId.isValid(questionId)) {
     return next(new AppError(404, 'Invalid Question ID type'));
   }
@@ -88,18 +88,18 @@ exports.validateQuestionId = async (req, res, next) => {
       );
     }
 
-    const page = await Page.findOne({
-      _id: pageId,
+    const collection = await Collection.findOne({
+      _id: collectionId,
       questions: {
         _id: questionId,
       },
     });
 
-    if (!page) {
+    if (!collection) {
       return next(
         new AppError(
           404,
-          'Your question is not belong to any page, please double check',
+          'Your question is not belong to any collection, please double check',
         ),
       );
     }

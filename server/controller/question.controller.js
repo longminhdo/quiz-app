@@ -1,9 +1,7 @@
 const { startSession } = require('mongoose');
 const Page = require('../model/page');
-const Response = require('../model/response');
 const Question = require('../model/question');
 const DeleteMedia = require('../model/deleteMedia');
-const Answer = require('../model/answer');
 const AppError = require('../helper/AppError');
 const Collection = require('../model/collection');
 const { InternalServerError } = require('../constant/errorMessage');
@@ -78,54 +76,23 @@ module.exports.updateQuestion = async (req, res, next) => {
 module.exports.deleteQuestion = async (req, res, next) => {
   const session = await startSession();
   try {
-    const { pageId, questionId } = req.params;
-    const deleteImgs = [];
+    const { collectionId, questionId } = req.params;
 
     session.startTransaction();
-    const question = await Question.findById(questionId, null, { session });
-
-    /* Delete imgs */
-    // add question media to be deleted
-    if (question?.questionMedia) {
-      deleteImgs.push(question.questionMedia);
-    }
-
-    // add option media to be deleted
-    if (question?.options) {
-      for (const option of question.options) {
-        if (option.media) {
-          deleteImgs.push(option.media);
-        }
-      }
-    }
-
     await Question.findByIdAndDelete(questionId).session(session);
-    const page = await Page.findByIdAndUpdate(
-      pageId,
+
+    const collection = await Collection.findByIdAndUpdate(
+      collectionId,
       { $pull: { questions: questionId } },
       { session, new: true },
-    );
-    await Response.updateMany(
-      {},
-      { $pull: { options: { questionId } } },
-      { session, new: true },
-    );
-    await Answer.deleteMany(
-      {
-        questionId: {
-          $regex: questionId,
-        },
-      },
-      { session, new: true },
-    );
-    await DeleteMedia.insertMany(deleteImgs, null, { session });
+    ).populate('questions');
+
     await session.commitTransaction();
     session.endSession();
-    return res.status(200).send({ success: true, data: page });
+    return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.log(error);
     next(error);
   }
 };

@@ -46,8 +46,6 @@ module.exports.getCollections = async (req, res) => {
 
     const totalCollections = await Collection.countDocuments({ owner: userId, ...searchOptions });
 
-    console.log();
-
     return res.status(StatusCodes.OK).send({
       success: true,
       data: {
@@ -68,7 +66,7 @@ module.exports.getCollections = async (req, res) => {
 module.exports.getCollectionById = async (req, res) => {
   try {
     const { collectionId } = req.params;
-    const collection = await Collection.findById(collectionId);
+    const collection = await Collection.findById(collectionId).populate('questions');
 
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
