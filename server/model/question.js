@@ -1,19 +1,8 @@
 const mongoose = require('mongoose');
 const { OptionType } = require('../constant/option');
+const { QuestionLevel } = require('../constant/level');
 
 const Schema = mongoose.Schema;
-
-const questionValidateSchema = new Schema(
-  {
-    type: String,
-    operations: String,
-    min: Number,
-    max: Number,
-    pattern: String,
-    message: String,
-  },
-  { _id: false },
-);
 
 const ImageSchema = new Schema(
   {
@@ -28,26 +17,19 @@ const questionSchema = new Schema({
     type: String,
     default: 'Untitled Question',
   },
-  description: {
-    type: String,
-    default: '',
-  },
   type: {
     type: String,
-    default: OptionType.SHORT,
+    default: OptionType.MULTIPLE_CHOICE,
   },
-  required: {
-    type: Boolean,
-    default: false,
+  level: {
+    type: Number,
+    default: QuestionLevel.REMEMBER,
   },
-  otherAnswerAccepted: {
-    type: Boolean,
-    default: false,
+  keys: {
+    type: [String],
+    default: [],
   },
   questionMedia: { type: ImageSchema },
-  validator: {
-    type: questionValidateSchema,
-  },
   options: {
     type: [
       {

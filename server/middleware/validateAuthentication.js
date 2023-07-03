@@ -33,8 +33,6 @@ module.exports = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log('fist', error);
-
     return next(new AppError(401, Authentication.INVALID_TOKEN));
   }
 };

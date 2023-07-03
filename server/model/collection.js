@@ -9,10 +9,12 @@ const collectionSchema = new Schema(
       type: String,
       default: 'Untitled Collection',
     },
-    questions: {
-      type: Schema.Types.ObjectId,
-      ref: 'Question',
-    },
+    questions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Question',
+      },
+    ],
     owner: String,
     createdAt: Number,
     updatedAt: Number,

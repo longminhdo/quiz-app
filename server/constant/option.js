@@ -1,8 +1,6 @@
 const OptionType = {
-  LONG: 'long',
-  SHORT: 'short',
-  CHECKBOX: 'checkbox',
-  RADIO: 'radio',
+  TEXT: 'text',
+  MULTIPLE_CHOICE: 'multiple_choice',
 };
 
 module.exports = {

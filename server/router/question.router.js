@@ -1,6 +1,6 @@
 const express = require('express');
 const question = require('../controller/question.controller');
-const { validateQuestionId } = require('../middleware/validateId');
+const { validateQuestionId, validateCollectionId } = require('../middleware/validateId');
 const { reqSchemaValidator } = require('../middleware/validateInput');
 const { validateQuestion } = require('../schema');
 const validateAuthentication = require('../middleware/validateAuthentication');
@@ -9,35 +9,36 @@ const catchAsync = require('../helper/catchAsync');
 const router = express.Router({ mergeParams: true });
 
 router.use(validateAuthentication);
+router.use(validateCollectionId);
 
 router.post(
   '',
-  catchAsync(question.create),
+  catchAsync(question.createQuestion),
 );
 
 router.delete(
   '/:questionId',
   validateQuestionId,
-  catchAsync(question.delete),
+  catchAsync(question.deleteQuestion),
 );
 
 router.put(
   '/:questionId',
   reqSchemaValidator(validateQuestion),
   validateQuestionId,
-  catchAsync(question.update),
+  catchAsync(question.updateQuestion),
 );
 
 router.post(
   '/:questionId/duplicate',
   validateQuestionId,
-  catchAsync(question.duplicate),
+  catchAsync(question.duplicateQuestion),
 );
 
-router.put(
-  '/:questionId/re-order',
+router.get(
+  '/:questionId',
   validateQuestionId,
-  catchAsync(question.reOrder),
+  catchAsync(question.getQuestionById),
 );
 
 module.exports = router;

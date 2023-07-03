@@ -49,7 +49,7 @@ app.use('/templates', templateRoute);
 app.use('/forms/:formId/responses', responseRoute);
 app.use('/forms', formRoute);
 app.use('/forms/:formId/pages', pageRoute);
-app.use('/forms/:formId/pages/:pageId/questions', questionRoute);
+app.use('/collections/:collectionId/questions', questionRoute);
 app.use('/media', mediaRoute);
 app.use('/answer', answerRoute);
 app.use('/auth', authRoute);

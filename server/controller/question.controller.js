@@ -1,47 +1,39 @@
 const { startSession } = require('mongoose');
-const Form = require('../model/form');
 const Page = require('../model/page');
 const Response = require('../model/response');
 const Question = require('../model/question');
 const DeleteMedia = require('../model/deleteMedia');
 const Answer = require('../model/answer');
 const AppError = require('../helper/AppError');
+const Collection = require('../model/collection');
+const { InternalServerError } = require('../constant/errorMessage');
+const { StatusCodes } = require('../constant/statusCodes');
 
-// create a default question
-module.exports.create = async (req, res, next) => {
+module.exports.createQuestion = async (req, res, next) => {
+  const { collectionId } = req.params;
   const session = await startSession();
-  const { index } = req.body;
   try {
     session.startTransaction();
-
-    const question = new Question({});
+    const question = new Question({ ...req.body });
     await question.save({ session, new: true });
 
-    const page = await Page.findById(req.params.pageId)
-      .session(session)
-      .populate('questions');
+    const collection = await Collection.findById(collectionId).populate('questions');
 
-    if (index >= 0) {
-      page.questions.splice(index, 0, question);
-    } else {
-      page.questions.push(question);
-    }
+    collection.questions.push(question);
 
-    await page.save({ session });
+    await collection.save({ session });
 
     await session.commitTransaction();
     session.endSession();
-    return res.status(200).send({ success: true, data: page });
+    return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.log(error);
     next(error);
   }
 };
 
-// update a question
-module.exports.update = async (req, res, next) => {
+module.exports.updateQuestion = async (req, res, next) => {
   try {
     const editedQuestion = req.body;
     const { questionId } = req.params;
@@ -83,7 +75,7 @@ module.exports.update = async (req, res, next) => {
   }
 };
 
-module.exports.delete = async (req, res, next) => {
+module.exports.deleteQuestion = async (req, res, next) => {
   const session = await startSession();
   try {
     const { pageId, questionId } = req.params;
@@ -138,7 +130,7 @@ module.exports.delete = async (req, res, next) => {
   }
 };
 
-module.exports.duplicate = async (req, res, next) => {
+module.exports.duplicateQuestion = async (req, res, next) => {
   const { pageId, questionId } = req.params;
 
   const question = await Question.findById(questionId);
@@ -167,55 +159,14 @@ module.exports.duplicate = async (req, res, next) => {
   return res.status(200).send({ success: true, data: page });
 };
 
-module.exports.reOrder = async (req, res, next) => {
-  const session = await startSession();
+module.exports.getQuestionById = async (req, res) => {
   try {
-    const { pageId, questionId } = req.params;
-    const { targetPageId, index } = req.body;
+    const { questionId } = req.params;
+    const question = await Question.findById(questionId);
 
-    // Get question
-    const question = await Question.findById(questionId, null, { session });
-    if (!question) {
-      return next(new AppError(404, 'Could not find a question with the given questionId'));
-    }
-
-    // Get target page and add new question in
-    const targetPage = await Page.findById(targetPageId, null, { session })
-      .populate('questions');
-    if (!targetPage) {
-      return next(new AppError(404, 'Could not find target page with the given pageId'));
-    }
-
-    if (index >= 0) {
-      targetPage.questions.splice(index, 0, question);
-    } else {
-      targetPage.questions.push(question);
-    }
-
-    // Get current page and remove question
-    const sourcePage = await Page.findById(pageId, null, { session });
-    sourcePage.questions = sourcePage.questions.filter(id => id.toString() !== questionId);
-
-    await Promise.all([
-      targetPage.save({ session, new: true }),
-      sourcePage.save({ session, new: true }),
-    ]);
-
-    // Get form
-    const form = await Form.findById(req.formId)
-      .populate({
-        path: 'pages',
-        populate: 'questions',
-      });
-
-    return res.status(200).send({
-      success: true,
-      data: form,
-    });
+    return res.status(StatusCodes.OK).send({ success: true, data: question });
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
-    console.log(error);
-    next(error);
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: InternalServerError.INTERNAL_SERVER_ERROR, error });
   }
 };
