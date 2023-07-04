@@ -15,7 +15,14 @@ module.exports.createQuestion = async (req, res, next) => {
     const question = new Question({ ...req.body });
     await question.save({ session, new: true });
 
-    const collection = await Collection.findById(collectionId).populate('questions');
+    const collection = await Collection
+      .findById(collectionId)
+      .populate(
+        {
+          path: 'questions',
+          match: { deleted: false },
+        },
+      );
 
     collection.questions.push(question);
 
@@ -74,25 +81,17 @@ module.exports.updateQuestion = async (req, res, next) => {
 };
 
 module.exports.deleteQuestion = async (req, res, next) => {
-  const session = await startSession();
   try {
     const { collectionId, questionId } = req.params;
 
-    session.startTransaction();
-    await Question.findByIdAndDelete(questionId).session(session);
+    await Question.findByIdAndUpdate(questionId, { deleted: true });
 
-    const collection = await Collection.findByIdAndUpdate(
-      collectionId,
-      { $pull: { questions: questionId } },
-      { session, new: true },
-    ).populate('questions');
+    const collection = await Collection
+      .findByIdAndUpdate(collectionId, { $pull: { questions: questionId } }, { new: true })
+      .populate('questions');
 
-    await session.commitTransaction();
-    session.endSession();
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     next(error);
   }
 };

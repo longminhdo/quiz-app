@@ -23,9 +23,7 @@ module.exports.updateCollection = async (req, res) => {
   const updatedLibrary = await Collection.findByIdAndUpdate(collectionId, body, {
     new: true,
   })
-    .populate({
-      path: 'questions',
-    });
+    .populate('questions');
 
   return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedLibrary } });
 };

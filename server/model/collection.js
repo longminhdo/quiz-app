@@ -16,6 +16,10 @@ const collectionSchema = new Schema(
       },
     ],
     owner: String,
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
     createdAt: Number,
     updatedAt: Number,
   },

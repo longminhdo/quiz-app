@@ -49,6 +49,10 @@ const questionSchema = new Schema({
       },
     ],
   },
+  deleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model('Question', questionSchema);
