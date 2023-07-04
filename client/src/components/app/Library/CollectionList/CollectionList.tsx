@@ -9,8 +9,14 @@ import { convertTime } from '@/utilities/helpers';
 import './CollectionList.scss';
 import { updateCollection } from '@/actions/collection';
 
+const MODAL_TYPES = {
+  DELETE: 'delete',
+  RENAME: 'rename',
+};
+
 const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, total: number, tableLoading?: boolean}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<string>('');
   const [selectedCollection, setSelectedCollection] = useState<Collection>();
   const { updateQuery } = useUpdateUrlQuery();
   const [run, loading] = useDispatchAsyncAction();
@@ -18,7 +24,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
 
   useEffect(() => {
     setTimeout(() => {
-      titleInputRef.current.focus();
+      titleInputRef.current?.focus();
     }, 0);
   }, [isModalOpen]);
 
@@ -85,6 +91,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
           <Button
             onClick={() => {
               setSelectedCollection(record);
+              setModalType(MODAL_TYPES.RENAME);
               setIsModalOpen(true);
             }}
             type="primary"
@@ -93,7 +100,14 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
             <FontSizeOutlined />
             Rename
           </Button>
-          <Button danger>
+          <Button
+            danger
+            onClick={() => {
+              setSelectedCollection(record);
+              setModalType(MODAL_TYPES.DELETE);
+              setIsModalOpen(true);
+            }}
+          >
             <DeleteOutlined />
             Delete
           </Button>
@@ -109,7 +123,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
         dataSource={data}
         rowKey="_id"
         loading={tableLoading}
-        scroll={{ y: 500 }}
+        scroll={{ y: 530, x: 1300 }}
         pagination={false}
       />
       <MyPagination total={total} />
@@ -117,21 +131,29 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       <Modal
         forceRender
         confirmLoading={loading}
-        title="Rename"
+        title={modalType === MODAL_TYPES.RENAME ? 'Rename' : 'Delete collection'}
         okButtonProps={{ disabled: !selectedCollection?.title }}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        wrapClassName="form-rename-modal"
+        wrapClassName="collection-list-modal"
         destroyOnClose
+        closable={false}
       >
-        <p>Please enter a new name for the item:</p>
-        <Input
-          value={selectedCollection?.title}
-          onKeyDown={handleKeyDown}
-          onChange={handleTitleChange}
-          ref={titleInputRef}
-        />
+        {
+          modalType === MODAL_TYPES.RENAME ? (
+            <>
+              <p>Please enter a new name for the item:</p>
+              <Input
+                value={selectedCollection?.title}
+                onKeyDown={handleKeyDown}
+                onChange={handleTitleChange}
+                ref={titleInputRef}
+              />
+            </>
+          ) : <p>Are you sure you want to delete this question?</p>
+        }
+
       </Modal>
     </div>
   );

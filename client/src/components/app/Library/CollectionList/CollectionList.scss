@@ -4,6 +4,10 @@
   margin-top: toRem(20);
 
   .ant-table-body {
-    height: toRem(500);
+    height: calc(100vh - toRem(410));
   }
+}
+
+.collection-list-modal {
+  padding-top: toRem(100);
 }

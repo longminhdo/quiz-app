@@ -9,15 +9,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-::-webkit-scrollbar {
-  background-color: $gray-color-1;
-  width: 7px;
-}
+// ::-webkit-scrollbar {
+//   background-color: $gray-color-1;
+//   width: 7px;
+// }
 
-::-webkit-scrollbar-thumb {
-  border-radius: 4px;
-  background-color: rgba(0, 0, 0, 0.3);
-}
+// ::-webkit-scrollbar-thumb {
+//   border-radius: 4px;
+//   background-color: rgba(0, 0, 0, 0.3);
+// }
 
 .icon {
   font-size: toRem(18);
