@@ -22,15 +22,6 @@ const schemaQuestion = {
     type: {
       enum: [OptionType.MULTIPLE_CHOICE, OptionType.TEXT],
     },
-    required: {
-      type: 'boolean',
-    },
-    description: {
-      type: 'string',
-    },
-    otherAnswerAccepted: {
-      type: 'boolean',
-    },
     options: {
       type: 'array',
       uniqueItemProperties: ['content'],
@@ -58,8 +49,14 @@ const schemaQuestion = {
         additionalProperties: false,
       },
     },
+    keys: {
+      type: 'array',
+    },
+    level: {
+      type: 'number',
+    },
   },
-  required: ['title', 'type', 'required', 'otherAnswerAccepted', 'options'],
+  required: ['title', 'type', 'level', 'keys'],
 };
 
 module.exports = {

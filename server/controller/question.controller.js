@@ -1,7 +1,6 @@
 const { startSession } = require('mongoose');
 const Page = require('../model/page');
 const Question = require('../model/question');
-const DeleteMedia = require('../model/deleteMedia');
 const AppError = require('../helper/AppError');
 const Collection = require('../model/collection');
 const { InternalServerError } = require('../constant/errorMessage');
@@ -43,35 +42,13 @@ module.exports.updateQuestion = async (req, res, next) => {
     const editedQuestion = req.body;
     const { questionId } = req.params;
 
-    const question = await Question.findById(questionId);
-    const { _doc: currentQuestion } = question;
-
-    //get old images from option
-    const oldOptionImages = currentQuestion.options
-      .filter(({ media }, index) => media?.url !== editedQuestion.options[index]?.media?.url)
-      .map(({ media }) => media);
-
-    //get old question image
-    let oldQuestionMedia;
-    const isQuestionMediaChanged = editedQuestion.questionMedia?.url === currentQuestion.questionMedia?.url;
-
-    if (
-      !isQuestionMediaChanged
-      && currentQuestion.questionMedia !== undefined
-    ) {
-      oldQuestionMedia = currentQuestion.questionMedia;
-      await question.updateOne({ $unset: { questionMedia: 1 } });
-    }
-
-    // move to deleteImg collection
-    await DeleteMedia.insertMany([...oldOptionImages, oldQuestionMedia]);
     const newQuestion = await Question.findByIdAndUpdate(
       questionId,
       editedQuestion,
       {
         new: true,
       },
-    );
+  );
 
     return res.status(200).send({ success: true, data: newQuestion });
   } catch (error) {
