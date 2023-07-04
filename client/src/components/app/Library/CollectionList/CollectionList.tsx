@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Space, Table } from 'antd';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { deleteCollection, updateCollection } from '@/actions/collection';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
 import { convertTime } from '@/utilities/helpers';
 import './CollectionList.scss';
-import { updateCollection } from '@/actions/collection';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
@@ -25,17 +25,23 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
   useEffect(() => {
     setTimeout(() => {
       titleInputRef.current?.focus();
-    }, 0);
+    }, 20);
   }, [isModalOpen]);
 
   const handleOk = async () => {
-    const newTitle = selectedCollection?.title;
+    if (modalType === MODAL_TYPES.RENAME) {
+      const newTitle = selectedCollection?.title;
+      if (!newTitle) {
+        return;
+      }
 
-    if (!newTitle) {
-      return;
+      await run(updateCollection({ _id: selectedCollection?._id, title: newTitle }));
     }
 
-    await run(updateCollection({ _id: selectedCollection?._id, title: newTitle }));
+    if (modalType === MODAL_TYPES.DELETE) {
+      await run(deleteCollection(selectedCollection?._id || ''));
+    }
+
     updateQuery({ query: { timestamp: Date.now() } });
     setIsModalOpen(false);
   };
@@ -70,9 +76,16 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       render: (text) => <a>{text}</a>,
     },
     {
+      title: 'Amount',
+      dataIndex: 'questions',
+      width: 150,
+      render: (q) => <p>{q.length}</p>,
+    },
+    {
       title: 'Owner',
       dataIndex: 'owner',
       key: 'owner',
+      width: 240,
       render: (_, record) => <b>{record?.ownerData?.email}</b>,
     },
     {
@@ -92,7 +105,9 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
             onClick={() => {
               setSelectedCollection(record);
               setModalType(MODAL_TYPES.RENAME);
-              setIsModalOpen(true);
+              setTimeout(() => {
+                setIsModalOpen(true);
+              }, 0);
             }}
             type="primary"
             ghost
@@ -105,7 +120,9 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
             onClick={() => {
               setSelectedCollection(record);
               setModalType(MODAL_TYPES.DELETE);
-              setIsModalOpen(true);
+              setTimeout(() => {
+                setIsModalOpen(true);
+              }, 0);
             }}
           >
             <DeleteOutlined />
