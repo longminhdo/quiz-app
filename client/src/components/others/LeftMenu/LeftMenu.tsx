@@ -12,7 +12,7 @@ import { routePaths } from '@/constants/routePaths';
 import './LeftMenu.scss';
 
 const menuItems = [
-  { label: 'Library', icon: AppstoreOutlined, key: routePaths.LIBRARY },
+  { label: 'Library', icon: AppstoreOutlined, key: routePaths.COLLECTIONS },
   { label: 'Quizzes', icon: ProfileOutlined, key: routePaths.MY_QUIZZES },
   { label: 'Reports', icon: PieChartOutlined, key: routePaths.REPORTS },
 ];
@@ -31,7 +31,7 @@ const LeftMenu = () => {
 
   useEffect(() => {
     if (location.pathname) {
-      setSelectedMenu(menuItems.find(item => item.key === location.pathname));
+      setSelectedMenu(menuItems.find(item => location.pathname.includes(item.key)));
     }
   }, [location.pathname, setSelectedMenu]);
 

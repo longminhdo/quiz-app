@@ -10,7 +10,7 @@ const RouteWrapper = ({ children }: Props) => {
 
   useEffect(() => {
     if (['/', '/forms'].includes(location.pathname)) {
-      navigate(routePaths.LIBRARY, { replace: true });
+      navigate(routePaths.COLLECTIONS, { replace: true });
     }
   }, [location.pathname, navigate]);
 

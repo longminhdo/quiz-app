@@ -14,7 +14,7 @@ const NotFoundPage = () => {
       <h2 className="not-found-text-1">Sorry something went wrong</h2>
       <p className="not-found-text-2">We can't find your page</p>
 
-      <div className="go-back" onClick={() => { navigate(routePaths.LIBRARY); }}>Go back to your dashboard</div>
+      <div className="go-back" onClick={() => { navigate(routePaths.COLLECTIONS); }}>Go back to your dashboard</div>
     </div>
   );
 };

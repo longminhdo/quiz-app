@@ -17,6 +17,7 @@ import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementL
 import LibraryPage from '@/pages/LibraryPage/LibraryPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
 import MyQuizzesPage from '@/pages/MyQuizzesPage/MyQuizzesPage';
+import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -39,11 +40,21 @@ const App = () => {
           <Spin spinning={loading}>
             <Routes>
               <Route
-                path={routePaths.LIBRARY}
+                path={routePaths.COLLECTIONS}
                 element={(
                   <ProtectedRoute>
                     <QuizManagementLayout>
                       <LibraryPage />
+                    </QuizManagementLayout>
+                  </ProtectedRoute>
+              )}
+              />
+              <Route
+                path={routePaths.COLLECTION_DETAIL}
+                element={(
+                  <ProtectedRoute>
+                    <QuizManagementLayout>
+                      <CollectionDetailPage />
                     </QuizManagementLayout>
                   </ProtectedRoute>
               )}

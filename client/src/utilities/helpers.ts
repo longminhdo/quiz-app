@@ -162,3 +162,13 @@ export const convertTime = (time: number) => {
 
   return moment.unix(time).format('MMM DD, YYYY');
 };
+
+export const convertLabel = (value: number | string, enums: object) => {
+  const found = enums?.[value];
+
+  if (!found) {
+    return value;
+  }
+
+  return found;
+};

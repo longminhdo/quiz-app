@@ -1,6 +1,7 @@
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Space, Table } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { deleteCollection, updateCollection } from '@/actions/collection';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
@@ -8,6 +9,7 @@ import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
 import { convertTime } from '@/utilities/helpers';
 import './CollectionList.scss';
+import { routePaths } from '@/constants/routePaths';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
@@ -21,6 +23,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
   const { updateQuery } = useUpdateUrlQuery();
   const [run, loading] = useDispatchAsyncAction();
   const titleInputRef = useRef<any>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setTimeout(() => {
@@ -73,7 +76,13 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       title: 'Name',
       dataIndex: 'title',
       key: 'title',
-      render: (text) => <a>{text}</a>,
+      render: (title, record) => (
+        <a
+          onClick={() => navigate(routePaths.COLLECTION_DETAIL.replace(':collectionId', record._id))}
+        >
+          {title}
+        </a>
+      ),
     },
     {
       title: 'Amount',
@@ -131,7 +140,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
         </Space>
       ),
     },
-  ], []);
+  ], [navigate]);
 
   return (
     <div className="collection-list">

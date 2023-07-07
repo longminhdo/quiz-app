@@ -8,7 +8,7 @@ import configs from '@/configuration';
 
 const LinkAttachment = () => {
   const [open, setOpen] = useState(false);
-  const formData = useTypedSelector((state) => state.collection.collection);
+  const formData = useTypedSelector((state) => state.collection.currentCollection);
 
   const handleOpenChange = (newOpen: boolean) => {
     if (!formData?._id) {

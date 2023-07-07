@@ -7,7 +7,8 @@ export const routePaths = {
   LOGIN: '/login',
   LOGIN_CALLBACK: '/callback',
   HUST_REDIRECT: '/hust-redirect',
-  LIBRARY: '/library',
+  COLLECTIONS: '/collections',
+  COLLECTION_DETAIL: '/collections/:collectionId',
   REPORTS: '/reports',
   MY_QUIZZES: '/my-quizzes',
 };

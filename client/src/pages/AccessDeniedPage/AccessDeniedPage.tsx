@@ -14,7 +14,7 @@ const AccessDenied = () => {
       <h2 className="access-denied-text-1">Sorry something went wrong</h2>
       <p className="access-denied-text-2">You don't have permission to view this form</p>
 
-      <div className="go-back" onClick={() => { navigate(routePaths.LIBRARY); }}>Go back to your dashboard</div>
+      <div className="go-back" onClick={() => { navigate(routePaths.COLLECTIONS); }}>Go back to your dashboard</div>
     </div>
   );
 };

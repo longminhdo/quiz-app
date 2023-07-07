@@ -1,7 +1,7 @@
 import { CollectionAction } from 'src/constants/action';
 
 interface CollectionState {
-  collection?: any;
+  currentCollection?: any;
 }
 
 const INITIAL_STATE: any = {
@@ -18,9 +18,8 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
     case CollectionAction.DELETE_QUESTION:
     case CollectionAction.CREATE_QUESTION: {
       const collection = action.payload.data;
-
       return {
-        ...collection,
+        currentCollection: collection,
       };
     }
 

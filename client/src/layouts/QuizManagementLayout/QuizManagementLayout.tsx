@@ -1,6 +1,5 @@
-import { Layout, Card } from 'antd';
+import { Layout } from 'antd';
 import React, {
-  FunctionComponent,
   ReactElement,
   useMemo,
   useState,
@@ -19,7 +18,7 @@ interface QuizManagementLayoutProps {
   children: ReactElement;
 }
 
-const QuizManagementLayout: FunctionComponent<QuizManagementLayoutProps> = ({
+const QuizManagementLayout: React.FunctionComponent<QuizManagementLayoutProps> = ({
   children,
 }) => {
   const [selectedMenu, setSelectedMenu] = useState<MenuItem>({
