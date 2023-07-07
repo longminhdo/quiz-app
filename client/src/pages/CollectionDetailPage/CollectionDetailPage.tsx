@@ -3,7 +3,7 @@ import { Button, Input, Tabs } from 'antd';
 import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getCollectionById } from '@/actions/collection';
+import { flushCollection, getCollectionById } from '@/actions/collection';
 import CollectionDetail from '@/components/app/Library/CollectionDetail/CollectionDetail';
 import CollectionDetailToolbar from '@/components/app/Library/CollectionDetailToolbar/CollectionDetailToolbar';
 import MyCard from '@/components/common/MyCard/MyCard';
@@ -47,7 +47,7 @@ const CollectionDetailPage = () => {
 
   useEffect(() => {
     if (!collectionId) {
-      return;
+      return () => undefined;
     }
 
     (async () => {
@@ -55,6 +55,11 @@ const CollectionDetailPage = () => {
       await run(getCollectionById(collectionId));
       run(setLoading(false));
     })();
+
+    return () => {
+      run(flushCollection());
+      return undefined;
+    };
   }, [collectionId, run]);
 
   useEffect(() => {
@@ -81,6 +86,7 @@ const CollectionDetailPage = () => {
     if (isEmpty(currentCollection) || isEqual(currentCollection, collectionRef.current)) {
       return;
     }
+
     setCollection(currentCollection);
     collectionRef.current = { ...currentCollection };
   }, [currentCollection]);

@@ -6,12 +6,11 @@ import { createCollection, getCollections } from '@/actions/collection';
 import CollectionList from '@/components/app/Library/CollectionList/CollectionList';
 import MyCard from '@/components/common/MyCard/MyCard';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
+import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
 import './LibraryPage.scss';
-import { setLoading } from '@/modules/redux/slices/appReducer';
-import { routePaths } from '@/constants/routePaths';
 
 const libraryTabs: Array<any> = [
   {
