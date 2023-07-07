@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Space, Table, Tag, Tooltip } from 'antd';
+import { Button, Image, Space, Table, Tag, Tooltip } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useMemo } from 'react';
 import { convertLabel } from '@/utilities/helpers';
@@ -40,6 +40,13 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
           {convertLabel(level, QuestionLevelEnums)}
         </Tag>
       ),
+    },
+    {
+      title: 'Image',
+      dataIndex: 'questionMedia',
+      key: 'questionMedia',
+      width: 140,
+      render: (media) => (<Image src={media?.url} style={{ height: 60 }} />),
     },
     {
       title: 'Action',

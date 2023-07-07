@@ -71,7 +71,7 @@ const CollectionDetailPage = () => {
 
     const newCollection = {
       ...currentCollection,
-      questions: currentCollection.questions.filter(
+      questions: currentCollection?.questions?.filter(
         q => (isEmpty(level) ? true : level.includes(String(q.level)))
              && (isEmpty(type) ? true : type.includes(String(q.type)))
              && (isEmpty(search) ? true : q.title.toLowerCase().includes(search.toLowerCase())),

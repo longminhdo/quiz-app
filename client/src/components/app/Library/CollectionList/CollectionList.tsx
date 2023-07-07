@@ -1,5 +1,5 @@
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space, Table } from 'antd';
+import { Button, Input, Modal, Space, Table, Tooltip } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { deleteCollection, updateCollection } from '@/actions/collection';
@@ -95,7 +95,12 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       dataIndex: 'owner',
       key: 'owner',
       width: 240,
-      render: (_, record) => <b>{record?.ownerData?.email}</b>,
+      ellipsis: true,
+      render: (_, record) => (
+        <Tooltip title={record?.ownerData?.email} placement="topLeft">
+          <b>{record?.ownerData?.email}</b>
+        </Tooltip>
+      ),
     },
     {
       title: 'Last modified',
