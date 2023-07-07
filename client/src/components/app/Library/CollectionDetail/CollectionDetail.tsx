@@ -1,4 +1,4 @@
-import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Space, Table, Tag, Tooltip } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useMemo } from 'react';
@@ -51,7 +51,7 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
             type="primary"
             ghost
           >
-            <FontSizeOutlined />
+            <EditOutlined />
             Edit
           </Button>
           <Button
