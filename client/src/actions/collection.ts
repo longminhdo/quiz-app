@@ -18,9 +18,11 @@ export const getCollectionById = (collectionId: string) => ({
   promise: GET(`/collections/${collectionId}`),
 });
 
-export const createCollection = () => ({
+export const createCollection = (payload: { title: string }) => ({
   type: CollectionAction.CREATE_COLLECTION,
-  promise: POST('/collections'),
+  promise: POST('/collections', {
+    body: payload,
+  }),
 });
 
 export const duplicateQuestion = ({ formId, pageId, questionId }: { formId: string; pageId: string; questionId: string }) => ({

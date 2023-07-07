@@ -10,7 +10,6 @@ const INITIAL_STATE: any = {
 
 export const collectionReducer = (state = INITIAL_STATE, action: any): CollectionState => {
   switch (action.type) {
-    case CollectionAction.CREATE_COLLECTION:
     case CollectionAction.GET_COLLECTION_BY_ID:
     case CollectionAction.UPDATE_COLLECTION:
     case CollectionAction.DUPLICATE_QUESTION:

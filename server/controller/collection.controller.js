@@ -4,9 +4,9 @@ const { parseSortOption } = require('../helper/utils');
 const Collection = require('../model/collection');
 
 module.exports.createCollection = async (req, res) => {
-  const { userData } = req;
+  const { userData, body } = req;
 
-  const collection = new Collection({ owner: userData.userId });
+  const collection = new Collection({ owner: userData.userId, title: body.title });
 
   await collection.save();
 
