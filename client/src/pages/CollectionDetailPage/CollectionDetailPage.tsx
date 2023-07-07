@@ -5,12 +5,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCollectionById } from '@/actions/collection';
 import CollectionDetail from '@/components/app/Library/CollectionDetail/CollectionDetail';
+import CollectionDetailToolbar from '@/components/app/Library/CollectionDetailToolbar/CollectionDetailToolbar';
 import MyCard from '@/components/common/MyCard/MyCard';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
-import './CollectionDetailPage.scss';
 import { Collection } from '@/types/collection';
+import './CollectionDetailPage.scss';
 
 const libraryTabs: Array<any> = [
   {
@@ -27,17 +28,21 @@ const libraryTabs: Array<any> = [
 
 const CollectionDetailPage = () => {
   const [selectedTab, setSelectedTab] = useState('1');
-  const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
-  const [run] = useDispatchAsyncAction();
-  const { currentCollection } = useTypedSelector((state) => state.collection);
-  const { collectionId } = useParams();
   const [collection, setCollection] = useState<Collection>();
+  const [filter, setFilter] = useState<{search: string, type: Array<string>, level: Array<string>}>({ search: '', type: [], level: [] });
+
+  const filterRef = useRef<any>();
   const collectionRef = useRef<any>();
+
+  const { collectionId } = useParams();
+
+  const { currentCollection } = useTypedSelector((state) => state.collection);
+  const [run] = useDispatchAsyncAction();
 
   const handleSearchChange = (e) => {
     const searchValue = e.target.value;
 
-    setSearch(searchValue);
+    setFilter(prev => ({ ...prev, search: searchValue }));
   };
 
   useEffect(() => {
@@ -51,6 +56,26 @@ const CollectionDetailPage = () => {
       run(setLoading(false));
     })();
   }, [collectionId, run]);
+
+  useEffect(() => {
+    if (isEmpty(currentCollection) || isEqual(filterRef.current, filter)) {
+      return;
+    }
+
+    const { level, type, search } = filter;
+
+    const newCollection = {
+      ...currentCollection,
+      questions: currentCollection.questions.filter(
+        q => (isEmpty(level) ? true : level.includes(String(q.level)))
+             && (isEmpty(type) ? true : type.includes(String(q.type)))
+             && (isEmpty(search) ? true : q.title.toLowerCase().includes(search.toLowerCase())),
+      ),
+    };
+
+    setCollection(newCollection);
+    filterRef.current = { ...filter };
+  }, [currentCollection, filter, setCollection]);
 
   useEffect(() => {
     if (isEmpty(currentCollection) || isEqual(currentCollection, collectionRef.current)) {
@@ -77,7 +102,7 @@ const CollectionDetailPage = () => {
             placeholder="Search questions"
             prefix={<SearchOutlined />}
             allowClear
-            value={search}
+            value={filter.search}
             onChange={handleSearchChange}
           />
           <Button type="primary">
@@ -85,6 +110,8 @@ const CollectionDetailPage = () => {
             New question
           </Button>
         </div>
+
+        <CollectionDetailToolbar setFilter={setFilter} filter={filter} />
 
         <CollectionDetail collection={collection} />
       </MyCard>

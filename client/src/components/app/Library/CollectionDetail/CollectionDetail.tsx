@@ -1,10 +1,10 @@
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
-import { Button, Space, Table } from 'antd';
+import { Button, Space, Table, Tag, Tooltip } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useMemo } from 'react';
 import { convertLabel } from '@/utilities/helpers';
 import { Collection } from '@/types/collection';
-import { QuestionLevelEnums } from '@/constants/constants';
+import { LevelColorEnums, QuestionLevelEnums, QuestionTypeEnums } from '@/constants/constants';
 import './CollectionDetail.scss';
 
 const CollectionDetail = ({ collection } : { collection?: Collection}) => {
@@ -17,10 +17,29 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
       key: 'title',
     },
     {
+      title: 'Answers',
+      dataIndex: 'keys',
+      key: 'keys',
+      ellipsis: true,
+      render: (answers) => <Tooltip placement="topLeft" title={answers.join(', ')}>{answers.join(', ')}</Tooltip>,
+    },
+    {
+      title: 'Type',
+      dataIndex: 'type',
+      key: 'type',
+      width: 180,
+      render: (v) => convertLabel(v, QuestionTypeEnums),
+    },
+    {
       title: 'Level',
       dataIndex: 'level',
       key: 'level',
-      render: (level) => convertLabel(level, QuestionLevelEnums),
+      width: 140,
+      render: (level) => (
+        <Tag color={convertLabel(level, LevelColorEnums)}>
+          {convertLabel(level, QuestionLevelEnums)}
+        </Tag>
+      ),
     },
     {
       title: 'Action',
@@ -48,7 +67,12 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
 
   return (
     <div className="collection-detail">
-      <Table columns={columns} dataSource={questions} rowKey={(item) => item._id} />
+      <Table
+        scroll={{ y: 530, x: 1300 }}
+        columns={columns}
+        dataSource={questions}
+        rowKey={(item) => item._id}
+      />
     </div>
   );
 };

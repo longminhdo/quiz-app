@@ -1,8 +1,11 @@
 export const QuestionType = {
-  RADIO: 'radio',
-  CHECKBOX: 'checkbox',
-  LONG: 'long',
-  SHORT: 'short',
+  TEXT: 'text',
+  MULTIPLE_CHOICE: 'multiple_choice',
+};
+
+export const QuestionTypeEnums = {
+  text: 'Text',
+  multiple_choice: 'Multiple choice',
 };
 
 export const QuestionLevel = {
@@ -17,4 +20,11 @@ export const QuestionLevelEnums = {
   2: 'Understand',
   3: 'Apply',
   4: 'Critically Apply',
+};
+
+export const LevelColorEnums = {
+  1: 'default',
+  2: 'green',
+  3: 'gold',
+  4: 'volcano',
 };

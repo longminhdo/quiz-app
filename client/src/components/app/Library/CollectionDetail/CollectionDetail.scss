@@ -1,4 +1,15 @@
 @import '@/assets/styles/global.scss';
 
 .collection-detail {
+  .ant-table-body {
+    height: calc(100vh - toRem(483));
+
+    @media (max-width: 1200px) {
+      height: calc(100vh - toRem(509));
+    }
+
+    @media (max-width: 992px) {
+      height: calc(100vh - toRem(565));
+    }
+  }
 }

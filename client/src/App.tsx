@@ -1,23 +1,25 @@
-import React from 'react';
 import { Spin, message } from 'antd';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import RouteWrapper from '@/modules/routes/RouteWrapper';
-import useTypedSelector from './hooks/useTypedSelector';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+import RouteWrapper from '@/modules/routes/RouteWrapper';
 import { routePaths } from './constants/routePaths';
+import useTypedSelector from './hooks/useTypedSelector';
 
-import LoginPage from '@/pages/LoginPage/LoginPage';
-import LoginCallback from '@/pages/LoginPage/LoginCallback';
 import AccessDeniedPage from '@/pages/AccessDeniedPage/AccessDeniedPage';
+import LoginCallback from '@/pages/LoginPage/LoginCallback';
+import LoginPage from '@/pages/LoginPage/LoginPage';
 
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
+import { setWindowWidth } from '@/modules/redux/slices/appReducer';
+import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
+import LibraryPage from '@/pages/LibraryPage/LibraryPage';
+import MyQuizzesPage from '@/pages/MyQuizzesPage/MyQuizzesPage';
+import ReportsPage from '@/pages/ReportsPage/ReportsPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import UnprotectedRoute from './components/common/UnprotectedRoute';
 import HustRedirect from './pages/LoginPage/HustRedirect';
-import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
-import LibraryPage from '@/pages/LibraryPage/LibraryPage';
-import ReportsPage from '@/pages/ReportsPage/ReportsPage';
-import MyQuizzesPage from '@/pages/MyQuizzesPage/MyQuizzesPage';
-import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -32,6 +34,19 @@ const MessageWrapper = ({ children }) => {
 
 const App = () => {
   const { loading } = useTypedSelector((state: any) => state.app);
+  const [run] = useDispatchAsyncAction();
+
+  useEffect(() => {
+    const handleResize = () => {
+      run(setWindowWidth(window.innerWidth));
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [run]);
 
   return (
     <MessageWrapper>
