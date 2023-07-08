@@ -20,6 +20,7 @@ interface MyTooltipIconProps {
     | 'rightBottom';
   className?: string;
   onClick?: any;
+  style? : object;
 }
 
 const MyTooltipIcon: React.FC<MyTooltipIconProps> = ({
@@ -28,13 +29,14 @@ const MyTooltipIcon: React.FC<MyTooltipIconProps> = ({
   placement = 'bottom',
   className,
   onClick,
+  style = {},
 }) => {
   const handleClick = (e) => {
     onClick && onClick(e);
   };
 
   return (
-    <div className={`icon my-tooltip-icon ${className ?? ''}`} onClick={handleClick}>
+    <div className={`icon my-tooltip-icon ${className ?? ''}`} style={style} onClick={handleClick}>
       <Tooltip
         destroyTooltipOnHide
         placement={placement}

@@ -1,12 +1,72 @@
 @import '@/assets/styles/global.scss';
 
 .my-upload-image {
-  padding: 0 toRem(4);
-  font-size: toRem(20);
-  @include select-restricted;
-  cursor: pointer;
-  color: $gray-color-4;
-}
+  .upload-button {
+    font-size: 1.2rem;
+    color: $main-black-color;
+    position: relative;
+    height: toRem(40);
+    width: toRem(40);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border-radius: 50%;
+    transition: 0.12s ease-in-out;
+    transform: translateY(-4px);
+  }
 
-.my-upload-image-modal {
+  .upload-button:hover {
+    background: $gray-color-1;
+    cursor: pointer;
+    height: toRem(40);
+    width: toRem(40);
+    z-index: 2;
+  }
+
+  .media-container {
+    border: toRem(1) solid $gray-color-2;
+    border-radius: toRem(4);
+    padding: toRem(4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: toRem(110);
+
+    .media {
+      display: flex;
+      align-items: center;
+      gap: toRem(8);
+
+      .img-wrapper {
+        box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+        background-color: white;
+        border-radius: toRem(4);
+        width: toRem(134);
+        height: toRem(100);
+        position: relative;
+        border: 1px solid $purple-color-0;
+        display: flex;
+        outline-width: 0;
+        justify-content: center;
+
+        .ant-image {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .ant-image-img {
+          box-sizing: border-box;
+          margin: auto;
+          max-height: 100%;
+          max-width: 100%;
+          min-height: 0;
+          min-width: 0;
+
+          @include select-restricted;
+        }
+      }
+    }
+  }
 }
