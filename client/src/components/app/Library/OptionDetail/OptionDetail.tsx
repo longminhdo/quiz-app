@@ -1,6 +1,5 @@
 import { CopyOutlined, DeleteOutlined, WarningFilled } from '@ant-design/icons';
 import { Button, Card, Input } from 'antd';
-import { isEqual } from 'lodash';
 import React, { useEffect } from 'react';
 import { MyTooltipIcon, MyUploadImage } from '@/components/common';
 import { DUPLICATED_OPTIONS_ERROR_MESSAGE } from '@/constants/message';

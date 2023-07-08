@@ -2,12 +2,12 @@ import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Image, Modal, Space, Table, Tag, Tooltip } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
-import { convertLabel } from '@/utilities/helpers';
-import { Collection } from '@/types/collection';
-import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
-import './CollectionDetail.scss';
-import { Question } from '@/types/question';
 import QuestionDetail from '@/components/app/Library/QuestionDetail/QuestionDetail';
+import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import { Collection } from '@/types/collection';
+import { Question } from '@/types/question';
+import { convertLabel } from '@/utilities/helpers';
+import './CollectionDetail.scss';
 
 const CollectionDetail = ({ collection } : { collection?: Collection}) => {
   const [open, setOpen] = useState(false);

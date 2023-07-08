@@ -6,8 +6,8 @@ import OptionDetail from '@/components/app/Library/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
 import { Question } from '@/types/question';
-import './QuestionDetail.scss';
 import { getNewOptionContent } from '@/utilities/helpers';
+import './QuestionDetail.scss';
 
 const { Item } = Form;
 

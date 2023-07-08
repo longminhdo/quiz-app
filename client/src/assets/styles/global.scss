@@ -78,8 +78,7 @@ $desktop-width: 1024px;
   transition: 0.3s ease-in-out;
 
   &:hover {
-    box-shadow: 0 0px 2px 0 rgba(74, 74, 74, 0.2),
-      0 0px 4px 2px rgba(94, 94, 94, 0.19);
+    box-shadow: 0 0px 2px 0 rgba(74, 74, 74, 0.2), 0 0px 4px 2px rgba(94, 94, 94, 0.19);
   }
 }
 
