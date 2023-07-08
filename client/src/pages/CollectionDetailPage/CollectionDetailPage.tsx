@@ -13,7 +13,8 @@ import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Collection } from '@/types/collection';
 import './CollectionDetailPage.scss';
 
-const libraryTabs: Array<any> = [
+// TODO: update tab
+const collectionTabs: Array<any> = [
   {
     label: 'My collections',
     path: 'my-collection',
@@ -43,6 +44,11 @@ const CollectionDetailPage = () => {
     const searchValue = e.target.value;
 
     setFilter(prev => ({ ...prev, search: searchValue }));
+  };
+
+  // TODO: add question
+  const handleAddQuestion = () => {
+    console.log('create question');
   };
 
   useEffect(() => {
@@ -96,7 +102,7 @@ const CollectionDetailPage = () => {
       <Tabs
         onChange={(tab) => setSelectedTab(tab)}
         type="card"
-        items={libraryTabs.map(({ id, label }) => ({
+        items={collectionTabs.map(({ id, label }) => ({
           label,
           key: id,
         }))}
@@ -111,7 +117,7 @@ const CollectionDetailPage = () => {
             value={filter.search}
             onChange={handleSearchChange}
           />
-          <Button type="primary">
+          <Button type="primary" onClick={handleAddQuestion}>
             <FormOutlined />
             New question
           </Button>

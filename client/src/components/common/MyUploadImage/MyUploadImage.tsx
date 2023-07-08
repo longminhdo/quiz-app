@@ -13,10 +13,11 @@ import './MyUploadImage.scss';
 interface MyUploadImageProps {
   value?: Media;
   onChange?: any
+  disableOnLoading?: any;
 }
 
 const MyUploadImage: React.FC<MyUploadImageProps> = ({
-  value = undefined, onChange = () => undefined,
+  value = undefined, onChange = () => undefined, disableOnLoading = () => undefined,
 }) => {
   const [media, setMedia] = useState<Media>();
   const [loading, setLoading] = useState(false);
@@ -45,6 +46,7 @@ const MyUploadImage: React.FC<MyUploadImageProps> = ({
   const handleChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
       setLoading(true);
+      disableOnLoading && disableOnLoading(true);
       return;
     }
     if (info.file.status === 'done') {
@@ -52,12 +54,14 @@ const MyUploadImage: React.FC<MyUploadImageProps> = ({
       setMedia(receivedMedia);
       onChange && onChange(receivedMedia);
       setLoading(false);
+      disableOnLoading && disableOnLoading(false);
       message.success(`${info.file.name} file uploaded successfully.`);
     }
     if (info.file.status === 'error') {
       setMedia(mediaRef.current);
       onChange && onChange(mediaRef.current);
       setLoading(false);
+      disableOnLoading && disableOnLoading(false);
       message.error(`${info.file.name} file upload failed.`);
     }
   };

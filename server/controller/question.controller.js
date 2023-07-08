@@ -27,9 +27,11 @@ module.exports.createQuestion = async (req, res, next) => {
 
     await collection.save({ session });
 
+    const newCollection = await Collection.findById(collectionId).populate('questions');
+
     await session.commitTransaction();
     session.endSession();
-    return res.status(StatusCodes.OK).send({ success: true, data: collection });
+    return res.status(StatusCodes.OK).send({ success: true, data: newCollection });
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
@@ -41,16 +43,19 @@ module.exports.updateQuestion = async (req, res, next) => {
   try {
     const editedQuestion = req.body;
     const { questionId } = req.params;
+    const { collectionId } = req.params;
 
-    const newQuestion = await Question.findByIdAndUpdate(
+    await Question.findByIdAndUpdate(
       questionId,
       editedQuestion,
       {
         new: true,
       },
-  );
+    );
 
-    return res.status(200).send({ success: true, data: newQuestion });
+    const newCollection = await Collection.findById(collectionId).populate('questions');
+
+    return res.status(200).send({ success: true, data: newCollection });
   } catch (error) {
     console.log(error);
     next(error);

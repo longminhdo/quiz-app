@@ -1,5 +1,5 @@
 import { CopyOutlined, DeleteOutlined, WarningFilled } from '@ant-design/icons';
-import { Button, Card, Input } from 'antd';
+import { Button, Card, Checkbox, Input } from 'antd';
 import React, { useEffect } from 'react';
 import { MyTooltipIcon, MyUploadImage } from '@/components/common';
 import { DUPLICATED_OPTIONS_ERROR_MESSAGE } from '@/constants/message';
@@ -13,39 +13,34 @@ const OptionDetail = ({
   index = 0,
   setQuestion,
   options,
+  disableSubmit,
 }: {
   option: Option,
   setQuestion?: any;
   index?: number;
   options?: Array<Option>;
+  disableSubmit? : any
 }) => {
   const [optionLocalData, setOptionLocalData] = React.useState<Option>(option);
   const [error, setError] = React.useState(false);
-
-  // React.useEffect(() => {
-  //   if (isEqual(option, optionLocalData)) {
-  //     return;
-  //   }
-
-  //   setOptionLocalData(option);
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [option]);
 
   const optionContentArray = React.useMemo(
     () => options?.map((opt: Option) => opt.content),
     [options],
   );
 
-  // React.useEffect(() => {
-  //   const currentContent = optionLocalData?.content || '';
+  useEffect(() => {
+    const currentContent = optionLocalData?.content || '';
 
-  //   const foundIndex = optionContentArray?.indexOf(currentContent);
-  //   if (foundIndex !== -1 && foundIndex !== index) {
-  //     return setError(true);
-  //   }
+    const foundIndex = optionContentArray?.indexOf(currentContent);
+    if (foundIndex !== -1 && foundIndex !== index) {
+      disableSubmit(true);
+      return setError(true);
+    }
 
-  //   return setError(false);
-  // }, [index, optionContentArray, optionLocalData?.content]);
+    disableSubmit(false);
+    return setError(false);
+  }, [disableSubmit, index, optionContentArray, optionLocalData?.content]);
 
   const handleContentChange = (e) => {
     const newContent = e.target.value;
@@ -100,7 +95,13 @@ const OptionDetail = ({
     [index, setQuestion],
   );
 
+  // TODO: duplicate option
   const handleDuplicateOption = () => {};
+
+  const handleCheckboxChange = (e) => {
+    const checked = e.target.checked;
+    setOptionLocalData(prev => ({ ...prev, isCorrectAnswer: checked }));
+  };
 
   const optionActions = [
     <Button type="text" key="duplicate" onClick={handleDuplicateOption}>
@@ -122,11 +123,20 @@ const OptionDetail = ({
             <MyTooltipIcon style={{ padding: 0 }} title={DUPLICATED_OPTIONS_ERROR_MESSAGE}>
               <WarningFilled className="option-content-warning" />
             </MyTooltipIcon>
-          ) : null}
+          ) : <span />}
         />
       </div>
 
-      <MyUploadImage value={option?.media} onChange={handleMediaChange} />
+      <MyUploadImage value={option?.media} onChange={handleMediaChange} disableOnLoading={disableSubmit} />
+
+      <Checkbox
+        defaultChecked={option?.isCorrectAnswer}
+        disabled={error}
+        onChange={handleCheckboxChange}
+        style={{ userSelect: 'none' }}
+      >
+        Mark this as the correct answer
+      </Checkbox>
     </Card>
   );
 };

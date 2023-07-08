@@ -1,12 +1,16 @@
 import { Button, Form, Input, Select } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { updateQuestion } from '@/actions/collection';
 import OptionDetail from '@/components/app/Library/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { Question } from '@/types/question';
 import { getNewOptionContent } from '@/utilities/helpers';
+import { transformSendingQuestion } from '@/utilities/quizHelpers';
 import './QuestionDetail.scss';
 
 const { Item } = Form;
@@ -16,13 +20,20 @@ const levelOptions = Object.entries(QuestionLevelEnums)
 
 const typeOptions = Object.entries(QuestionTypeEnums).map(([key, value]) => ({ label: value, value: key }));
 
-const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
-  const selectedQuestionRef = useRef<Question>();
+const QuestionDetail = ({ selectedQuestion, onCancel }: {selectedQuestion: Question, onCancel?: any}) => {
   const [localQuestion, setLocalQuestion] = useState<Question>();
+  const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
+  const [run, loading] = useDispatchAsyncAction();
+  const selectedQuestionRef = useRef<Question>();
+  const { collectionId } = useParams();
 
   useEffect(() => {
     if (!isEqual(selectedQuestionRef.current, selectedQuestion)) {
-      const convertedOptions = (selectedQuestion?.options || []).map(item => ({ ...item, id: item?.id || uuidv4() }));
+      const convertedOptions = (selectedQuestion?.options || []).map(item => ({
+        ...item,
+        isCorrectAnswer: (selectedQuestion?.keys || []).includes(item.content),
+        id: item?.id || uuidv4(),
+      }));
       const convertedQuestion: Question = { ...selectedQuestion, options: convertedOptions };
       setLocalQuestion(convertedQuestion);
 
@@ -30,11 +41,15 @@ const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
     }
   }, [selectedQuestion]);
 
-  const handleSubmit = () => {
-    console.log('Success:', localQuestion);
+  const handleSubmit = async () => {
+    const payload = transformSendingQuestion(localQuestion);
+
+    await run(updateQuestion(({ newQuestion: payload, collectionId: collectionId || '' })));
+    onCancel && onCancel();
   };
 
-  const handleReset = () => {
+  const handleCancel = () => {
+    onCancel && onCancel();
     setLocalQuestion(undefined);
   };
 
@@ -52,6 +67,10 @@ const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
     setLocalQuestion((prev: any) => ({ ...prev, type: v }));
   };
 
+  const handleQuestionLevelChange = (v) => {
+    setLocalQuestion((prev: any) => ({ ...prev, level: v }));
+  };
+
   const scrollToEnd = () => {
     const element = document.getElementById('scroll-to-end');
     element?.scrollIntoView({ behavior: 'smooth', block: 'end' });
@@ -67,6 +86,12 @@ const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
     setTimeout(() => {
       scrollToEnd();
     }, 20);
+  };
+
+  const handleCorrectAnswerChange = (e) => {
+    const value = e.target.value.trim();
+
+    setLocalQuestion((prev: any) => ({ ...prev, keys: [value] }));
   };
 
   return (
@@ -91,6 +116,7 @@ const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
           placeholder="Please select"
           options={levelOptions}
           value={localQuestion?.level}
+          onChange={handleQuestionLevelChange}
         />
       </Item>
 
@@ -124,6 +150,7 @@ const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
                   key={opt.id}
                   setQuestion={setLocalQuestion}
                   options={localQuestion?.options || []}
+                  disableSubmit={setIsSubmitBtnDisabled}
                 />
               ))}
 
@@ -132,13 +159,20 @@ const QuestionDetail = ({ selectedQuestion }: {selectedQuestion: Question}) => {
           </Item>
         ) : null}
 
+      {[QuestionType.TEXT].includes(localQuestion?.type || '')
+        ? (
+          <Item label="Correct answer">
+            <Input placeholder="Correct answer" allowClear onChange={handleCorrectAnswerChange} value={localQuestion?.keys[0] || ''} />
+          </Item>
+        ) : null}
+
       <div id="scroll-to-end" style={{ height: 0, width: 0 }} />
       <div className="custom-footer">
-        <Button onClick={handleReset}>
-          Clear
+        <Button onClick={handleCancel}>
+          Cancel
         </Button>
 
-        <Button type="primary" onClick={handleSubmit}>
+        <Button type="primary" onClick={handleSubmit} disabled={isSubmitBtnDisabled} loading={loading}>
           Submit
         </Button>
       </div>

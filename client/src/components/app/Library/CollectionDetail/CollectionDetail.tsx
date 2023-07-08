@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { CheckSquareFilled, CloseSquareFilled, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Button, Image, Modal, Space, Table, Tag, Tooltip } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -22,6 +22,11 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
 
   const handleCancel = () => {
     setOpen(false);
+  };
+
+  // TODO: handle delete question
+  const handleQuestionDelete = (question) => {
+    console.log('delete', question);
   };
 
   const columns: any = useMemo(() => [
@@ -60,7 +65,7 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
       dataIndex: 'questionMedia',
       key: 'questionMedia',
       width: 140,
-      render: (media) => (<Image src={media?.url} style={{ height: 60 }} />),
+      render: (media) => (<Image src={media?.url} style={{ height: 40 }} />),
     },
     {
       title: 'Action',
@@ -83,6 +88,7 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
           </Button>
           <Button
             danger
+            onClick={() => handleQuestionDelete(record)}
           >
             <DeleteOutlined />
             Delete
@@ -94,13 +100,23 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
 
   const expandedRowRender = useCallback((props) => {
     const data :any = props?.options || [];
+    const { keys } = props;
     const columns: any = [
       { title: 'Option', dataIndex: 'content', key: 'content' },
+      { title: 'Correct answer',
+        dataIndex: 'isCorrectAnswer',
+        key: 'isCorrectAnswer',
+        width: 160,
+        render: (_, record) => (
+          (keys.includes(record.content))
+            ? <CheckSquareFilled style={{ color: '#52c41a', fontSize: 24 }} />
+            : <CloseSquareFilled style={{ color: '#e65061', fontSize: 24 }} />),
+      },
       { title: 'Media',
         dataIndex: 'media',
         key: 'media',
         width: 200,
-        render: (media) => (<Image src={media?.url} style={{ height: 40 }} />),
+        render: (media) => (<Image src={media?.url} style={{ height: 36 }} />),
       },
       {
         title: 'Action',
@@ -149,7 +165,7 @@ const CollectionDetail = ({ collection } : { collection?: Collection}) => {
         destroyOnClose
         footer={null}
       >
-        { selectedQuestion && <QuestionDetail selectedQuestion={selectedQuestion} />}
+        { selectedQuestion && <QuestionDetail selectedQuestion={selectedQuestion} onCancel={handleCancel} />}
       </Modal>
     </div>
   );

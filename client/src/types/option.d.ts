@@ -4,4 +4,5 @@ export interface Option {
   content: string;
   media?: Media;
   id?: string | number;
+  isCorrectAnswer?: boolean;
 }

@@ -1,5 +1,6 @@
 import { CollectionAction } from 'src/constants/action';
 import { GET, PUT, POST, DELETE } from '@/utilities/request';
+import { Question } from '@/types/question';
 
 export const getCollections = (query?: { title?: string; page?: number; sort?: string; limit?: number }) => ({
   type: CollectionAction.GET_COLLECTIONS,
@@ -51,20 +52,20 @@ export const deleteQuestion = ({ formId, pageId, questionId }: { formId: string;
   promise: DELETE(`/forms/${formId}/pages/${pageId}/questions/${questionId}`),
 });
 
-export const updateQuestion = ({ newQuestion, formId, pageId }) => {
+export const updateQuestion = ({ newQuestion, collectionId }: { newQuestion: Question; collectionId: string }) => {
+  const questionId = newQuestion._id;
   const data = {
-    title: newQuestion.title,
-    description: newQuestion.description,
-    type: newQuestion.type,
-    required: newQuestion.required,
-    otherAnswerAccepted: newQuestion.otherAnswerAccepted,
-    options: [...newQuestion.options],
+    title: newQuestion?.title,
+    keys: newQuestion?.keys,
+    level: newQuestion?.level,
+    options: newQuestion?.options,
+    type: newQuestion?.type,
     questionMedia: newQuestion?.questionMedia,
   };
 
   return {
     type: CollectionAction.UPDATE_QUESTION,
-    promise: PUT(`/forms/${formId}/pages/${pageId}/questions/${newQuestion._id}`, {
+    promise: PUT(`/collections/${collectionId}/questions/${questionId}`, {
       body: data,
     }),
   };
