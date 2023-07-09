@@ -10,7 +10,6 @@ const LoginPage = () => {
 
   const handleSSOLogin = useCallback(async () => {
     const { data } = await run(getSSOToken());
-    console.log(data);
     window.location.replace(data.url);
   }, [run]);
 

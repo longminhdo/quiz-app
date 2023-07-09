@@ -1,5 +1,4 @@
 import { CollectionAction } from 'src/constants/action';
-import { transformReceivedCollection } from '@/utilities/quizHelpers';
 
 interface CollectionState {
   currentCollection?: any;
@@ -15,11 +14,12 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
     case CollectionAction.UPDATE_COLLECTION:
     case CollectionAction.UPDATE_QUESTION:
     case CollectionAction.CREATE_QUESTION:
+    case CollectionAction.DELETE_QUESTION:
     case CollectionAction.DUPLICATE_QUESTION: {
       const collection = action.payload.data;
 
       return {
-        currentCollection: transformReceivedCollection(collection),
+        currentCollection: collection,
       };
     }
 

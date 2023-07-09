@@ -1,7 +1,8 @@
 import { CheckSquareFilled, CloseSquareFilled, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { Button, Image, Modal, Space, Table, Tag, Tooltip } from 'antd';
+import { Button, Image, Modal, Space, Table, Tag, Tooltip, message } from 'antd';
 import { isEmpty, isEqual } from 'lodash';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import QuestionDetail from '@/components/app/Library/QuestionDetail/QuestionDetail';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
@@ -9,6 +10,10 @@ import { Collection } from '@/types/collection';
 import { Question } from '@/types/question';
 import { convertLabel } from '@/utilities/helpers';
 import './CollectionDetail.scss';
+import { setLoading } from '@/modules/redux/slices/appReducer';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import { deleteQuestion } from '@/actions/collection';
+import { NO_COLLECTION_ID } from '@/constants/message';
 
 const defaultQuestion = {
   title: 'Untitled Question',
@@ -33,6 +38,10 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
   const actionRef = useRef<any>();
   const tableRef = useRef<any>(null);
   const filterRef = useRef<any>();
+
+  const { collectionId } = useParams();
+  const [messageApi] = message.useMessage();
+  const [run] = useDispatchAsyncAction();
 
   const scrollToEnd = () => {
     if (tableRef.current) {
@@ -70,8 +79,15 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
   };
 
   // TODO: handle delete question
-  const handleQuestionDelete = (question) => {
-    console.log('delete', question);
+  const handleQuestionDelete = async(question) => {
+    if (!collectionId) {
+      messageApi.error(NO_COLLECTION_ID);
+      return;
+    }
+
+    run(setLoading(true));
+    await run(deleteQuestion({ collectionId, questionId: question._id }));
+    run(setLoading(false));
   };
 
   const handlePaginationChange = (page, pageSize) => {
@@ -216,12 +232,11 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
 
     if (actionRef.current === 'CREATE') {
       setPaginationToLastPage({ total: (collection?.questions || []).length, pageSize });
-      actionRef.current = 'SCROLL';
+      actionRef.current = 'SCROLL_TO_END';
       return;
     }
 
-    if (actionRef.current === 'SCROLL') {
-      console.log('scroll to end table', newQuestions);
+    if (actionRef.current === 'SCROLL_TO_END') {
       scrollToEnd();
       actionRef.current = '';
     }

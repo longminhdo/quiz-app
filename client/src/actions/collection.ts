@@ -47,9 +47,9 @@ export const flushCollection = () => ({
   type: CollectionAction.FLUSH_COLLECTION,
 });
 
-export const deleteQuestion = ({ formId, pageId, questionId }: { formId: string; pageId: string; questionId: string }) => ({
+export const deleteQuestion = ({ collectionId, questionId }: { collectionId: string; questionId: string }) => ({
   type: CollectionAction.DELETE_QUESTION,
-  promise: DELETE(`/forms/${formId}/pages/${pageId}/questions/${questionId}`),
+  promise: DELETE(`/collections/${collectionId}/questions/${questionId}`),
 });
 
 export const createQuestion = ({ newQuestion, collectionId }: { newQuestion: Question; collectionId: string }) => {

@@ -27,10 +27,3 @@ export const transformSendingQuestion = (question) => {
 
   return { ...question, keys: transformedKeys, options: transformedOptions };
 };
-
-export const transformReceivedCollection = (collection) => {
-  console.log('collection', collection);
-  const transformedCollection = collection;
-
-  return transformedCollection;
-};

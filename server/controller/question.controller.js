@@ -44,7 +44,8 @@ module.exports.updateQuestion = async (req, res, next) => {
       },
     );
 
-    const newCollection = await Collection.findById(collectionId).populate('questions');
+    const newCollection = await Collection.findById(collectionId)
+      .populate({ path: 'questions', match: { deleted: false } });
 
     return res.status(200).send({ success: true, data: newCollection });
   } catch (error) {
@@ -61,7 +62,7 @@ module.exports.deleteQuestion = async (req, res, next) => {
 
     const collection = await Collection
       .findByIdAndUpdate(collectionId, { $pull: { questions: questionId } }, { new: true })
-      .populate('questions');
+      .populate({ path: 'questions', match: { deleted: false } });
 
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {

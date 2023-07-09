@@ -1,16 +1,18 @@
-const { cloudinary } = require("../cloudinary");
+const { cloudinary } = require('.');
 
 const deleteImg = async (filename) => {
-	return await cloudinary.uploader.destroy(filename);
+  const res = await cloudinary.uploader.destroy(filename);
+  return res;
 };
 
 const uploadImg = async (url) => {
-	return await cloudinary.uploader.upload(url, {
-		folder: "survey-app",
-	});
+  const res = await cloudinary.uploader.upload(url, {
+    folder: 'survey-app',
+  });
+  return res;
 };
 
 module.exports = {
-	deleteImg,
-	uploadImg,
+  deleteImg,
+  uploadImg,
 };
