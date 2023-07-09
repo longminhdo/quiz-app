@@ -1,12 +1,12 @@
 import { BookOutlined, FolderOpenOutlined, PieChartOutlined, SettingOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
-import MyCard from '@/components/common/MyCard/MyCard';
-import './CollectionDetailPage.scss';
-import QuestionListTab from '@/components/app/CollectionDetail/QuestionListTab';
 import AnalyticsTab from '@/components/app/CollectionDetail/AnalyticsTab';
+import QuestionListTab from '@/components/app/CollectionDetail/QuestionListTab';
 import QuizzesTab from '@/components/app/CollectionDetail/QuizzesTab';
 import SettingsTab from '@/components/app/CollectionDetail/SettingsTab';
+import MyCard from '@/components/common/MyCard/MyCard';
+import './CollectionDetailPage.scss';
 
 const COLLECTION_TAB_PATHS = {
   QUESTIONS: 'questions',

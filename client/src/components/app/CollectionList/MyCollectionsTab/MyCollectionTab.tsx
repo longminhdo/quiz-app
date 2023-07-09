@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
 import { message } from 'antd';
-import CollectionListToolbar from '@/components/app/CollectionList/MyCollectionsTab/CollectionListToolbar/CollectionListToolbar';
-import CollectionList from '@/components/app/CollectionList/MyCollectionsTab/CollectionList/CollectionList';
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import { Collection } from '@/types/collection';
-import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
+import React, { useEffect, useRef, useState } from 'react';
 import { getCollections } from '@/actions/collection';
+import CollectionList from '@/components/app/CollectionList/MyCollectionsTab/CollectionList/CollectionList';
+import CollectionListToolbar from '@/components/app/CollectionList/MyCollectionsTab/CollectionListToolbar/CollectionListToolbar';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
+import { Collection } from '@/types/collection';
 
-const MyCollectionTab = () => {
+const MyCollectionTab: React.FC = () => {
   const [collections, setCollections] = useState<Array<Collection>>([]);
   const [total, setTotal] = useState<number>(0);
 

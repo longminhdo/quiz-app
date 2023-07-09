@@ -10,7 +10,7 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Collection } from '@/types/collection';
 
-const QuestionListTab = () => {
+const QuestionListTab: React.FC = () => {
   const [collection, setCollection] = useState<Collection>();
   const [filter, setFilter] = useState<{search: string, type: Array<string>, level: Array<string>}>({ search: '', type: [], level: [] });
 
