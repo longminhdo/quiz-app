@@ -182,7 +182,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
                 ref={titleInputRef}
               />
             </>
-          ) : <p>Are you sure you want to delete this question?</p>
+          ) : <p>Are you sure you want to delete this collection?</p>
         }
 
       </Modal>

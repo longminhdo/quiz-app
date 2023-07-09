@@ -2,3 +2,15 @@
 
 .user-avatar {
 }
+
+.custom-user-dropdown {
+  top: toRem(64) !important;
+  width: toRem(140);
+
+  .custom-user-dropdown-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: toRem(8);
+  }
+}

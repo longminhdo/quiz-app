@@ -21,7 +21,7 @@ const LoginPage = () => {
         remember: true,
       }}
     >
-      <div className="title">HUST Form</div>
+      <div className="title">HUST Quiz</div>
       <Form.Item
         name="username"
         rules={[
