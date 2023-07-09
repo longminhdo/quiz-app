@@ -3,17 +3,17 @@ import { Button, Image, Modal, Space, Table, Tag, Tooltip, message } from 'antd'
 import { isEmpty, isEqual } from 'lodash';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { deleteQuestion } from '@/actions/question';
 import QuestionDetail from '@/components/app/Library/QuestionDetail/QuestionDetail';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import { NO_COLLECTION_ID } from '@/constants/message';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Collection } from '@/types/collection';
 import { Question } from '@/types/question';
 import { convertLabel } from '@/utilities/helpers';
 import './CollectionDetail.scss';
-import { setLoading } from '@/modules/redux/slices/appReducer';
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import { deleteQuestion } from '@/actions/collection';
-import { NO_COLLECTION_ID } from '@/constants/message';
 
 const defaultQuestion = {
   title: 'Untitled Question',

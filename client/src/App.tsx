@@ -14,7 +14,7 @@ import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
 import { setWindowWidth } from '@/modules/redux/slices/appReducer';
 import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
-import LibraryPage from '@/pages/LibraryPage/LibraryPage';
+import CollectionListPage from '@/pages/CollectionListPage/CollectionListPage';
 import MyQuizzesPage from '@/pages/MyQuizzesPage/MyQuizzesPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -59,7 +59,7 @@ const App = () => {
                 element={(
                   <ProtectedRoute>
                     <QuizManagementLayout>
-                      <LibraryPage />
+                      <CollectionListPage />
                     </QuizManagementLayout>
                   </ProtectedRoute>
               )}

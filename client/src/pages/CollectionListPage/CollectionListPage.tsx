@@ -10,7 +10,7 @@ import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
-import './LibraryPage.scss';
+import './CollectionListPage.scss';
 
 const libraryTabs: Array<any> = [
   {
@@ -25,7 +25,7 @@ const libraryTabs: Array<any> = [
   },
 ];
 
-const LibraryPage = () => {
+const CollectionListPage = () => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
   const [selectedTab, setSelectedTab] = useState('1');
   const [collections, setCollections] = useState<Array<Collection>>([]);
@@ -161,4 +161,4 @@ const LibraryPage = () => {
   );
 };
 
-export default LibraryPage;
+export default CollectionListPage;

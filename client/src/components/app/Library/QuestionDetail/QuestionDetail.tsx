@@ -3,7 +3,6 @@ import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { createQuestion, updateQuestion } from '@/actions/collection';
 import OptionDetail from '@/components/app/Library/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
@@ -13,6 +12,7 @@ import { Question } from '@/types/question';
 import { getNewOptionContent } from '@/utilities/helpers';
 import { transformSendingQuestion } from '@/utilities/quizHelpers';
 import './QuestionDetail.scss';
+import { createQuestion, updateQuestion } from '@/actions/question';
 
 const { Item } = Form;
 

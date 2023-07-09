@@ -1,4 +1,4 @@
-import { CollectionAction } from 'src/constants/action';
+import { CollectionAction, QuestionAction } from 'src/constants/action';
 
 interface CollectionState {
   currentCollection?: any;
@@ -12,10 +12,10 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
   switch (action.type) {
     case CollectionAction.GET_COLLECTION_BY_ID:
     case CollectionAction.UPDATE_COLLECTION:
-    case CollectionAction.UPDATE_QUESTION:
-    case CollectionAction.CREATE_QUESTION:
-    case CollectionAction.DELETE_QUESTION:
-    case CollectionAction.DUPLICATE_QUESTION: {
+    case QuestionAction.UPDATE_QUESTION:
+    case QuestionAction.CREATE_QUESTION:
+    case QuestionAction.DELETE_QUESTION:
+    case QuestionAction.DUPLICATE_QUESTION: {
       const collection = action.payload.data;
 
       return {
