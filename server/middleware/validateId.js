@@ -59,7 +59,7 @@ exports.validateAnswerId = async (req, res, next) => {
 };
 
 
-//validate collection id
+// validate collection id
 exports.validateCollectionId = async (req, res, next) => {
   const { collectionId } = req.params;
   if (!ObjectId.isValid(collectionId)) {
@@ -74,7 +74,7 @@ exports.validateCollectionId = async (req, res, next) => {
   return next();
 };
 
-//validate quiz id
+// validate quiz id
 exports.validateQuizId = async (req, res, next) => {
   const { quizId } = req.params;
 
