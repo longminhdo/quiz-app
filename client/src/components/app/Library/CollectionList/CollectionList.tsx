@@ -97,7 +97,7 @@ const CollectionList = ({ data, total, tableLoading }:{data: Array<Collection>, 
       width: 240,
       ellipsis: true,
       render: (_, record) => (
-        <Tooltip title={record?.ownerData?.email} placement="topLeft">
+        <Tooltip destroyTooltipOnHide title={record?.ownerData?.email} placement="topLeft">
           <b>{record?.ownerData?.email}</b>
         </Tooltip>
       ),
