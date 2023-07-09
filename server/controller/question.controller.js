@@ -69,13 +69,12 @@ module.exports.deleteQuestion = async (req, res, next) => {
 };
 
 // TODO: duplicate question backend
-module.exports.duplicateQuestion = async (req, res) => {
+module.exports.duplicateQuestion = async (req, res, next) => {
   try {
     const { collectionId, questionId } = req.params;
     const question = await Question.findById(questionId);
 
-    const collection = await Collection.findById(collectionId)
-      .populate({ path: 'questions', match: { deleted: false } });
+    const collection = await Collection.findById(collectionId);
 
     const index = collection.questions.findIndex((question) => question._id.toString() === questionId);
 
@@ -87,12 +86,14 @@ module.exports.duplicateQuestion = async (req, res) => {
     } else {
       collection.questions.push(newQuestion);
     }
+
     await collection.save();
 
-    return res.status(200).send({ success: true, data: collection });
+    const newCollection = await Collection.findById(collectionId).populate({ path: 'questions', match: { deleted: false } });
+
+    return res.status(200).send({ success: true, data: newCollection });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: InternalServerError.INTERNAL_SERVER_ERROR, error });
+    next(error);
   }
 };
 
