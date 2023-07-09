@@ -101,7 +101,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
       title: 'Owner',
       dataIndex: 'owner',
       key: 'owner',
-      width: 240,
+      width: 280,
       ellipsis: true,
       render: (_, record) => (
         <Tooltip destroyTooltipOnHide title={record?.ownerData?.email} placement="topLeft">

@@ -90,3 +90,31 @@ module.exports.deleteQuiz = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.generateCode = async (req, res, next) => {
+  try {
+    const { quizId } = req.params;
+    const quiz = await Quiz.findById(quizId);
+
+    if (quiz?.code) {
+      return res.status(StatusCodes.RESOURCE_EXISTED).send({ success: false, message: 'This quiz has already had a code!' });
+    }
+
+    const quizWithBiggestCode = await Quiz.findOne().sort({ code: -1 });
+    let newCode;
+    if (!quizWithBiggestCode?.code) {
+      newCode = 1;
+    } else {
+      newCode = quizWithBiggestCode.code + 1;
+    }
+
+    await Quiz.findByIdAndUpdate(quizId, { code: newCode }, { new: true });
+
+    return res.status(StatusCodes.OK).send({
+      success: true,
+      data: { code: newCode },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

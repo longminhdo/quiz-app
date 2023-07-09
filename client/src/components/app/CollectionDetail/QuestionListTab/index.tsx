@@ -19,7 +19,7 @@ const QuestionListTab: React.FC = () => {
   const collectionRef = useRef<any>();
 
   const { currentCollection } = useTypedSelector((state) => state.collection);
-  const [run] = useDispatchAsyncAction();
+  const [run, loading] = useDispatchAsyncAction();
   const { collectionId } = useParams();
 
   const handleAddQuestion = () => {
@@ -33,10 +33,7 @@ const QuestionListTab: React.FC = () => {
     }
 
     (async () => {
-      run(setLoading(true));
       await run(getCollectionById(collectionId));
-
-      run(setLoading(false));
     })();
   }, [collectionId, run]);
 
@@ -69,7 +66,7 @@ const QuestionListTab: React.FC = () => {
     <>
       <QuestionListToolbar handleAddQuestion={handleAddQuestion} setFilter={setFilter} filter={filter} />
       <QuestionListFilter setFilter={setFilter} filter={filter} />
-      <QuestionList collection={collection} ref={childRef} filter={filter} />
+      <QuestionList tableLoading={loading} collection={collection} ref={childRef} filter={filter} />
     </>
   );
 };

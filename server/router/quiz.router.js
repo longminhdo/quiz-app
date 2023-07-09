@@ -37,4 +37,11 @@ router.delete(
   catchAsync(quiz.deleteQuiz),
 );
 
+// DELETE /quizzes/:quizId
+router.post(
+  '/:quizId/generate-code',
+  validateQuizId,
+  catchAsync(quiz.generateCode),
+);
+
 module.exports = router;

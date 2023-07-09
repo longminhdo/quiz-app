@@ -37,3 +37,8 @@ export const updateQuiz = (newQuiz: { _id?: string; title: string }) => {
     }),
   };
 };
+
+export const generateQuizCode = (quizId: string) => ({
+  type: QuizAction.GENERATE_QUIZ_CODE,
+  promise: POST(`/quizzes/${quizId}/generate-code`),
+});

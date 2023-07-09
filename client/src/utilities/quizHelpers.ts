@@ -27,3 +27,9 @@ export const transformSendingQuestion = (question) => {
 
   return { ...question, keys: transformedKeys, options: transformedOptions };
 };
+
+export const formatCode = (code: number) => {
+  const result = code.toString().padStart(6, '0');
+
+  return result;
+};

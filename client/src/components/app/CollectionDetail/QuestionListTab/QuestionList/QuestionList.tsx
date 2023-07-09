@@ -27,7 +27,7 @@ const defaultQuestion = {
   ],
 };
 
-const QuestionList = forwardRef< any, {collection?: Collection, filter: any}>(({ collection, filter }, ref) => {
+const QuestionList = forwardRef< any, {collection?: Collection, filter: any, tableLoading?: boolean}>(({ collection, filter, tableLoading = false }, ref) => {
   const [open, setOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const [questions, setQuestions] = useState <Array<Question>>(collection?.questions || []);
@@ -259,6 +259,7 @@ const QuestionList = forwardRef< any, {collection?: Collection, filter: any}>(({
     <div className="question-list">
       <Table
         scroll={{ y: 530, x: 1300 }}
+        loading={tableLoading}
         columns={columns}
         dataSource={questions}
         rowKey={(item) => item._id || ''}

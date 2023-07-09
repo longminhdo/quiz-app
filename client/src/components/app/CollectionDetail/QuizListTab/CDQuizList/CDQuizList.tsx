@@ -1,15 +1,16 @@
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space, Table, Tooltip } from 'antd';
-import React, { useMemo, useRef, useState } from 'react';
+import { Button, Input, Modal, Space, Table, Tag, Tooltip } from 'antd';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteQuiz, updateQuiz } from '@/actions/quiz';
+import { deleteQuiz, generateQuizCode, updateQuiz } from '@/actions/quiz';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Quiz } from '@/types/quiz';
-import { convertTime } from '@/utilities/helpers';
+import { convertTime, copyToClipboard } from '@/utilities/helpers';
 import './CDQuizList.scss';
+import { formatCode } from '@/utilities/quizHelpers';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
@@ -26,6 +27,7 @@ const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) =>
   const [selectedQuiz, setSelectedQuiz] = useState<Quiz>();
   const [modalType, setModalType] = useState<string>('');
   const [isOpen, setIsOpen] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const titleInputRef = useRef<any>();
 
@@ -74,6 +76,17 @@ const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) =>
     }));
   };
 
+  const handleGenerateCode = useCallback(async (quizId) => {
+    setIsGenerating(true);
+    await run(generateQuizCode(quizId));
+    setIsGenerating(false);
+    updateQuery({ query: { timestamp: Date.now() } });
+  }, [run, updateQuery]);
+
+  const handleCodeTagClick = useCallback((code) => {
+    copyToClipboard({ data: code, callbackMessage: 'Copied to clipboard' });
+  }, []);
+
   const columns: any = useMemo(() => [
     {
       title: 'Name',
@@ -88,6 +101,28 @@ const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) =>
       ),
     },
     {
+      title: 'Code',
+      dataIndex: 'code',
+      width: 200,
+      render: (code, record) => (code
+        ? (
+          <Tag
+            onClick={() => handleCodeTagClick(formatCode(code))}
+            color="green"
+            style={{ userSelect: 'none', fontSize: 14, cursor: 'pointer' }}
+          >
+            {formatCode(code)}
+          </Tag>
+        ) : (
+          <Button
+            loading={isGenerating}
+            onClick={() => handleGenerateCode(record._id)}
+          >
+            Generate code
+          </Button>
+        )),
+    },
+    {
       title: 'Amount',
       dataIndex: 'questions',
       width: 150,
@@ -97,7 +132,7 @@ const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) =>
       title: 'Owner',
       dataIndex: 'owner',
       key: 'owner',
-      width: 240,
+      width: 280,
       ellipsis: true,
       render: (_, record) => (
         <Tooltip destroyTooltipOnHide title={record?.ownerData?.email} placement="topLeft">
@@ -148,7 +183,7 @@ const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) =>
         </Space>
       ),
     },
-  ], [navigate]);
+  ], [navigate, handleGenerateCode, handleCodeTagClick]);
 
   return (
     <div className="cd-quiz-list">
