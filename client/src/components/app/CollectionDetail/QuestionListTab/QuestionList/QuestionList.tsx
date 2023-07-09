@@ -4,7 +4,7 @@ import { isEmpty, isEqual } from 'lodash';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { deleteQuestion } from '@/actions/question';
-import QuestionDetail from '@/components/app/Library/QuestionDetail/QuestionDetail';
+import EditQuestionForm from '@/components/app/CollectionDetail/QuestionListTab/EditQuestionForm/EditQuestionForm';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
 import { NO_COLLECTION_ID } from '@/constants/message';
@@ -13,7 +13,7 @@ import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Collection } from '@/types/collection';
 import { Question } from '@/types/question';
 import { convertLabel } from '@/utilities/helpers';
-import './CollectionDetail.scss';
+import './QuestionList.scss';
 
 const defaultQuestion = {
   title: 'Untitled Question',
@@ -27,7 +27,7 @@ const defaultQuestion = {
   ],
 };
 
-const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}>(({ collection, filter }, ref) => {
+const QuestionList = forwardRef< any, {collection?: Collection, filter: any}>(({ collection, filter }, ref) => {
   const [open, setOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<Question>();
   const [questions, setQuestions] = useState <Array<Question>>(collection?.questions || []);
@@ -256,7 +256,7 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
   }, [filter]);
 
   return (
-    <div className="collection-detail">
+    <div className="question-list">
       <Table
         scroll={{ y: 530, x: 1300 }}
         columns={columns}
@@ -275,7 +275,7 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
       />
 
       <Modal
-        className="question-detail-modal"
+        className="question-edit-modal"
         title={selectedQuestion ? 'Edit question' : 'New question'}
         open={open}
         onOk={handleOk}
@@ -283,7 +283,7 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
         destroyOnClose
         footer={null}
       >
-        <QuestionDetail
+        <EditQuestionForm
           selectedQuestion={selectedQuestion || defaultQuestion}
           onCancel={handleCancel}
           editType={selectedQuestion ? 'UPDATE' : 'CREATE'}
@@ -293,4 +293,4 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
   );
 });
 
-export default React.memo(CollectionDetail, (prev, next) => isEqual(prev, next));
+export default React.memo(QuestionList, (prev, next) => isEqual(prev, next));

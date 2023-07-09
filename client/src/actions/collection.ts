@@ -1,7 +1,7 @@
 import { CollectionAction } from 'src/constants/action';
 import { GET, PUT, POST, DELETE } from '@/utilities/request';
 
-export const getCollections = (query?: { title?: string; page?: number; sort?: string; limit?: number }) => ({
+export const getCollections = (query?: { search?: string; page?: number; sort?: string; limit?: number }) => ({
   type: CollectionAction.GET_COLLECTIONS,
   promise: GET('/collections', {
     params: query,

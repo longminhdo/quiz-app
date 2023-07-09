@@ -1,6 +1,6 @@
 @import '@/assets/styles/global.scss';
 
-.question-detail {
+.edit-question-form {
   width: 100%;
 
   .options-container {
@@ -29,7 +29,7 @@
   }
 }
 
-.question-detail-modal {
+.question-edit-modal {
   width: 90% !important;
   max-width: toRem(900);
   top: toRem(60);

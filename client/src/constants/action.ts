@@ -25,6 +25,14 @@ export enum QuestionAction {
   GET_QUESTIONS = 'get_question',
 }
 
+export enum QuizAction {
+  GET_QUIZZES = 'get_quizzes',
+  GET_QUIZ_BY_ID = 'get_quiz_by_id',
+  DELETE_QUIZ = 'delete_quiz',
+  UPDATE_QUIZ = 'update_quiz',
+  CREATE_QUIZ = 'create_quiz',
+}
+
 export enum AuthenticationAction {
   GET_SSO_TOKEN = 'get_sso_token',
   SSO_LOGIN = 'sso_login',

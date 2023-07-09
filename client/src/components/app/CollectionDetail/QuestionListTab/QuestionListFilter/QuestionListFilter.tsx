@@ -3,7 +3,7 @@ import { FormLayout } from 'antd/es/form/Form';
 import React, { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { QuestionLevelEnums, QuestionTypeEnums } from '@/constants/constants';
-import './CollectionDetailAdvancedFilter.scss';
+import './QuestionListFilter.scss';
 
 const { Item } = Form;
 
@@ -18,7 +18,7 @@ const FormLayoutEnums: any = {
   HORIZONTAL: 'horizontal',
 };
 
-const CollectionDetailAdvancedFilter = ({ setFilter, filter }: {setFilter: any, filter: any}) => {
+const QuestionListFilter = ({ setFilter, filter }: {setFilter: any, filter: any}) => {
   const [formLayout, setFormLayout] = useState<FormLayout | undefined>(() => (window.innerWidth >= 1200 ? 'vertical' : 'horizontal'));
   const { windowWidth } = useTypedSelector((state) => state.app);
 
@@ -56,7 +56,7 @@ const CollectionDetailAdvancedFilter = ({ setFilter, filter }: {setFilter: any, 
   }, [windowWidth]);
 
   return (
-    <Form className="collection-detail-toolbar" layout={formLayout}>
+    <Form className="question-list-filter" layout={formLayout}>
       <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }}>
         <Col {...colLayouts}>
           <Item
@@ -106,4 +106,4 @@ const CollectionDetailAdvancedFilter = ({ setFilter, filter }: {setFilter: any, 
   );
 };
 
-export default CollectionDetailAdvancedFilter;
+export default QuestionListFilter;

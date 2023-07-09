@@ -3,7 +3,8 @@ import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import OptionDetail from '@/components/app/Library/OptionDetail/OptionDetail';
+import { createQuestion, updateQuestion } from '@/actions/question';
+import OptionDetail from '@/components/app/CollectionDetail/QuestionListTab/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
 import { NO_COLLECTION_ID } from '@/constants/message';
@@ -11,8 +12,7 @@ import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { Question } from '@/types/question';
 import { getNewOptionContent } from '@/utilities/helpers';
 import { transformSendingQuestion } from '@/utilities/quizHelpers';
-import './QuestionDetail.scss';
-import { createQuestion, updateQuestion } from '@/actions/question';
+import './EditQuestionForm.scss';
 
 const { Item } = Form;
 
@@ -21,7 +21,7 @@ const levelOptions = Object.entries(QuestionLevelEnums)
 
 const typeOptions = Object.entries(QuestionTypeEnums).map(([key, value]) => ({ label: value, value: key }));
 
-const QuestionDetail = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {editType?: string, selectedQuestion: Question, onCancel?: any}) => {
+const EditQuestionForm = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {editType?: string, selectedQuestion: Question, onCancel?: any}) => {
   const [localQuestion, setLocalQuestion] = useState<Question>();
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
   const [run, loading] = useDispatchAsyncAction();
@@ -111,7 +111,7 @@ const QuestionDetail = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {ed
 
   return (
     <Form
-      className="question-detail"
+      className="edit-question-form"
       labelCol={{ span: 4 }}
       wrapperCol={{ span: 20 }}
       labelAlign="left"
@@ -195,4 +195,4 @@ const QuestionDetail = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {ed
   );
 };
 
-export default QuestionDetail;
+export default EditQuestionForm;

@@ -1,17 +1,12 @@
-import { BookOutlined, FolderOpenOutlined, FormOutlined, PieChartOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Input, Tabs } from 'antd';
-import { isEmpty, isEqual } from 'lodash';
-import { useEffect, useRef, useState } from 'react';
-import React, { useParams } from 'react-router-dom';
-import { flushCollection, getCollectionById } from '@/actions/collection';
-import CollectionDetail from '@/components/app/Library/CollectionDetail/CollectionDetail';
-import CollectionDetailAdvancedFilter from '@/components/app/Library/CollectionDetailAdvancedFilter/CollectionDetailAdvancedFilter';
+import { BookOutlined, FolderOpenOutlined, PieChartOutlined, SettingOutlined } from '@ant-design/icons';
+import { Tabs } from 'antd';
+import React, { useState } from 'react';
 import MyCard from '@/components/common/MyCard/MyCard';
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import useTypedSelector from '@/hooks/useTypedSelector';
-import { setLoading } from '@/modules/redux/slices/appReducer';
-import { Collection } from '@/types/collection';
 import './CollectionDetailPage.scss';
+import QuestionListTab from '@/components/app/CollectionDetail/QuestionListTab';
+import AnalyticsTab from '@/components/app/CollectionDetail/AnalyticsTab';
+import QuizzesTab from '@/components/app/CollectionDetail/QuizzesTab';
+import SettingsTab from '@/components/app/CollectionDetail/SettingsTab';
 
 const COLLECTION_TAB_PATHS = {
   QUESTIONS: 'questions',
@@ -20,28 +15,28 @@ const COLLECTION_TAB_PATHS = {
   SETTINGS: 'settings',
 };
 
-const QuestionsTab = () => (
+const QuestionsTabItem = () => (
   <div>
     <BookOutlined />
     Questions
   </div>
 );
 
-const AnalyticsTab = () => (
+const AnalyticsTabItem = () => (
   <div>
     <PieChartOutlined />
     Analytics
   </div>
 );
 
-const QuizzesTab = () => (
+const QuizzesTabItem = () => (
   <div>
     <FolderOpenOutlined />
     Quizzes
   </div>
 );
 
-const SettingsTab = () => (
+const SettingsTabItem = () => (
   <div>
     <SettingOutlined />
     Settings
@@ -50,87 +45,25 @@ const SettingsTab = () => (
 
 const collectionTabs: Array<any> = [
   {
-    label: <QuestionsTab />,
+    label: <QuestionsTabItem />,
     path: COLLECTION_TAB_PATHS.QUESTIONS,
   },
   {
-    label: <AnalyticsTab />,
+    label: <AnalyticsTabItem />,
     path: COLLECTION_TAB_PATHS.ANALYTICS,
   },
   {
-    label: <QuizzesTab />,
+    label: <QuizzesTabItem />,
     path: COLLECTION_TAB_PATHS.QUIZZES,
   },
   {
-    label: <SettingsTab />,
+    label: <SettingsTabItem />,
     path: COLLECTION_TAB_PATHS.SETTINGS,
   },
 ];
 
-const CollectionDetailPage = () => {
+const CollectionDetailPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(COLLECTION_TAB_PATHS.QUESTIONS);
-  const [collection, setCollection] = useState<Collection>();
-  const [filter, setFilter] = useState<{search: string, type: Array<string>, level: Array<string>}>({ search: '', type: [], level: [] });
-
-  const filterRef = useRef<any>();
-  const collectionRef = useRef<any>();
-  const childRef = useRef<any>();
-
-  const { collectionId } = useParams();
-
-  const { currentCollection } = useTypedSelector((state) => state.collection);
-  const [run] = useDispatchAsyncAction();
-
-  const handleSearchChange = (e) => {
-    const searchValue = e.target.value;
-
-    setFilter(prev => ({ ...prev, search: searchValue }));
-  };
-
-  const handleAddQuestion = () => {
-    childRef?.current?.createNewQuestion && childRef.current.createNewQuestion();
-  };
-
-  useEffect(() => {
-    if (!collectionId) {
-      return () => undefined;
-    }
-
-    (async () => {
-      run(setLoading(true));
-      await run(getCollectionById(collectionId));
-      run(setLoading(false));
-    })();
-
-    return () => {
-      run(flushCollection());
-      return undefined;
-    };
-  }, [collectionId, run]);
-
-  useEffect(() => {
-    if (isEmpty(currentCollection)) {
-      return;
-    }
-
-    if (isEqual(filterRef.current, filter) && isEqual(currentCollection, collectionRef.current)) {
-      return;
-    }
-
-    const { level, type, search } = filter;
-    const newCollection = {
-      ...currentCollection,
-      questions: currentCollection?.questions?.filter(
-        q => (isEmpty(level) ? true : level.includes(String(q.level)))
-             && (isEmpty(type) ? true : type.includes(String(q.type)))
-             && (isEmpty(search) ? true : q.title.toLowerCase().includes(search.toLowerCase())),
-      ),
-    };
-
-    setCollection(newCollection);
-    filterRef.current = filter;
-    collectionRef.current = currentCollection;
-  }, [currentCollection, filter, setCollection]);
 
   return (
     <div className="collection-detail-page">
@@ -144,43 +77,12 @@ const CollectionDetailPage = () => {
         }))}
       />
 
-      {selectedTab === COLLECTION_TAB_PATHS.QUESTIONS ? (
-        <MyCard className="card-content">
-          <div className="toolbar">
-            <Input
-              placeholder="Search questions"
-              prefix={<SearchOutlined />}
-              allowClear
-              value={filter.search}
-              onChange={handleSearchChange}
-            />
-            <Button type="primary" onClick={handleAddQuestion}>
-              <FormOutlined />
-              New question
-            </Button>
-          </div>
-          <CollectionDetailAdvancedFilter setFilter={setFilter} filter={filter} />
-          <CollectionDetail collection={collection} ref={childRef} filter={filter} />
-        </MyCard>
-      ) : null}
-
-      {selectedTab === COLLECTION_TAB_PATHS.ANALYTICS ? (
-        <MyCard className="card-content">
-          ANALYTICS
-        </MyCard>
-      ) : null}
-
-      {selectedTab === COLLECTION_TAB_PATHS.QUIZZES ? (
-        <MyCard className="card-content">
-          QUIZZES
-        </MyCard>
-      ) : null}
-
-      {selectedTab === COLLECTION_TAB_PATHS.SETTINGS ? (
-        <MyCard className="card-content">
-          SETTINGS
-        </MyCard>
-      ) : null}
+      <MyCard className="card-content">
+        {selectedTab === COLLECTION_TAB_PATHS.QUESTIONS ? (<QuestionListTab />) : null}
+        {selectedTab === COLLECTION_TAB_PATHS.ANALYTICS ? (<AnalyticsTab />) : null}
+        {selectedTab === COLLECTION_TAB_PATHS.QUIZZES ? (<QuizzesTab />) : null}
+        {selectedTab === COLLECTION_TAB_PATHS.SETTINGS ? (<SettingsTab />) : null}
+      </MyCard>
     </div>
   );
 };

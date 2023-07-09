@@ -1,0 +1,11 @@
+@import '@/assets/styles/global.scss';
+
+.collection-list-toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+
+  .ant-input-affix-wrapper {
+    max-width: toRem(320);
+  }
+}

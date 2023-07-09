@@ -6,6 +6,7 @@ export interface Collection {
   questions: [Question];
   owner: string;
   deleted: boolean;
+  createdIn: string;
   createdAt: number;
   updatedAt: number;
   __v: number;
