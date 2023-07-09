@@ -34,6 +34,7 @@ const CollectionDetailPage = () => {
 
   const filterRef = useRef<any>();
   const collectionRef = useRef<any>();
+  const childRef = useRef<any>();
 
   const { collectionId } = useParams();
 
@@ -46,9 +47,8 @@ const CollectionDetailPage = () => {
     setFilter(prev => ({ ...prev, search: searchValue }));
   };
 
-  // TODO: add question
   const handleAddQuestion = () => {
-    console.log('create question');
+    childRef?.current?.createNewQuestion && childRef.current.createNewQuestion();
   };
 
   useEffect(() => {
@@ -69,12 +69,15 @@ const CollectionDetailPage = () => {
   }, [collectionId, run]);
 
   useEffect(() => {
-    if (isEmpty(currentCollection) || isEqual(filterRef.current, filter)) {
+    if (isEmpty(currentCollection)) {
+      return;
+    }
+
+    if (isEqual(filterRef.current, filter) && isEqual(currentCollection, collectionRef.current)) {
       return;
     }
 
     const { level, type, search } = filter;
-
     const newCollection = {
       ...currentCollection,
       questions: currentCollection?.questions?.filter(
@@ -85,17 +88,9 @@ const CollectionDetailPage = () => {
     };
 
     setCollection(newCollection);
-    filterRef.current = { ...filter };
+    filterRef.current = filter;
+    collectionRef.current = currentCollection;
   }, [currentCollection, filter, setCollection]);
-
-  useEffect(() => {
-    if (isEmpty(currentCollection) || isEqual(currentCollection, collectionRef.current)) {
-      return;
-    }
-
-    setCollection(currentCollection);
-    collectionRef.current = { ...currentCollection };
-  }, [currentCollection]);
 
   return (
     <div className="collection-detail-page">
@@ -125,7 +120,7 @@ const CollectionDetailPage = () => {
 
         <CollectionDetailToolbar setFilter={setFilter} filter={filter} />
 
-        <CollectionDetail collection={collection} />
+        <CollectionDetail collection={collection} ref={childRef} filter={filter} />
       </MyCard>
     </div>
   );

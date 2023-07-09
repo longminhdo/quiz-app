@@ -1,12 +1,13 @@
-import { Button, Form, Input, Select } from 'antd';
+import { Button, Form, Input, Select, message } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { updateQuestion } from '@/actions/collection';
+import { createQuestion, updateQuestion } from '@/actions/collection';
 import OptionDetail from '@/components/app/Library/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import { NO_COLLECTION_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { Question } from '@/types/question';
 import { getNewOptionContent } from '@/utilities/helpers';
@@ -20,12 +21,13 @@ const levelOptions = Object.entries(QuestionLevelEnums)
 
 const typeOptions = Object.entries(QuestionTypeEnums).map(([key, value]) => ({ label: value, value: key }));
 
-const QuestionDetail = ({ selectedQuestion, onCancel }: {selectedQuestion: Question, onCancel?: any}) => {
+const QuestionDetail = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {editType?: string, selectedQuestion: Question, onCancel?: any}) => {
   const [localQuestion, setLocalQuestion] = useState<Question>();
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
   const [run, loading] = useDispatchAsyncAction();
   const selectedQuestionRef = useRef<Question>();
   const { collectionId } = useParams();
+  const [messageApi] = message.useMessage();
 
   useEffect(() => {
     if (!isEqual(selectedQuestionRef.current, selectedQuestion)) {
@@ -44,7 +46,20 @@ const QuestionDetail = ({ selectedQuestion, onCancel }: {selectedQuestion: Quest
   const handleSubmit = async () => {
     const payload = transformSendingQuestion(localQuestion);
 
-    await run(updateQuestion(({ newQuestion: payload, collectionId: collectionId || '' })));
+    if (!collectionId) {
+      messageApi.error(NO_COLLECTION_ID);
+      onCancel && onCancel();
+      return;
+    }
+
+    if (editType === 'UPDATE') {
+      await run(updateQuestion({ newQuestion: payload, collectionId }));
+    }
+
+    if (editType === 'CREATE') {
+      await run(createQuestion({ newQuestion: payload, collectionId }));
+    }
+
     onCancel && onCancel();
   };
 
@@ -173,7 +188,7 @@ const QuestionDetail = ({ selectedQuestion, onCancel }: {selectedQuestion: Quest
         </Button>
 
         <Button type="primary" onClick={handleSubmit} disabled={isSubmitBtnDisabled} loading={loading}>
-          Submit
+          {editType === 'UPDATE' ? 'Update' : 'Create'}
         </Button>
       </div>
     </Form>

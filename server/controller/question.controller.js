@@ -1,4 +1,3 @@
-const { startSession } = require('mongoose');
 const Page = require('../model/page');
 const Question = require('../model/question');
 const AppError = require('../helper/AppError');
@@ -8,11 +7,9 @@ const { StatusCodes } = require('../constant/statusCodes');
 
 module.exports.createQuestion = async (req, res, next) => {
   const { collectionId } = req.params;
-  const session = await startSession();
   try {
-    session.startTransaction();
     const question = new Question({ ...req.body });
-    await question.save({ session, new: true });
+    await question.save({ new: true });
 
     const collection = await Collection
       .findById(collectionId)
@@ -25,16 +22,10 @@ module.exports.createQuestion = async (req, res, next) => {
 
     collection.questions.push(question);
 
-    await collection.save({ session });
+    await collection.save({ new: true });
 
-    const newCollection = await Collection.findById(collectionId).populate('questions');
-
-    await session.commitTransaction();
-    session.endSession();
-    return res.status(StatusCodes.OK).send({ success: true, data: newCollection });
+    return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     next(error);
   }
 };

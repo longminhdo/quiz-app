@@ -14,6 +14,7 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
     case CollectionAction.GET_COLLECTION_BY_ID:
     case CollectionAction.UPDATE_COLLECTION:
     case CollectionAction.UPDATE_QUESTION:
+    case CollectionAction.CREATE_QUESTION:
     case CollectionAction.DUPLICATE_QUESTION: {
       const collection = action.payload.data;
 

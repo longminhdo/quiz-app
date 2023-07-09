@@ -52,6 +52,24 @@ export const deleteQuestion = ({ formId, pageId, questionId }: { formId: string;
   promise: DELETE(`/forms/${formId}/pages/${pageId}/questions/${questionId}`),
 });
 
+export const createQuestion = ({ newQuestion, collectionId }: { newQuestion: Question; collectionId: string }) => {
+  const data = {
+    title: newQuestion?.title,
+    keys: newQuestion?.keys,
+    level: newQuestion?.level,
+    options: newQuestion?.options,
+    type: newQuestion?.type,
+    questionMedia: newQuestion?.questionMedia,
+  };
+
+  return {
+    type: CollectionAction.CREATE_QUESTION,
+    promise: POST(`/collections/${collectionId}/questions`, {
+      body: data,
+    }),
+  };
+};
+
 export const updateQuestion = ({ newQuestion, collectionId }: { newQuestion: Question; collectionId: string }) => {
   const questionId = newQuestion._id;
   const data = {

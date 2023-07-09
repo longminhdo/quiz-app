@@ -3,19 +3,30 @@ import { Pagination } from 'antd';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './MyPagination.scss';
 
-const MyPagination = ({ total } : {total:number}) => {
-  const [page, setPage] = useState(() => Number(new URLSearchParams(window.location.search).get('offset') || 1));
-  const [pageSize, setPageSize] = useState(() => Number(new URLSearchParams(window.location.search).get('limit') || 10));
+const MyPagination = (
+  { total,
+    onChange,
+    willUpdateQuery = true,
+    customPagination,
+  } : {
+    willUpdateQuery?: boolean,
+    total:number,
+    onChange?: any,
+    customPagination?: any,
+  },
+) => {
+  const [localPage, setLocalPage] = useState(() => Number(new URLSearchParams(window.location.search).get('offset') || 1));
+  const [localPageSize, setLocalPageSize] = useState(() => Number(new URLSearchParams(window.location.search).get('limit') || 10));
   const { updateQuery } = useUpdateUrlQuery();
 
-  const handlePaginationChange = (page, pageSize) => {
-    setPage(page);
-    setPageSize(pageSize);
-
-    updateQuery({
+  const handlePaginationChange = (newLocalPage, newLocalPageSize) => {
+    setLocalPage(newLocalPage);
+    setLocalPageSize(newLocalPageSize);
+    onChange && onChange(newLocalPage, newLocalPageSize);
+    willUpdateQuery && updateQuery({
       query: {
-        offset: page,
-        limit: pageSize,
+        offset: newLocalPage,
+        limit: newLocalPageSize,
       },
     });
   };
@@ -24,8 +35,8 @@ const MyPagination = ({ total } : {total:number}) => {
     <div className="my-pagination">
       <Pagination
         showSizeChanger
-        current={page}
-        pageSize={pageSize}
+        current={customPagination?.page || localPage}
+        pageSize={customPagination?.pageSize || localPageSize}
         onChange={handlePaginationChange}
         showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
         total={total}
