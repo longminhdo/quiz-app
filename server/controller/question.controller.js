@@ -68,7 +68,6 @@ module.exports.deleteQuestion = async (req, res, next) => {
   }
 };
 
-// TODO: duplicate question backend
 module.exports.duplicateQuestion = async (req, res, next) => {
   try {
     const { collectionId, questionId } = req.params;
