@@ -3,15 +3,11 @@ const dayjs = require('dayjs');
 
 const Schema = mongoose.Schema;
 
-const pageSchema = new Schema(
+const quizSchema = new Schema(
   {
     title: {
       type: String,
-      default: 'Untitled Page',
-    },
-    description: {
-      type: String,
-      default: '',
+      default: 'Untitled Quiz',
     },
     questions: [
       {
@@ -19,6 +15,11 @@ const pageSchema = new Schema(
         ref: 'Question',
       },
     ],
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
+    owner: String,
     createdAt: Number,
     updatedAt: Number,
   },
@@ -29,4 +30,6 @@ const pageSchema = new Schema(
   },
 );
 
-module.exports = mongoose.model('Page', pageSchema);
+const Quiz = mongoose.model('Quiz', quizSchema);
+
+module.exports = Quiz;

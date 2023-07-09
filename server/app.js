@@ -1,19 +1,16 @@
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
+
 const { TokenExpiredError } = require('jsonwebtoken');
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const formRoute = require('./router/form.router');
-const pageRoute = require('./router/page.router');
 const mediaRoute = require('./router/media.router');
 const questionRoute = require('./router/question.router');
-const responseRoute = require('./router/response.router');
 const answerRoute = require('./router/answer.router');
 const departmentRoute = require('./router/department.router');
 const authRoute = require('./router/auth.router');
-const templateRoute = require('./router/template.route');
 const collectionRoute = require('./router/collection.router');
 
 const { MONGO_USERNAME,
@@ -45,10 +42,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // NOTE: the order of these router is mater!
-app.use('/templates', templateRoute);
-app.use('/forms/:formId/responses', responseRoute);
-app.use('/forms', formRoute);
-app.use('/forms/:formId/pages', pageRoute);
 app.use('/collections/:collectionId/questions', questionRoute);
 app.use('/media', mediaRoute);
 app.use('/answer', answerRoute);

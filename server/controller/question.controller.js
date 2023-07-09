@@ -1,6 +1,4 @@
-const Page = require('../model/page');
 const Question = require('../model/question');
-const AppError = require('../helper/AppError');
 const Collection = require('../model/collection');
 const { InternalServerError } = require('../constant/errorMessage');
 const { StatusCodes } = require('../constant/statusCodes');
@@ -70,33 +68,32 @@ module.exports.deleteQuestion = async (req, res, next) => {
   }
 };
 
-module.exports.duplicateQuestion = async (req, res, next) => {
-  const { pageId, questionId } = req.params;
+// TODO: duplicate question backend
+module.exports.duplicateQuestion = async (req, res) => {
+  try {
+    const { collectionId, questionId } = req.params;
+    const question = await Question.findById(questionId);
 
-  const question = await Question.findById(questionId);
-  if (!question) {
-    return next(new AppError(404, 'Could not find a question with the given questionId'));
+    const collection = await Collection.findById(collectionId)
+      .populate({ path: 'questions', match: { deleted: false } });
+
+    const index = collection.questions.findIndex((question) => question._id.toString() === questionId);
+
+    const newQuestion = new Question({ ...question.toObject(), _id: undefined });
+    await newQuestion.save();
+
+    if (index >= 0) {
+      collection.questions.splice(index + 1, 0, newQuestion);
+    } else {
+      collection.questions.push(newQuestion);
+    }
+    await collection.save();
+
+    return res.status(200).send({ success: true, data: collection });
+  } catch (error) {
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ message: InternalServerError.INTERNAL_SERVER_ERROR, error });
   }
-
-  const page = await Page.findById(pageId)
-    .populate('questions');
-  if (!page) {
-    return next(new AppError(404, 'Could not find a page with the given pageId'));
-  }
-
-  const index = page.questions.findIndex((question) => question._id.toString() === questionId);
-
-  const newQuestion = new Question({ ...question.toObject(), _id: undefined });
-  await newQuestion.save();
-
-  if (index >= 0) {
-    page.questions.splice(index + 1, 0, newQuestion);
-  } else {
-    page.questions.push(newQuestion);
-  }
-  await page.save();
-
-  return res.status(200).send({ success: true, data: page });
 };
 
 module.exports.getQuestionById = async (req, res) => {
