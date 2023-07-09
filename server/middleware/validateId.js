@@ -1,5 +1,6 @@
 const ObjectId = require('mongoose').Types.ObjectId;
 const Collection = require('../model/collection');
+const Quiz = require('../model/quiz');
 const Question = require('../model/question');
 const AppError = require('../helper/AppError');
 const Response = require('../model/response');
@@ -68,6 +69,22 @@ exports.validateCollectionId = async (req, res, next) => {
   const collection = await Collection.findById(collectionId);
   if (!collection) {
     return next(new AppError(404, 'The collection is not found or does not exist'));
+  }
+
+  return next();
+};
+
+//validate quiz id
+exports.validateQuizId = async (req, res, next) => {
+  const { quizId } = req.params;
+
+  if (!ObjectId.isValid(quizId)) {
+    return next(new AppError(404, 'Invalid Quiz ID Type'));
+  }
+
+  const quiz = await Quiz.findById(quizId);
+  if (!quiz) {
+    return next(new AppError(404, 'The quiz is not found or does not exist'));
   }
 
   return next();
