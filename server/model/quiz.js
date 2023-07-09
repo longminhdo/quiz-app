@@ -20,6 +20,7 @@ const quizSchema = new Schema(
       default: false,
     },
     owner: String,
+    createdIn: String,
     createdAt: Number,
     updatedAt: Number,
   },
