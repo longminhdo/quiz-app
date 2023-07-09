@@ -78,8 +78,7 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
     }, 50);
   };
 
-  // TODO: handle delete question
-  const handleQuestionDelete = async(question) => {
+  const handleQuestionDelete = useCallback(async(question) => {
     if (!collectionId) {
       messageApi.error(NO_COLLECTION_ID);
       return;
@@ -88,7 +87,7 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
     run(setLoading(true));
     await run(deleteQuestion({ collectionId, questionId: question._id }));
     run(setLoading(false));
-  };
+  }, [collectionId, messageApi, run]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, pageSize });
@@ -166,7 +165,7 @@ const CollectionDetail = forwardRef< any, {collection?: Collection, filter: any}
         </Space>
       ),
     },
-  ], []);
+  ], [handleQuestionDelete]);
 
   const expandedRowRender = useCallback((props) => {
     const data :any = props?.options || [];
