@@ -13,7 +13,7 @@ import './LeftMenu.scss';
 
 const menuItems = [
   { label: 'Library', icon: AppstoreOutlined, key: routePaths.COLLECTIONS },
-  { label: 'Quizzes', icon: ProfileOutlined, key: routePaths.MY_QUIZZES },
+  { label: 'Quizzes', icon: ProfileOutlined, key: routePaths.QUIZZES },
   { label: 'Reports', icon: PieChartOutlined, key: routePaths.REPORTS },
 ];
 

@@ -85,7 +85,7 @@ const App = () => {
               )}
               />
               <Route
-                path={routePaths.MY_QUIZZES}
+                path={routePaths.QUIZZES}
                 element={(
                   <ProtectedRoute>
                     <QuizManagementLayout>

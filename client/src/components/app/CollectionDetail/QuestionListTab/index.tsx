@@ -29,7 +29,7 @@ const QuestionListTab: React.FC = () => {
   // effect for fetching
   useEffect(() => {
     if (!collectionId) {
-      return () => undefined;
+      return;
     }
 
     (async () => {
@@ -38,11 +38,6 @@ const QuestionListTab: React.FC = () => {
 
       run(setLoading(false));
     })();
-
-    return () => {
-      run(flushCollection());
-      return undefined;
-    };
   }, [collectionId, run]);
 
   // effect for locally filtering

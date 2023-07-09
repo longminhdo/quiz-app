@@ -1,11 +1,14 @@
 import { BookOutlined, FolderOpenOutlined, PieChartOutlined, SettingOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { flushCollection } from '@/actions/collection';
 import AnalyticsTab from '@/components/app/CollectionDetail/AnalyticsTab';
 import QuestionListTab from '@/components/app/CollectionDetail/QuestionListTab';
-import QuizzesTab from '@/components/app/CollectionDetail/QuizzesTab';
+import QuizzesTab from '@/components/app/CollectionDetail/QuizListTab';
 import SettingsTab from '@/components/app/CollectionDetail/SettingsTab';
 import MyCard from '@/components/common/MyCard/MyCard';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './CollectionDetailPage.scss';
 
 const COLLECTION_TAB_PATHS = {
@@ -64,12 +67,29 @@ const collectionTabs: Array<any> = [
 
 const CollectionDetailPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(COLLECTION_TAB_PATHS.QUESTIONS);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [run] = useDispatchAsyncAction();
+
+  const clearParam = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('search');
+    navigate(`?${params.toString()}`, { replace: true });
+  };
+
+  useEffect(() => () => {
+    run(flushCollection());
+    return undefined;
+  }, [run]);
 
   return (
     <div className="collection-detail-page">
       <Tabs
         defaultActiveKey={COLLECTION_TAB_PATHS.QUESTIONS}
-        onChange={(tab) => setSelectedTab(tab)}
+        onChange={(tab) => {
+          clearParam();
+          setSelectedTab(tab);
+        }}
         type="card"
         items={collectionTabs.map(({ path, label }) => ({
           label,

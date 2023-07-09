@@ -25,7 +25,7 @@ export const createQuiz = (payload: { title: string }) => ({
   }),
 });
 
-export const updateQuiz = (newQuiz: { _id: string; title: string }) => {
+export const updateQuiz = (newQuiz: { _id?: string; title: string }) => {
   const data = {
     title: newQuiz?.title,
   };

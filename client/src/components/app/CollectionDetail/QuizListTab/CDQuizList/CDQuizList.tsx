@@ -1,67 +1,63 @@
 import { DeleteOutlined, FontSizeOutlined } from '@ant-design/icons';
 import { Button, Input, Modal, Space, Table, Tooltip } from 'antd';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { deleteCollection, updateCollection } from '@/actions/collection';
+import { deleteQuiz, updateQuiz } from '@/actions/quiz';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
-import { Collection } from '@/types/collection';
+import { Quiz } from '@/types/quiz';
 import { convertTime } from '@/utilities/helpers';
-import './CollectionList.scss';
+import './CDQuizList.scss';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
   RENAME: 'rename',
 };
 
-interface CollectionListProps {
-  data: Array<Collection>;
+interface CDQuizListProps {
+  data: Array<Quiz>;
   total: number;
   tableLoading?: boolean
 }
 
-
-const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoading }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) => {
+  const [selectedQuiz, setSelectedQuiz] = useState<Quiz>();
   const [modalType, setModalType] = useState<string>('');
-  const [selectedCollection, setSelectedCollection] = useState<Collection>();
-  const { updateQuery } = useUpdateUrlQuery();
-  const [run, loading] = useDispatchAsyncAction();
-  const titleInputRef = useRef<any>();
-  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
-  useEffect(() => {
-    setTimeout(() => {
-      titleInputRef.current?.focus();
-    }, 20);
-  }, [isModalOpen]);
+  const titleInputRef = useRef<any>();
+
+  const [run, loading] = useDispatchAsyncAction();
+  const { updateQuery } = useUpdateUrlQuery();
+
+  const navigate = useNavigate();
 
   const handleOk = async () => {
     if (modalType === MODAL_TYPES.RENAME) {
-      const newTitle = selectedCollection?.title;
+      const newTitle = selectedQuiz?.title;
       if (!newTitle) {
         return;
       }
 
-      await run(updateCollection({ _id: selectedCollection?._id, title: newTitle }));
+      await run(updateQuiz({ _id: selectedQuiz?._id, title: newTitle }));
     }
 
     if (modalType === MODAL_TYPES.DELETE) {
-      await run(deleteCollection(selectedCollection?._id || ''));
+      await run(deleteQuiz(selectedQuiz?._id || ''));
     }
 
     updateQuery({ query: { timestamp: Date.now() } });
-    setIsModalOpen(false);
+    setIsOpen(false);
   };
 
   const handleCancel = () => {
-    setIsModalOpen(false);
+    setIsOpen(false);
   };
 
   const handleKeyDown = (e) => {
-    if (!selectedCollection?.title) {
+    if (!selectedQuiz?.title) {
       return;
     }
 
@@ -72,7 +68,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
   };
 
   const handleTitleChange = (e) => {
-    setSelectedCollection((prev: any) => ({
+    setSelectedQuiz((prev: any) => ({
       ...prev,
       title: e.target.value,
     }));
@@ -85,7 +81,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
       key: 'title',
       render: (title, record) => (
         <a
-          onClick={() => navigate(routePaths.COLLECTION_DETAIL.replace(':collectionId', record._id))}
+          onClick={() => navigate(routePaths.QUIZ_DETAIL.replace(':quizId', record._id))}
         >
           {title}
         </a>
@@ -124,10 +120,10 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
         <Space size="middle">
           <Button
             onClick={() => {
-              setSelectedCollection(record);
+              setSelectedQuiz(record);
               setModalType(MODAL_TYPES.RENAME);
               setTimeout(() => {
-                setIsModalOpen(true);
+                setIsOpen(true);
               }, 0);
             }}
             type="primary"
@@ -139,10 +135,10 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
           <Button
             danger
             onClick={() => {
-              setSelectedCollection(record);
+              setSelectedQuiz(record);
               setModalType(MODAL_TYPES.DELETE);
               setTimeout(() => {
-                setIsModalOpen(true);
+                setIsOpen(true);
               }, 0);
             }}
           >
@@ -155,7 +151,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
   ], [navigate]);
 
   return (
-    <div className="collection-list">
+    <div className="cd-quiz-list">
       <Table
         columns={columns}
         dataSource={data}
@@ -169,27 +165,27 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
       <Modal
         forceRender
         confirmLoading={loading}
-        title={modalType === MODAL_TYPES.RENAME ? 'Rename' : 'Delete collection'}
-        okButtonProps={{ disabled: !selectedCollection?.title }}
-        open={isModalOpen}
+        title={modalType === MODAL_TYPES.RENAME ? 'Rename' : 'Delete quiz'}
+        okButtonProps={{ disabled: !selectedQuiz?.title }}
+        open={isOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        wrapClassName="collection-list-modal"
+        wrapClassName="cd-quiz-list-modal"
         destroyOnClose
         closable={false}
       >
         {
           modalType === MODAL_TYPES.RENAME ? (
             <>
-              <p>Please enter a new name for the item:</p>
+              <p>Please enter a new name for the quiz:</p>
               <Input
-                value={selectedCollection?.title}
+                value={selectedQuiz?.title}
                 onKeyDown={handleKeyDown}
                 onChange={handleTitleChange}
                 ref={titleInputRef}
               />
             </>
-          ) : <p>Are you sure you want to delete this collection?</p>
+          ) : <p>Are you sure you want to delete this quiz?</p>
         }
 
       </Modal>
@@ -197,4 +193,4 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
   );
 };
 
-export default CollectionList;
+export default CDQuizList;

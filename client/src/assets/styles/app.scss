@@ -1,0 +1,12 @@
+@import '@/assets/styles/global.scss';
+
+@mixin default-toolbar {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  margin-bottom: toRem(20);
+
+  .ant-input-affix-wrapper {
+    max-width: toRem(320);
+  }
+}

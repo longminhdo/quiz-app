@@ -10,5 +10,6 @@ export const routePaths = {
   COLLECTIONS: '/collections',
   COLLECTION_DETAIL: '/collections/:collectionId',
   REPORTS: '/reports',
-  MY_QUIZZES: '/my-quizzes',
+  QUIZZES: '/quizzes',
+  QUIZ_DETAIL: '/quizzes/:quizId',
 };

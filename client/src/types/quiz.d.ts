@@ -1,7 +1,7 @@
 import { Question } from '@/types/question';
 
-export interface Collection {
-  _id: string;
+export interface Quiz {
+  _id?: string;
   title: string;
   questions: [Question];
   owner: string;

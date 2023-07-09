@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
-import MyCollectionTab from '@/components/app/CollectionList/MyCollectionsTab/MyCollectionTab';
-import SharedWithMeTab from '@/components/app/CollectionList/SharedWithMeTab/SharedWithMeTab';
+import MyCollectionTab from '@/components/app/CollectionList/MyCollectionsTab';
+import SharedWithMeTab from '@/components/app/CollectionList/SharedWithMeTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import './CollectionListPage.scss';
 

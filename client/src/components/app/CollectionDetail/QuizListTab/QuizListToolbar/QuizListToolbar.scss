@@ -1,0 +1,5 @@
+@import '@/assets/styles/app.scss';
+
+.quizzes-tab-toolbar {
+  @include default-toolbar;
+}
