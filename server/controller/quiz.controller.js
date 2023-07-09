@@ -1,4 +1,3 @@
-const { InternalServerError } = require('../constant/errorMessage');
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
 const Quiz = require('../model/quiz');
@@ -33,7 +32,7 @@ module.exports.updateQuiz = async (req, res, next) => {
   }
 };
 
-module.exports.getQuizzes = async (req, res) => {
+module.exports.getQuizzes = async (req, res, next) => {
   try {
     const { userId } = req.userData;
     const { offset = 1, limit = 10, sort = '', search, createdIn } = req.query;
@@ -64,20 +63,18 @@ module.exports.getQuizzes = async (req, res) => {
       },
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: InternalServerError.INTERNAL_SERVER_ERROR, error });
+    next(error);
   }
 };
 
-module.exports.getQuizById = async (req, res) => {
+module.exports.getQuizById = async (req, res, next) => {
   try {
     const { quizId } = req.params;
     const collection = await Quiz.findById(quizId).populate('questions');
 
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: InternalServerError.INTERNAL_SERVER_ERROR, error });
+    next(error);
   }
 };
 
