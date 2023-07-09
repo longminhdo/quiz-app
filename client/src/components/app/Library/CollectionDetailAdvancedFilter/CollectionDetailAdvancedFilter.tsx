@@ -3,7 +3,7 @@ import { FormLayout } from 'antd/es/form/Form';
 import React, { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { QuestionLevelEnums, QuestionTypeEnums } from '@/constants/constants';
-import './CollectionDetailToolbar.scss';
+import './CollectionDetailAdvancedFilter.scss';
 
 const { Item } = Form;
 
@@ -18,7 +18,7 @@ const FormLayoutEnums: any = {
   HORIZONTAL: 'horizontal',
 };
 
-const CollectionDetailToolbar = ({ setFilter, filter }: {setFilter: any, filter: any}) => {
+const CollectionDetailAdvancedFilter = ({ setFilter, filter }: {setFilter: any, filter: any}) => {
   const [formLayout, setFormLayout] = useState<FormLayout | undefined>(() => (window.innerWidth >= 1200 ? 'vertical' : 'horizontal'));
   const { windowWidth } = useTypedSelector((state) => state.app);
 
@@ -106,4 +106,4 @@ const CollectionDetailToolbar = ({ setFilter, filter }: {setFilter: any, filter:
   );
 };
 
-export default CollectionDetailToolbar;
+export default CollectionDetailAdvancedFilter;
