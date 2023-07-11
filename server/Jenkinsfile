@@ -4,8 +4,9 @@ pipeline {
         stage("Clean source") {
             steps {
                 echo 'Start build'
-                sh "cd server"
-                sh "npm install"
+                dir('serrver') {
+                    sh "npm install"
+                }
             }
         }
         stage("Stop current project") {
@@ -20,7 +21,9 @@ pipeline {
         stage("Build docker image") {
             steps {
                 echo 'Start build docker image'
-                sh "docker build -f Dockerfile.server -t quiz-app-server ."
+                dir('server') {
+                    sh "docker build -f Dockerfile.server -t quiz-app-server ."
+                }
                 echo 'Build image success'
             }
         }
