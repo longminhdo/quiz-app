@@ -4,7 +4,7 @@ pipeline {
         stage("Clean source") {
             steps {
                 echo 'Start build'
-                dir('serrver') {
+                dir('server') {
                     sh "npm install"
                 }
             }
