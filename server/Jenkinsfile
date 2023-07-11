@@ -1,0 +1,9 @@
+pipeline {
+    agent any
+    stages {
+        stage("Clean source") {
+            steps {
+                echo 'Start build'
+            }
+        }
+}
