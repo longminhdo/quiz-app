@@ -4,6 +4,8 @@
 $main-black-color: #0b0c0d;
 $main-white-color: white;
 
+$background-blue-color: #f4f4f4;
+
 $red-color-0: #fde8ed;
 $red-color-0_5: #e65062bb;
 $red-color-1: #e65061;
@@ -22,6 +24,7 @@ $purple-color-0: rgb(225, 216, 241);
 $purple-color-1: rgb(103, 58, 183);
 
 $blue-color-1: #e6f7ff;
+$blue-color-0_5: #bae7ff17;
 $blue-color-2: #bae7ff;
 $blue-color-5: #40a9ff;
 $blue-color-6: #1890ff;
@@ -93,4 +96,8 @@ $desktop-width: 1024px;
   $remValue: math.div($value, 16) + rem;
 
   @return $remValue;
+}
+
+@mixin box-shadow {
+  box-shadow: $blue-color-0_5 0px 4px 12px;
 }

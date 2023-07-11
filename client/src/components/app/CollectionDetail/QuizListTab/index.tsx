@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { message } from 'antd';
-import QuizListToolbar from '@/components/app/CollectionDetail/QuizListTab/QuizListToolbar/QuizListToolbar';
+import CDQuizListToolbar from '@/components/app/CollectionDetail/QuizListTab/CDQuizListToolbar/CDQuizListToolbar';
 import CDQuizList from '@/components/app/CollectionDetail/QuizListTab/CDQuizList/CDQuizList';
 import { Quiz } from '@/types/quiz';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
@@ -42,7 +42,7 @@ const QuizListTab: React.FC = () => {
 
   return (
     <div className="quiz-list-tab">
-      <QuizListToolbar />
+      <CDQuizListToolbar />
       <CDQuizList data={quizzes} total={total} tableLoading={loading} />
     </div>
   );

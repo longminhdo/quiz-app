@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { createQuiz } from '@/actions/quiz';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
-import './QuizListToolbar.scss';
+import './CDQuizListToolbar.scss';
 
-const QuizListToolbar: React.FC = () => {
+const CDQuizListToolbar: React.FC = () => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
   const [newQuizTitle, setNewQuizTitle] = useState('');
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +44,7 @@ const QuizListToolbar: React.FC = () => {
   };
 
   return (
-    <div className="quizzes-tab-toolbar">
+    <div className="cd-quizzes-list-toolbar">
       <Input
         placeholder="Search collections"
         prefix={<SearchOutlined />}
@@ -77,4 +77,4 @@ const QuizListToolbar: React.FC = () => {
   );
 };
 
-export default QuizListToolbar;
+export default CDQuizListToolbar;

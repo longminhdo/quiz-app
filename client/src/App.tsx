@@ -20,6 +20,8 @@ import ReportsPage from '@/pages/ReportsPage/ReportsPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import UnprotectedRoute from './components/common/UnprotectedRoute';
 import HustRedirect from './pages/LoginPage/HustRedirect';
+import AdminRoute from '@/components/HOCs/AdminRoute';
+import JoinPage from '@/pages/JoinPage/JoinPage';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -32,7 +34,7 @@ const MessageWrapper = ({ children }) => {
   );
 };
 
-const App = () => {
+const App: React.FC = () => {
   const { loading } = useTypedSelector((state: any) => state.app);
   const [run] = useDispatchAsyncAction();
 
@@ -48,6 +50,11 @@ const App = () => {
     };
   }, [run]);
 
+  // TODO: user role
+  useEffect(() => {
+    console.log('get user role');
+  }, []);
+
   return (
     <MessageWrapper>
       <BrowserRouter>
@@ -58,11 +65,13 @@ const App = () => {
                 path={routePaths.COLLECTIONS}
                 element={(
                   <ProtectedRoute>
-                    <QuizManagementLayout>
-                      <CollectionListPage />
-                    </QuizManagementLayout>
+                    <AdminRoute>
+                      <QuizManagementLayout>
+                        <CollectionListPage />
+                      </QuizManagementLayout>
+                    </AdminRoute>
                   </ProtectedRoute>
-              )}
+                )}
               />
               <Route
                 path={routePaths.COLLECTION_DETAIL}
@@ -72,7 +81,7 @@ const App = () => {
                       <CollectionDetailPage />
                     </QuizManagementLayout>
                   </ProtectedRoute>
-              )}
+                )}
               />
               <Route
                 path={routePaths.REPORTS}
@@ -82,7 +91,15 @@ const App = () => {
                       <ReportsPage />
                     </QuizManagementLayout>
                   </ProtectedRoute>
-              )}
+                )}
+              />
+              <Route
+                path={routePaths.JOIN}
+                element={(
+                  <ProtectedRoute>
+                    <JoinPage />
+                  </ProtectedRoute>
+                )}
               />
               <Route
                 path={routePaths.QUIZZES}
@@ -92,7 +109,7 @@ const App = () => {
                       <MyQuizzesPage />
                     </QuizManagementLayout>
                   </ProtectedRoute>
-              )}
+                )}
               />
               <Route
                 path={routePaths.LOGIN}
@@ -119,7 +136,7 @@ const App = () => {
               )}
               />
               <Route
-                path={routePaths.FORM_ACCESS_DENIED}
+                path={routePaths.ACCESS_DENIED}
                 element={(
                   <AccessDeniedPage />
               )}

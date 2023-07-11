@@ -1,6 +1,6 @@
 import { CopyOutlined, DeleteOutlined, WarningFilled } from '@ant-design/icons';
 import { Button, Card, Checkbox, Input } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { MyTooltipIcon, MyUploadImage } from '@/components/common';
 import { DUPLICATED_OPTIONS_ERROR_MESSAGE } from '@/constants/message';
 import { Media } from '@/types/media';
@@ -80,20 +80,9 @@ const OptionDetail = ({
     });
   };
 
-  const handleMediaChange = React.useCallback(
-    (media: Media) => {
-      setQuestion((prev: any) => {
-        const newOptions = [...prev.options];
-        newOptions[index] = {
-          ...newOptions[index],
-          media,
-        };
-
-        return { ...prev, options: newOptions };
-      });
-    },
-    [index, setQuestion],
-  );
+  const handleMediaChange = useCallback((media: Media) => {
+    setOptionLocalData((prev: any) => ({ ...prev, media }));
+  }, []);
 
   // TODO: duplicate option
   const handleDuplicateOption = () => {};
