@@ -4,6 +4,7 @@ pipeline {
         stage("Clean source") {
             steps {
                 echo 'Start build'
+                sh "cd /server"
                 sh "npm install"
             }
         }
