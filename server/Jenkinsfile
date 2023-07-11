@@ -4,6 +4,30 @@ pipeline {
         stage("Clean source") {
             steps {
                 echo 'Start build'
+                sh "npm install"
+            }
+        }
+        stage("Stop current project") {
+            steps {
+                echo 'Stopping current instance'
+                sh "docker stop quiz-app-server || true"
+                sh "docker rm quiz-app-server || true"
+                sh "docker rmi quiz-app-server:latest || true"
+                echo 'Stopped current instance'
+            }
+        }
+        stage("Build docker image") {
+            steps {
+                echo 'Start build docker image'
+                sh "docker build -f Dockerfile.server -t quiz-app-server ."
+                echo 'Build image success'
+            }
+        }
+        stage("Start application") {
+            steps {
+                echo 'Starting application'
+                sh "docker run -d -p 6008:6008 --name=quiz-app-server quiz-app-server:latest"
+                echo 'Start application success'
             }
         }
     }
