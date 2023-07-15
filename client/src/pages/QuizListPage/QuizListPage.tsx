@@ -5,7 +5,7 @@ import SharedWithMeTab from '@/components/app/Quizzes/SharedWithMeTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import './QuizListPage.scss';
 
-const QUIZZES_TAB_PATHS = {
+const QUIZ_LIST_PAGE_TABS = {
   MY_QUIZZES: 'my-quizzes',
   SHARED_WITH_ME: 'shared-with-me',
 };
@@ -13,21 +13,21 @@ const QUIZZES_TAB_PATHS = {
 const quizzesTabs: Array<any> = [
   {
     label: 'My quizzes',
-    path: QUIZZES_TAB_PATHS.MY_QUIZZES,
+    path: QUIZ_LIST_PAGE_TABS.MY_QUIZZES,
   },
   {
     label: 'Shared with me',
-    path: QUIZZES_TAB_PATHS.SHARED_WITH_ME,
+    path: QUIZ_LIST_PAGE_TABS.SHARED_WITH_ME,
   },
 ];
 
 const QuizListPage: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState(QUIZZES_TAB_PATHS.MY_QUIZZES);
+  const [selectedTab, setSelectedTab] = useState(QUIZ_LIST_PAGE_TABS.MY_QUIZZES);
 
   return (
     <div className="quiz-list-page">
       <Tabs
-        defaultActiveKey={QUIZZES_TAB_PATHS.MY_QUIZZES}
+        defaultActiveKey={QUIZ_LIST_PAGE_TABS.MY_QUIZZES}
         onChange={(tab) => setSelectedTab(tab)}
         type="card"
         items={quizzesTabs.map(({ path, label }) => ({
@@ -37,8 +37,8 @@ const QuizListPage: React.FC = () => {
       />
 
       <MyCard className="card-content">
-        {selectedTab === QUIZZES_TAB_PATHS.MY_QUIZZES ? (<MyQuizzesTab />) : null}
-        {selectedTab === QUIZZES_TAB_PATHS.SHARED_WITH_ME ? (<SharedWithMeTab />) : null}
+        {selectedTab === QUIZ_LIST_PAGE_TABS.MY_QUIZZES ? (<MyQuizzesTab />) : null}
+        {selectedTab === QUIZ_LIST_PAGE_TABS.SHARED_WITH_ME ? (<SharedWithMeTab />) : null}
       </MyCard>
     </div>
   );
