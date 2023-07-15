@@ -9,4 +9,11 @@
   .ant-input-affix-wrapper {
     max-width: toRem(320);
   }
+
+  .question-list-toolbar-actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: toRem(8);
+  }
 }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './JoinPage.scss';
 import { Button, Input } from 'antd';
 
+// TODO: Join page
 const JoinPage: React.FC = () => {
   const [code, setCode] = useState('');
   const handleJoinClick = () => {
