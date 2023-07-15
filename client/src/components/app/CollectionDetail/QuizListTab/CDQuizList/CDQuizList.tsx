@@ -9,8 +9,8 @@ import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Quiz } from '@/types/quiz';
 import { convertTime, copyToClipboard } from '@/utilities/helpers';
-import './CDQuizList.scss';
 import { formatCode } from '@/utilities/quizHelpers';
+import './CDQuizList.scss';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
@@ -183,7 +183,7 @@ const CDQuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) =>
         </Space>
       ),
     },
-  ], [navigate, handleGenerateCode, handleCodeTagClick]);
+  ], [navigate, isGenerating, handleCodeTagClick, handleGenerateCode]);
 
   return (
     <div className="cd-quiz-list">

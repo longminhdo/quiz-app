@@ -1,17 +1,16 @@
 import { FormOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Modal } from 'antd';
 import React, { useState } from 'react';
-import { createQuiz } from '@/actions/quiz';
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import QuizBuilder from '@/components/app/Quizzes/QuizBuilder/QuizBuilder';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './CDQuizListToolbar.scss';
 
 const CDQuizListToolbar: React.FC = () => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
-  const [newQuizTitle, setNewQuizTitle] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const [run, loading] = useDispatchAsyncAction();
+  const { currentCollection } = useTypedSelector((state) => state.collection);
   const { updateQuery } = useUpdateUrlQuery();
 
   const handleSearchChange = (e) => {
@@ -29,20 +28,6 @@ const CDQuizListToolbar: React.FC = () => {
     setIsOpen(true);
   };
 
-  const handleOk = async () => {
-    const res = await run(createQuiz({ title: newQuizTitle }));
-    if (res.statusCode === 201) {
-      const newCollectionId = res.data.data._id;
-    }
-
-    setIsOpen(false);
-  };
-
-  const handleCancel = () => {
-    setNewQuizTitle('');
-    setIsOpen(false);
-  };
-
   return (
     <div className="cd-quizzes-list-toolbar">
       <Input
@@ -58,20 +43,14 @@ const CDQuizListToolbar: React.FC = () => {
       </Button>
 
       <Modal
-        confirmLoading={loading}
         title="New collection"
         open={isOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        wrapClassName="collection-list-modal"
+        wrapClassName="cd-quiz-create-modal"
         destroyOnClose
         closable={false}
+        footer={false}
       >
-        <p>Please enter a new name for the new quiz:</p>
-        <Input
-          value={newQuizTitle}
-          onChange={(e) => setNewQuizTitle(e.target.value)}
-        />
+        <QuizBuilder setIsOpen={setIsOpen} quizPool={currentCollection?.questions || []} />
       </Modal>
     </div>
   );

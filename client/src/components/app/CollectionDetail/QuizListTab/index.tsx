@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { message } from 'antd';
+import { useParams } from 'react-router-dom';
 import CDQuizListToolbar from '@/components/app/CollectionDetail/QuizListTab/CDQuizListToolbar/CDQuizListToolbar';
 import CDQuizList from '@/components/app/CollectionDetail/QuizListTab/CDQuizList/CDQuizList';
 import { Quiz } from '@/types/quiz';
@@ -16,6 +17,7 @@ const QuizListTab: React.FC = () => {
 
   const [run, loading] = useDispatchAsyncAction();
   const { currentParams } = useUpdateUrlQuery();
+  const { collectionId } = useParams();
 
   const [messageApi] = message.useMessage();
 
@@ -27,7 +29,7 @@ const QuizListTab: React.FC = () => {
         try {
           const params = { ...currentParams };
           params?.timestamp && delete params.timestamp;
-          const response = await run(getQuizzes({ ...params }));
+          const response = await run(getQuizzes({ createdIn: collectionId, ...params }));
           if (response?.statusCode === 200) {
             setQuizzes(response.data.data || []);
             setTotal(response.data.pagination?.total);

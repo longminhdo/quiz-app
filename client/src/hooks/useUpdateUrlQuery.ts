@@ -7,7 +7,7 @@ interface Props {
 
 function useUpdateUrlQuery() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const tmp = Array.from(searchParams.entries());
   const currentParams: any = {};
 
@@ -48,7 +48,12 @@ function useUpdateUrlQuery() {
     );
   };
 
-  return { updateQuery, currentParams };
+  const clearParams = () => {
+    setSearchParams('');
+    navigate('.', { replace: true });
+  };
+
+  return { updateQuery, currentParams, clearParams };
 }
 
 export default useUpdateUrlQuery;

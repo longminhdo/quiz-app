@@ -1,13 +1,12 @@
 import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { flushCollection, getCollectionById } from '@/actions/collection';
+import { getCollectionById } from '@/actions/collection';
 import QuestionList from '@/components/app/CollectionDetail/QuestionListTab/QuestionList/QuestionList';
 import QuestionListFilter from '@/components/app/CollectionDetail/QuestionListTab/QuestionListFilter/QuestionListFilter';
 import QuestionListToolbar from '@/components/app/CollectionDetail/QuestionListTab/QuestionListToolbar/QuestionListToolbar';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
-import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Collection } from '@/types/collection';
 
 const QuestionListTab: React.FC = () => {
