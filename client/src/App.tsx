@@ -22,6 +22,7 @@ import UnprotectedRoute from './components/common/UnprotectedRoute';
 import HustRedirect from './pages/LoginPage/HustRedirect';
 import AdminRoute from '@/components/HOCs/AdminRoute';
 import JoinPage from '@/pages/JoinPage/JoinPage';
+import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -77,9 +78,11 @@ const App: React.FC = () => {
                 path={routePaths.COLLECTION_DETAIL}
                 element={(
                   <ProtectedRoute>
-                    <QuizManagementLayout>
-                      <CollectionDetailPage />
-                    </QuizManagementLayout>
+                    <AdminRoute>
+                      <QuizManagementLayout>
+                        <CollectionDetailPage />
+                      </QuizManagementLayout>
+                    </AdminRoute>
                   </ProtectedRoute>
                 )}
               />
@@ -87,17 +90,11 @@ const App: React.FC = () => {
                 path={routePaths.REPORTS}
                 element={(
                   <ProtectedRoute>
-                    <QuizManagementLayout>
-                      <ReportsPage />
-                    </QuizManagementLayout>
-                  </ProtectedRoute>
-                )}
-              />
-              <Route
-                path={routePaths.JOIN}
-                element={(
-                  <ProtectedRoute>
-                    <JoinPage />
+                    <AdminRoute>
+                      <QuizManagementLayout>
+                        <ReportsPage />
+                      </QuizManagementLayout>
+                    </AdminRoute>
                   </ProtectedRoute>
                 )}
               />
@@ -105,9 +102,32 @@ const App: React.FC = () => {
                 path={routePaths.QUIZZES}
                 element={(
                   <ProtectedRoute>
-                    <QuizManagementLayout>
-                      <QuizListPage />
-                    </QuizManagementLayout>
+                    <AdminRoute>
+                      <QuizManagementLayout>
+                        <QuizListPage />
+                      </QuizManagementLayout>
+                    </AdminRoute>
+                  </ProtectedRoute>
+                )}
+              />
+              <Route
+                path={routePaths.QUIZ_DETAIL}
+                element={(
+                  <ProtectedRoute>
+                    <AdminRoute>
+                      <QuizManagementLayout>
+                        <QuizDetailPage />
+                      </QuizManagementLayout>
+                    </AdminRoute>
+                  </ProtectedRoute>
+                )}
+              />
+
+              <Route
+                path={routePaths.JOIN}
+                element={(
+                  <ProtectedRoute>
+                    <JoinPage />
                   </ProtectedRoute>
                 )}
               />

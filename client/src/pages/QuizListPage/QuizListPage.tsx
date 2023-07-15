@@ -1,7 +1,7 @@
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
-import MyQuizzesTab from '@/components/app/Quizzes/MyQuizzesTab';
-import SharedWithMeTab from '@/components/app/Quizzes/SharedWithMeTab';
+import MyQuizzesTab from '@/components/app/QuizList/MyQuizzesTab';
+import SharedWithMeTab from '@/components/app/QuizList/SharedWithMeTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import './QuizListPage.scss';
 

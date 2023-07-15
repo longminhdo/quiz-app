@@ -65,7 +65,7 @@ const QuestionListTab: React.FC = () => {
     <>
       <QuestionListToolbar handleAddQuestion={handleAddQuestion} setFilter={setFilter} filter={filter} />
       <QuestionListFilter setFilter={setFilter} filter={filter} />
-      <QuestionList tableLoading={loading} collection={collection} ref={childRef} filter={filter} />
+      <QuestionList tableLoading={loading} initialQuestions={collection?.questions || []} ref={childRef} filter={filter} />
     </>
   );
 };

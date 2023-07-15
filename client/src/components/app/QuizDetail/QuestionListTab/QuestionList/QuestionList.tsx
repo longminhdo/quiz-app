@@ -4,7 +4,6 @@ import { isEmpty, isEqual } from 'lodash';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { deleteQuestion } from '@/actions/question';
-import EditQuestionForm from '@/components/app/CollectionDetail/QuestionListTab/EditQuestionForm/EditQuestionForm';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
 import { NO_COLLECTION_ID } from '@/constants/message';
@@ -13,6 +12,7 @@ import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Question } from '@/types/question';
 import { convertLabel } from '@/utilities/helpers';
 import './QuestionList.scss';
+import EditQuestionForm from '@/components/app/QuizDetail/QuestionListTab/EditQuestionForm/EditQuestionForm';
 
 const defaultQuestion = {
   title: 'Untitled Question',
@@ -64,11 +64,6 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
         tableNode.scrollTop = 0;
       }
     }
-  };
-
-  const handleOk = (callback) => {
-    callback && callback();
-    setOpen(false);
   };
 
   const handleCancel = () => {
@@ -284,15 +279,12 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
         className="question-edit-modal"
         title={selectedQuestion ? 'Edit question' : 'New question'}
         open={open}
-        onOk={handleOk}
-        onCancel={handleCancel}
         destroyOnClose
         footer={null}
       >
         <EditQuestionForm
           selectedQuestion={selectedQuestion || defaultQuestion}
           onCancel={handleCancel}
-          editType={selectedQuestion ? 'UPDATE' : 'CREATE'}
         />
       </Modal>
     </div>

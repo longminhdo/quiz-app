@@ -42,3 +42,7 @@ export const generateQuizCode = (quizId: string) => ({
   type: QuizAction.GENERATE_QUIZ_CODE,
   promise: POST(`/quizzes/${quizId}/generate-code`),
 });
+
+export const flushQuiz = () => ({
+  type: QuizAction.FLUSH_QUIZ,
+});

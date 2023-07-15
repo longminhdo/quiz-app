@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { createQuiz } from '@/actions/quiz';
-import ManualQuizForm from '@/components/app/Quizzes/QuizBuilder/ManualQuizForm/ManualQuizForm';
+import ManualQuizForm from '@/components/app/QuizList/QuizBuilder/ManualQuizForm/ManualQuizForm';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Question } from '@/types/question';

@@ -1,0 +1,37 @@
+@import '@/assets/styles/global.scss';
+
+.option-detail {
+  overflow: hidden;
+  .content-wrapper {
+    display: flex;
+
+    .option-content-warning {
+      color: $orange-color-6;
+    }
+  }
+
+  .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(8);
+    padding: toRem(8);
+    padding-bottom: 0;
+  }
+
+  .ant-card-actions {
+    li {
+      margin: 0;
+
+      button {
+        width: 100%;
+        color: $gray-color-3;
+        height: toRem(36);
+        border-radius: 0;
+
+        &:hover:not([disabled]) {
+          background-color: $blue-color-1;
+        }
+      }
+    }
+  }
+}

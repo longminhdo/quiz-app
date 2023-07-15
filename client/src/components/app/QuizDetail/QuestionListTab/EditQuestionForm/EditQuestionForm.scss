@@ -1,0 +1,53 @@
+@import '@/assets/styles/global.scss';
+
+.edit-question-form {
+  width: 100%;
+
+  .options-container {
+    padding: toRem(12);
+    display: flex;
+    flex-direction: column;
+    gap: toRem(14);
+    border: toRem(1) dashed $gray-color-2;
+    border-radius: toRem(8);
+  }
+
+  .custom-footer {
+    position: absolute;
+    left: 0;
+    bottom: toRem(-60);
+    height: toRem(60);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: $main-white-color;
+    border-radius: 0 0 toRem(8) toRem(8);
+    width: 100%;
+    border-top: toRem(1) solid $gray-color-0_5;
+    padding: 0 toRem(20);
+    gap: toRem(8);
+  }
+}
+
+.question-edit-modal {
+  width: 90% !important;
+  max-width: toRem(900);
+  top: toRem(60);
+  height: calc(100vh - 120px);
+
+  .ant-modal-content {
+    border-radius: toRem(8) toRem(8) 0 0;
+    padding: 0;
+
+    .ant-modal-body {
+      overflow-y: scroll;
+      height: calc(100vh - 260px);
+
+      padding: toRem(20) toRem(24);
+    }
+
+    .ant-modal-header {
+      padding: toRem(20);
+    }
+  }
+}

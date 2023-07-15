@@ -28,8 +28,8 @@ export const createQuestion = ({ newQuestion, collectionId }: { newQuestion: Que
 export const updateQuestion = ({ newQuestion, collectionId }: { newQuestion: Question; collectionId: string }) => {
   const questionId = newQuestion._id;
   const data = {
-    title: newQuestion?.title,
-    keys: newQuestion?.keys,
+    title: newQuestion?.title?.trim(),
+    keys: newQuestion?.keys?.map((k) => String(k).trim()),
     level: newQuestion?.level,
     options: newQuestion?.options,
     type: newQuestion?.type,

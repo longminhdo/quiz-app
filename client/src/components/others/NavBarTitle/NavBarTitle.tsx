@@ -8,6 +8,7 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 const NavBarTitle = () => {
   const { selectedMenu } = useContext(LayoutContext);
   const { currentCollection } = useTypedSelector((state) => state.collection);
+  const { currentQuiz } = useTypedSelector((state) => state.quiz);
 
   return (
     <div className="nav-bar-title">
@@ -21,8 +22,9 @@ const NavBarTitle = () => {
       />
       )}
       <h1>{selectedMenu.label}</h1>
+
       {currentCollection && (
-        <div className="collection-title">
+        <div className="detail-title">
           <span>/</span>
           <p>
             {currentCollection.title}
@@ -30,6 +32,14 @@ const NavBarTitle = () => {
         </div>
       )}
 
+      {currentQuiz && (
+      <div className="detail-title">
+        <span>/</span>
+        <p>
+          {currentQuiz.title}
+        </p>
+      </div>
+      )}
     </div>
   );
 };

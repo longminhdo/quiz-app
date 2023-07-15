@@ -5,8 +5,8 @@ import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Quiz } from '@/types/quiz';
-import QuizListToolbar from '@/components/app/Quizzes/QuizListToolbar/QuizListToolbar';
-import QuizList from '@/components/app/Quizzes/QuizList/QuizList';
+import QuizListToolbar from '@/components/app/QuizList/QuizListToolbar/QuizListToolbar';
+import QuizList from '@/components/app/QuizList/QuizList/QuizList';
 
 const MyQuizzesTab: React.FC = () => {
   const [quizzes, setQuizzes] = useState<Array<Quiz>>([]);

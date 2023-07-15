@@ -4,3 +4,4 @@ export const SESSION_EXPIRED_MESSAGE = 'Your session access has expired or is no
 export const NO_QUESTIONS_EXISTED_MESSAGE = 'Your form has no question.';
 export const DOWNLOAD_PREPARING_MESSAGE = 'Your download will begin shortly.';
 export const NO_COLLECTION_ID = 'Collection ID is not found. Please reload the page!';
+export const NO_QUIZ_ID = 'Quiz ID is not found. Please reload the page!';

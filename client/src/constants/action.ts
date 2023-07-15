@@ -32,6 +32,7 @@ export enum QuizAction {
   UPDATE_QUIZ = 'update_quiz',
   CREATE_QUIZ = 'create_quiz',
   GENERATE_QUIZ_CODE = 'generate_quiz_code',
+  FLUSH_QUIZ = 'flush_quiz',
 }
 
 export enum AuthenticationAction {

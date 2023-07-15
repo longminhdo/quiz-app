@@ -1,18 +1,20 @@
 import { Button, Form, Input, Select, message } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
-import { createQuestion, updateQuestion } from '@/actions/question';
+import { updateQuestion } from '@/actions/question';
 import OptionDetail from '@/components/app/CollectionDetail/QuestionListTab/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
-import { NO_COLLECTION_ID } from '@/constants/message';
+import { NO_QUIZ_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import { Question } from '@/types/question';
 import { getNewOptionContent } from '@/utilities/helpers';
 import { transformSendingQuestion } from '@/utilities/quizHelpers';
 import './EditQuestionForm.scss';
+import { flushCollection } from '@/actions/collection';
+import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 
 const { Item } = Form;
 
@@ -21,13 +23,22 @@ const levelOptions = Object.entries(QuestionLevelEnums)
 
 const typeOptions = Object.entries(QuestionTypeEnums).map(([key, value]) => ({ label: value, value: key }));
 
-const EditQuestionForm = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {editType?: string, selectedQuestion: Question, onCancel?: any}) => {
+interface EditQuestionFormProps {
+  selectedQuestion: Question;
+  onCancel?: any
+}
+
+const EditQuestionForm : React.FC<EditQuestionFormProps> = ({ selectedQuestion, onCancel }) => {
   const [localQuestion, setLocalQuestion] = useState<Question>();
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
-  const [run, loading] = useDispatchAsyncAction();
+
   const selectedQuestionRef = useRef<Question>();
-  const { collectionId } = useParams();
+
   const [messageApi] = message.useMessage();
+
+  const [run, loading] = useDispatchAsyncAction();
+  const { currentQuiz } = useTypedSelector((state) => state.quiz);
+  const { updateQuery } = useUpdateUrlQuery();
 
   useEffect(() => {
     if (!isEqual(selectedQuestionRef.current, selectedQuestion)) {
@@ -44,23 +55,17 @@ const EditQuestionForm = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {
   }, [selectedQuestion]);
 
   const handleSubmit = async () => {
-    console.log('heẻe');
     const payload = transformSendingQuestion(localQuestion);
 
-    if (!collectionId) {
-      messageApi.error(NO_COLLECTION_ID);
+    if (!currentQuiz?.createdIn) {
+      messageApi.error(NO_QUIZ_ID);
       onCancel && onCancel();
       return;
     }
 
-    if (editType === 'UPDATE') {
-      await run(updateQuestion({ newQuestion: payload, collectionId }));
-    }
-
-    if (editType === 'CREATE') {
-      await run(createQuestion({ newQuestion: payload, collectionId }));
-    }
-
+    await run(updateQuestion({ newQuestion: payload, collectionId: currentQuiz?.createdIn }));
+    run(flushCollection());
+    updateQuery({ query: { timestamp: Date.now() } });
     onCancel && onCancel();
   };
 
@@ -189,7 +194,7 @@ const EditQuestionForm = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {
         </Button>
 
         <Button type="primary" onClick={handleSubmit} disabled={isSubmitBtnDisabled} loading={loading}>
-          {editType === 'UPDATE' ? 'Update' : 'Create'}
+          Update
         </Button>
       </div>
     </Form>

@@ -1,7 +1,7 @@
 import { FormOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Modal } from 'antd';
 import React, { useState } from 'react';
-import QuizBuilder from '@/components/app/Quizzes/QuizBuilder/QuizBuilder';
+import QuizBuilder from '@/components/app/QuizList/QuizBuilder/QuizBuilder';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './QuizListToolbar.scss';
