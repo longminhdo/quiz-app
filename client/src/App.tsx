@@ -15,7 +15,7 @@ import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementL
 import { setWindowWidth } from '@/modules/redux/slices/appReducer';
 import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 import CollectionListPage from '@/pages/CollectionListPage/CollectionListPage';
-import MyQuizzesPage from '@/pages/MyQuizzesPage/MyQuizzesPage';
+import QuizListPage from '@/pages/QuizListPage/QuizListPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import UnprotectedRoute from './components/common/UnprotectedRoute';
@@ -106,7 +106,7 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <QuizManagementLayout>
-                      <MyQuizzesPage />
+                      <QuizListPage />
                     </QuizManagementLayout>
                   </ProtectedRoute>
                 )}
