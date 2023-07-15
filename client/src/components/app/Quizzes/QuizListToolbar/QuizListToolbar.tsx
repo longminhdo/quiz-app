@@ -1,12 +1,12 @@
 import { FormOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Modal } from 'antd';
 import React, { useState } from 'react';
-import QuizBuilder from '@/components/app/Quizzes/QuizBuilder/QuizBuilder';
+import QuizBuilder from '@/components/app/Quizzes/QuizBuilder';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
-import './CDQuizListToolbar.scss';
+import './QuizListToolbar.scss';
 
-const CDQuizListToolbar: React.FC = () => {
+const QuizListToolbar: React.FC = () => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +29,7 @@ const CDQuizListToolbar: React.FC = () => {
   };
 
   return (
-    <div className="cd-quizzes-list-toolbar">
+    <div className="quizzes-list-toolbar">
       <Input
         placeholder="Search collections"
         prefix={<SearchOutlined />}
@@ -56,4 +56,4 @@ const CDQuizListToolbar: React.FC = () => {
   );
 };
 
-export default CDQuizListToolbar;
+export default QuizListToolbar;

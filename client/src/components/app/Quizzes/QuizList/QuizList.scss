@@ -1,4 +1,13 @@
 @import '@/assets/styles/global.scss';
 
 .quiz-list {
+  margin-top: toRem(20);
+
+  .ant-table-body {
+    height: calc(100vh - toRem(410));
+  }
+}
+
+.quiz-list-modal {
+  padding-top: toRem(100);
 }
