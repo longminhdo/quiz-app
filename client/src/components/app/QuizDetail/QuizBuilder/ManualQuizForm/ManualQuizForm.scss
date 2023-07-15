@@ -1,0 +1,38 @@
+@import '@/assets/styles/global.scss';
+
+.manual-quiz-form {
+  .select-section {
+    display: flex;
+    justify-content: space-between;
+
+    @media (max-width: 1300px) {
+      flex-direction: column;
+      gap: toRem(20);
+    }
+  }
+
+  .question-selection-table {
+    @media (max-width: 1300px) {
+      width: 100%;
+    }
+    width: toRem(550);
+
+    .ant-table-body {
+      min-height: toRem(494);
+
+      .ant-table-placeholder {
+        height: toRem(494);
+      }
+    }
+
+    &.need-collection-select {
+      .ant-table-body {
+        min-height: toRem(440);
+
+        .ant-table-placeholder {
+          height: toRem(440);
+        }
+      }
+    }
+  }
+}

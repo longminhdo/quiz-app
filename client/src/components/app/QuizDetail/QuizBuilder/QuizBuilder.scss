@@ -1,0 +1,28 @@
+@import '@/assets/styles/global.scss';
+
+.quiz-builder {
+  .quiz-builder-footer {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: flex-end;
+    gap: toRem(8);
+
+    @media (max-width: 1300px) {
+      position: relative;
+      margin-top: toRem(20);
+    }
+  }
+
+  .quiz-builder-content {
+    height: fit-content;
+    max-height: toRem(700);
+    overflow-y: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}

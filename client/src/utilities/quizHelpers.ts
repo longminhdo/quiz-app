@@ -1,4 +1,4 @@
-import { QuestionType } from '@/constants/constants';
+import { QuestionType } from '@/constants';
 
 export const transformSendingQuestion = (question) => {
   const { type, options } = JSON.parse(JSON.stringify(question));

@@ -1,3 +1,4 @@
+const isEmpty = require('lodash/isEmpty');
 const { InternalServerError } = require('../constant/errorMessage');
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
@@ -29,16 +30,23 @@ module.exports.updateCollection = async (req, res) => {
 module.exports.getCollections = async (req, res) => {
   try {
     const { userId } = req.userData;
-    const { offset = 1, limit = 10, sort = '', search } = req.query;
+    const { offset = 1, limit = 10, sort = '', search, fetchAll = false } = req.query;
 
     const sortOptions = parseSortOption(sort);
     const skipCount = (Number(offset) - 1) * Number(limit);
     const searchOptions = search ? { title: { $regex: search, $options: 'i' } } : {};
 
-    const collections = await Collection.find({ owner: userId, deleted: { $ne: true }, ...searchOptions })
-      .sort(sortOptions)
-      .skip(skipCount)
-      .limit(Number(limit));
+    let collections;
+
+    if (fetchAll) {
+      collections = (await Collection.find({ owner: userId, deleted: { $ne: true }, ...searchOptions })
+        .sort(sortOptions))?.filter(item => !isEmpty(item?.questions));
+    } else {
+      collections = await Collection.find({ owner: userId, deleted: { $ne: true }, ...searchOptions })
+        .sort(sortOptions)
+        .skip(skipCount)
+        .limit(Number(limit));
+    }
 
     const totalCollections = await Collection.countDocuments({ owner: userId, deleted: { $ne: true }, ...searchOptions });
 

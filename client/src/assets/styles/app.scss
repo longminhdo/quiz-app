@@ -10,3 +10,42 @@
     max-width: toRem(320);
   }
 }
+
+.quiz-builder-modal {
+  .ant-modal {
+    width: 90% !important;
+    max-width: toRem(1200);
+    top: toRem(40);
+    padding: 0;
+
+    .ant-modal-content {
+      height: calc(100vh - 80px);
+
+      .ant-modal-body {
+        padding-top: toRem(20);
+
+        @media (max-width: 1300px) {
+          height: fit-content;
+        }
+
+        height: 95%;
+
+        .quiz-builder-content-wrapper {
+          height: 100%;
+
+          .ant-spin-container {
+            height: 100%;
+          }
+        }
+      }
+
+      @media (max-width: 1300px) {
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+      }
+    }
+  }
+}

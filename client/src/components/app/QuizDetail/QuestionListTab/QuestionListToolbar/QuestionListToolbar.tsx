@@ -1,6 +1,9 @@
-import { SearchOutlined } from '@ant-design/icons';
-import { Input } from 'antd';
-import React from 'react';
+import { EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { Button, Input, Modal } from 'antd';
+import React, { useState } from 'react';
+import QuizBuilder from '@/components/app/QuizDetail/QuizBuilder/QuizBuilder';
+import { BuilderType } from '@/constants';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import './QuestionListToolbar.scss';
 
 interface QuestionListToolbarInterface {
@@ -9,9 +12,16 @@ interface QuestionListToolbarInterface {
 }
 
 const QuestionListToolbar: React.FC<QuestionListToolbarInterface> = ({ filter, setFilter }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { currentQuiz } = useTypedSelector((state) => state.quiz);
+
   const handleSearchChange = (e) => {
     const searchValue = e.target.value;
     setFilter(prev => ({ ...prev, search: searchValue }));
+  };
+
+  const handleEditQuiz = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -23,7 +33,23 @@ const QuestionListToolbar: React.FC<QuestionListToolbarInterface> = ({ filter, s
         value={filter.search}
         onChange={handleSearchChange}
       />
-      <div className="question-list-toolbar-actions" />
+      <div className="question-list-toolbar-actions">
+        <Button type="primary" onClick={handleEditQuiz}>
+          <EditOutlined />
+          Edit quiz
+        </Button>
+      </div>
+
+      <Modal
+        title="Edit quiz"
+        open={isOpen}
+        wrapClassName="quiz-builder-modal"
+        destroyOnClose
+        closable={false}
+        footer={false}
+      >
+        <QuizBuilder builderType={BuilderType.UPDATE} setIsOpen={setIsOpen} quizPool={currentQuiz?.questions || []} />
+      </Modal>
     </div>
   );
 };

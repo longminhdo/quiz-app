@@ -1,7 +1,14 @@
 import { CollectionAction } from 'src/constants/action';
 import { GET, PUT, POST, DELETE } from '@/utilities/request';
 
-export const getCollections = (query?: { search?: string; page?: number; sort?: string; limit?: number }) => ({
+export const getCollections = (query?: { fetchAll?: boolean; search?: string; page?: number; sort?: string; limit?: number }) => ({
+  type: CollectionAction.GET_COLLECTIONS,
+  promise: GET('/collections', {
+    params: query,
+  }),
+});
+
+export const getFlushCollections = (query?: { fetchAll?: boolean; search?: string; page?: number; sort?: string; limit?: number }) => ({
   type: CollectionAction.GET_COLLECTIONS,
   promise: GET('/collections', {
     params: query,
@@ -15,6 +22,11 @@ export const deleteCollection = (collectionId: string) => ({
 
 export const getCollectionById = (collectionId: string) => ({
   type: CollectionAction.GET_COLLECTION_BY_ID,
+  promise: GET(`/collections/${collectionId}`),
+});
+
+export const getFlushCollectionById = (collectionId: string) => ({
+  type: CollectionAction.GET_FLUSH_COLLECTION_BY_ID,
   promise: GET(`/collections/${collectionId}`),
 });
 

@@ -10,8 +10,10 @@ export enum ResponseAction {
 
 export enum CollectionAction {
   GET_COLLECTIONS = 'get_collections',
+  GET_FLUSH_COLLECTIONS = 'get_flush_collections',
   FLUSH_COLLECTION = 'flush_collection',
   GET_COLLECTION_BY_ID = 'get_collection_by_id',
+  GET_FLUSH_COLLECTION_BY_ID = 'get_flush_collection_by_id',
   CREATE_COLLECTION = 'create_collection',
   DELETE_COLLECTION = 'delete_collection',
   UPDATE_COLLECTION = 'update_collection',
@@ -21,6 +23,7 @@ export enum QuestionAction {
   CREATE_QUESTION = 'create_question',
   DELETE_QUESTION = 'delete_question',
   UPDATE_QUESTION = 'update_question',
+  UPDATE_FLUSH_QUESTION = 'update_flush_question',
   DUPLICATE_QUESTION = 'duplicate_question',
   GET_QUESTIONS = 'get_question',
 }

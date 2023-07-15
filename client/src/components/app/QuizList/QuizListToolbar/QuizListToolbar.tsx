@@ -1,10 +1,10 @@
 import { FormOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Modal } from 'antd';
 import React, { useState } from 'react';
-import QuizBuilder from '@/components/app/QuizList/QuizBuilder/QuizBuilder';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './QuizListToolbar.scss';
+import QuizBuilder from '@/components/app/QuizDetail/QuizBuilder/QuizBuilder';
 
 const QuizListToolbar: React.FC = () => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
@@ -45,7 +45,7 @@ const QuizListToolbar: React.FC = () => {
       <Modal
         title="New collection"
         open={isOpen}
-        wrapClassName="cd-quiz-create-modal"
+        wrapClassName="quiz-builder-modal"
         destroyOnClose
         closable={false}
         footer={false}

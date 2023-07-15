@@ -2,10 +2,10 @@ import { Button, Form, Input, Select, message } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { updateQuestion } from '@/actions/question';
+import { updateFlushQuestion, updateQuestion } from '@/actions/question';
 import OptionDetail from '@/components/app/CollectionDetail/QuestionListTab/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
-import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants';
 import { NO_QUIZ_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
@@ -63,8 +63,7 @@ const EditQuestionForm : React.FC<EditQuestionFormProps> = ({ selectedQuestion, 
       return;
     }
 
-    await run(updateQuestion({ newQuestion: payload, collectionId: currentQuiz?.createdIn }));
-    run(flushCollection());
+    await run(updateFlushQuestion({ newQuestion: payload, collectionId: currentQuiz?.createdIn }));
     updateQuery({ query: { timestamp: Date.now() } });
     onCancel && onCancel();
   };

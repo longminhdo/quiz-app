@@ -28,3 +28,8 @@ export const LevelColorEnums = {
   3: 'gold',
   4: 'volcano',
 };
+
+export const BuilderType = {
+  CREATE: 'create',
+  UPDATE: 'update',
+};

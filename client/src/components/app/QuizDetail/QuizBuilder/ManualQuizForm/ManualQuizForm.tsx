@@ -1,18 +1,20 @@
 import { Button, Col, Form, Input, Row, Table, Tag } from 'antd';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { LevelColorEnums, QuestionLevelEnums, QuestionTypeEnums } from '@/constants';
 import { Question } from '@/types/question';
 import { convertLabel } from '@/utilities/helpers';
-import { LevelColorEnums, QuestionLevelEnums, QuestionTypeEnums } from '@/constants/constants';
+import './ManualQuizForm.scss';
 
 const { Item } = Form;
 
 interface ManualQuizFormProps {
   quizPool: Array<Question>;
   setQuestions?: any;
+  needCollectionSelect?: boolean;
 }
 
-const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions }) => {
+const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions, needCollectionSelect }) => {
   const [search, setSearch] = useState('');
   const [source, setSource] = useState<Array<Question>>([]);
   const [destination, setDestination] = useState<Array<Question>>([]);
@@ -25,6 +27,8 @@ const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions 
     }
 
     setSource(quizPool);
+    setDestination([]);
+    setSearch('');
   }, [quizPool]);
 
   useEffect(() => {
@@ -158,7 +162,7 @@ const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions 
   ], [handleRemoveQuestion]);
 
   return (
-    <div>
+    <div className="manual-quiz-form">
       <Row>
         <Col>
           <Item label="Search">
@@ -173,18 +177,18 @@ const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions 
 
       <div className="select-section">
         <Table
-          className="question-selection-table"
+          className={`question-selection-table ${needCollectionSelect ? 'need-collection-select' : ''}`}
           dataSource={search ? filteredSrc : source}
           columns={sourceTableColumns}
           rowKey={(item) => item._id || ''}
-          scroll={{ y: 494 }}
+          scroll={{ y: needCollectionSelect ? 440 : 494 }}
         />
         <Table
-          className="question-selection-table"
+          className={`question-selection-table ${needCollectionSelect ? 'need-collection-select' : ''}`}
           dataSource={search ? filteredDes : destination}
           columns={destinationTableColumns}
           rowKey={(item) => item._id || ''}
-          scroll={{ y: 494 }}
+          scroll={{ y: needCollectionSelect ? 440 : 494 }}
           pagination={{ showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items` }}
         />
       </div>

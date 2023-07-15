@@ -5,7 +5,7 @@ import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo
 import { useParams } from 'react-router-dom';
 import { deleteQuestion } from '@/actions/question';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
-import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants';
 import { NO_COLLECTION_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { setLoading } from '@/modules/redux/slices/appReducer';

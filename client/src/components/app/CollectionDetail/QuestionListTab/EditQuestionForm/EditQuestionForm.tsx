@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createQuestion, updateQuestion } from '@/actions/question';
 import OptionDetail from '@/components/app/CollectionDetail/QuestionListTab/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
-import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants/constants';
+import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants';
 import { NO_COLLECTION_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { Question } from '@/types/question';

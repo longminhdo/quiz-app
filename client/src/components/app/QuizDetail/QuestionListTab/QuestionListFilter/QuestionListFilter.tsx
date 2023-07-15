@@ -2,7 +2,7 @@ import { Button, Col, Form, Row, Select } from 'antd';
 import { FormLayout } from 'antd/es/form/Form';
 import React, { useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '@/hooks/useTypedSelector';
-import { QuestionLevelEnums, QuestionTypeEnums } from '@/constants/constants';
+import { QuestionLevelEnums, QuestionTypeEnums } from '@/constants';
 import './QuestionListFilter.scss';
 
 const { Item } = Form;
