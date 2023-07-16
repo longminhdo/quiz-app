@@ -1,0 +1,23 @@
+@import '@/assets/styles/global.scss';
+
+.quiz-timer {
+  background-color: $main-white-color;
+  border-radius: toRem(8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: toRem(8) toRem(16);
+
+  .timer {
+    .ant-statistic-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .ant-statistic-content-value {
+        font-size: toRem(18);
+        line-height: toRem(18);
+      }
+    }
+  }
+}

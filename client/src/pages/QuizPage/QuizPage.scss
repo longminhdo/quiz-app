@@ -1,0 +1,34 @@
+@import '@/assets/styles/global.scss';
+
+.quiz-page {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background-color: $background-red-color;
+
+  .header {
+    height: toRem(64);
+    display: flex;
+    align-items: center;
+    padding: 0 toRem(14);
+    justify-content: flex-end;
+  }
+
+  .content {
+    background-color: $main-white-color;
+    border-radius: toRem(10);
+    height: calc(100vh - toRem(144));
+    overflow: hidden;
+    margin: 0 toRem(14);
+    position: relative;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 toRem(14);
+    height: toRem(80);
+  }
+}

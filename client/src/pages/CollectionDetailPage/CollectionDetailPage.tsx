@@ -2,10 +2,10 @@ import { BookOutlined, FolderOpenOutlined, PieChartOutlined, SettingOutlined } f
 import { Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { flushCollection } from '@/actions/collection';
-import AnalyticsTab from '@/components/app/CollectionDetail/AnalyticsTab';
-import QuestionListTab from '@/components/app/CollectionDetail/QuestionListTab';
-import QuizzesTab from '@/components/app/CollectionDetail/QuizListTab';
-import SettingsTab from '@/components/app/CollectionDetail/SettingsTab';
+import AnalyticsTab from '@/components/app/admin/CollectionDetail/AnalyticsTab';
+import QuestionListTab from '@/components/app/admin/CollectionDetail/QuestionListTab';
+import QuizzesTab from '@/components/app/admin/CollectionDetail/QuizListTab';
+import SettingsTab from '@/components/app/admin/CollectionDetail/SettingsTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';

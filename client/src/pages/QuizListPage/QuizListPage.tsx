@@ -1,9 +1,9 @@
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
-import MyQuizzesTab from '@/components/app/QuizList/MyQuizzesTab';
-import SharedWithMeTab from '@/components/app/QuizList/SharedWithMeTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import './QuizListPage.scss';
+import MyQuizzesTab from '@/components/app/admin/QuizList/MyQuizzesTab';
+import SharedWithMeTab from '@/components/app/admin/QuizList/SharedWithMeTab';
 
 const QUIZ_LIST_PAGE_TABS = {
   MY_QUIZZES: 'my-quizzes',

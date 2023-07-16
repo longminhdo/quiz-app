@@ -9,8 +9,8 @@ export const routePaths = {
   QUIZZES: '/admin/quizzes',
   QUIZ_DETAIL: '/admin/quizzes/:quizId',
 
-  JOIN: '/join',
-  DO_QUIZ: '/quiz/:quizId',
+  JOIN: '/quiz/join',
+  QUIZ: '/quiz/:quizId',
   HOME: '/',
 
   ACCESS_DENIED: '/access-denied',

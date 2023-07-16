@@ -1,0 +1,22 @@
+@import '@/assets/styles/global.scss';
+
+.quiz-navigation {
+  display: flex;
+  gap: toRem(8);
+  justify-content: center;
+  align-items: center;
+
+  .quiz-nav-btn {
+    height: toRem(40);
+    font-size: toRem(24);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $red-color-2;
+    background-color: $main-white-color;
+
+    &:hover {
+      background-color: antiquewhite;
+    }
+  }
+}

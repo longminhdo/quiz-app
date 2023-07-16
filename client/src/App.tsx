@@ -23,6 +23,7 @@ import HustRedirect from './pages/LoginPage/HustRedirect';
 import AdminRoute from '@/components/HOCs/AdminRoute';
 import JoinPage from '@/pages/JoinPage/JoinPage';
 import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
+import QuizPage from '@/pages/QuizPage/QuizPage';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -131,6 +132,15 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 )}
               />
+              <Route
+                path={routePaths.QUIZ}
+                element={(
+                  <ProtectedRoute>
+                    <QuizPage />
+                  </ProtectedRoute>
+                )}
+              />
+
               <Route
                 path={routePaths.LOGIN}
                 element={(

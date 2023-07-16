@@ -1,0 +1,17 @@
+@import '@/assets/styles/global.scss';
+
+.quiz-settings {
+  .quiz-settings-btn {
+    height: toRem(40);
+    font-size: toRem(24);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $red-color-2;
+    background-color: $main-white-color;
+
+    &:hover {
+      background-color: antiquewhite;
+    }
+  }
+}

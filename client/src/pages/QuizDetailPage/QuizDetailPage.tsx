@@ -2,8 +2,8 @@ import { BookOutlined, PieChartOutlined, SettingOutlined } from '@ant-design/ico
 import { Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { flushQuiz } from '@/actions/quiz';
-import ConfigurationTab from '@/components/app/QuizDetail/ConfigurationTab';
-import QuestionListTab from '@/components/app/QuizDetail/QuestionListTab';
+import ConfigurationTab from '@/components/app/admin/QuizDetail/ConfigurationTab';
+import QuestionListTab from '@/components/app/admin/QuizDetail/QuestionListTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
