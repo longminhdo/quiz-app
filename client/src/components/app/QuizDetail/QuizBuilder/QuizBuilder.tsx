@@ -11,6 +11,7 @@ import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Question } from '@/types/question';
+import { Quiz } from '@/types/quiz';
 import './QuizBuilder.scss';
 
 const QUIZ_CREATE_MODE = {
@@ -28,19 +29,18 @@ const { Panel } = Collapse;
 
 interface QuizBuilderProps {
   setIsOpen?: any;
-  quizPool: Array<Question>
+  quizPool?: Array<Question>
   builderType?: string;
+  initialQuiz?: Quiz;
 }
 
-const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderType = BuilderType.CREATE }) => {
+const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizPool, builderType = BuilderType.CREATE }) => {
   const [mode, setMode] = useState(QUIZ_CREATE_MODE.MANUAL);
   const [localQuizPool, setLocalQuizPool] = useState<Array<Question>>([]);
-  const [quizTitle, setQuizTitle] = useState('');
-  const [questions, setQuestions] = useState<Array<Question>>([]);
   const [disabled, setDisabled] = useState<boolean>(true);
   const [collectionLoading, setCollectionLoading] = useState(false);
   const [collectionOptions, setCollectionOptions] = useState<any>([]);
-  const [localCollectionId, setLocalCollectionId] = useState<string>('');
+  const [localQuiz, setLocalQuiz] = useState<Quiz>();
 
   const { collectionId } = useParams();
   const [messageApi] = message.useMessage();
@@ -49,7 +49,17 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
   const [run, loading] = useDispatchAsyncAction();
 
   useEffect(() => {
-    if (isEmpty(quizPool)) {
+    if (isEmpty(initialQuiz)) {
+      setLocalQuiz(undefined);
+      return;
+    }
+
+    setLocalQuiz(initialQuiz);
+  }, [initialQuiz]);
+
+
+  useEffect(() => {
+    if (isEmpty(quizPool) && builderType === BuilderType.CREATE) {
       setLocalQuizPool([]);
       try {
         (async() => {
@@ -69,17 +79,34 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
       return;
     }
 
-    setLocalQuizPool(quizPool);
-  }, [messageApi, quizPool, run]);
+    if (builderType === BuilderType.UPDATE) {
+      try {
+        (async () => {
+          setCollectionLoading(true);
+          console.log('first');
+          const res = await run(getFlushCollectionById(localQuiz?.createdIn || ''));
+          setCollectionLoading(false);
+          if (res?.statusCode === 200) {
+            const data = res?.data;
+            setLocalQuizPool(data?.questions);
+          }
+        })();
+      } catch (error) {
+        messageApi.error(UNEXPECTED_ERROR_MESSAGE);
+      }
+    }
+
+    setLocalQuizPool(quizPool || []);
+  }, [builderType, localQuiz?.createdIn, messageApi, quizPool, run]);
 
   useEffect(() => {
-    if (isEmpty(questions) || !quizTitle) {
+    if (isEmpty(localQuiz?.questions) || !localQuiz?.title) {
       setDisabled(true);
       return;
     }
 
     setDisabled(false);
-  }, [quizTitle, questions]);
+  }, [localQuiz?.title, localQuiz?.questions]);
 
   const handleModeChange = (e) => {
     setMode(e.target.value);
@@ -87,9 +114,9 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
 
   const handleOk = async () => {
     const payload = {
-      title: quizTitle,
-      questions: questions?.map(q => q?._id),
-      createdIn: collectionId || localCollectionId,
+      title: localQuiz?.title || '',
+      questions: localQuiz?.questions?.map(q => q?._id),
+      createdIn: collectionId || localQuiz?.createdIn,
     };
 
     const res = await run(createQuiz(payload));
@@ -105,14 +132,14 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
   };
 
   const handleCancel = () => {
-    setQuizTitle('');
+    setLocalQuiz(undefined);
     setIsOpen && setIsOpen(false);
   };
 
   const handleCollectionSelectionChange = async (value) => {
     try {
       setCollectionLoading(true);
-      setLocalCollectionId(value);
+      setLocalQuiz((prev: any) => ({ ...prev, createdIn: value }));
       const res = await run(getFlushCollectionById(value));
       setCollectionLoading(false);
       if (res?.statusCode === 200) {
@@ -128,7 +155,7 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
     <Spin spinning={collectionLoading} wrapperClassName="quiz-builder-content-wrapper">
       <Form className="quiz-builder" layout="horizontal" labelAlign="left">
         <div className="quiz-builder-content">
-          {isEmpty(quizPool) ? (
+          {isEmpty(quizPool) && builderType === BuilderType.CREATE ? (
             <Row>
               <Col>
                 <Item required label="Please select the collection">
@@ -150,8 +177,8 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
             <Col>
               <Item required label="Please enter a new name for the new quiz:">
                 <Input
-                  value={quizTitle}
-                  onChange={(e) => setQuizTitle(e.target.value)}
+                  value={localQuiz?.title}
+                  onChange={(e) => setLocalQuiz((prev: any) => ({ ...prev, title: e.target.value }))}
                 />
               </Item>
             </Col>
@@ -174,8 +201,9 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ setIsOpen, quizPool, builderT
               <Panel header="Quiz questions" key="1">
                 {mode === QUIZ_CREATE_MODE.MANUAL ? (
                   <ManualQuizForm
+                    initialQuiz={initialQuiz}
                     quizPool={localQuizPool}
-                    setQuestions={setQuestions}
+                    setQuestions={(newQuestions) => setLocalQuiz((prev: any) => ({ ...prev, questions: newQuestions }))}
                     needCollectionSelect={isEmpty(quizPool)}
                   />
                 ) : null}

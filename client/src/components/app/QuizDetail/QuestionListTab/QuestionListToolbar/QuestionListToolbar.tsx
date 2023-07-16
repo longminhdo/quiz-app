@@ -48,7 +48,7 @@ const QuestionListToolbar: React.FC<QuestionListToolbarInterface> = ({ filter, s
         closable={false}
         footer={false}
       >
-        <QuizBuilder builderType={BuilderType.UPDATE} setIsOpen={setIsOpen} quizPool={currentQuiz?.questions || []} />
+        <QuizBuilder initialQuiz={currentQuiz} builderType={BuilderType.UPDATE} setIsOpen={setIsOpen} />
       </Modal>
     </div>
   );

@@ -3,6 +3,7 @@ import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { LevelColorEnums, QuestionLevelEnums, QuestionTypeEnums } from '@/constants';
 import { Question } from '@/types/question';
+import { Quiz } from '@/types/quiz';
 import { convertLabel } from '@/utilities/helpers';
 import './ManualQuizForm.scss';
 
@@ -12,9 +13,10 @@ interface ManualQuizFormProps {
   quizPool: Array<Question>;
   setQuestions?: any;
   needCollectionSelect?: boolean;
+  initialQuiz?: Quiz
 }
 
-const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions, needCollectionSelect }) => {
+const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ initialQuiz, quizPool, setQuestions, needCollectionSelect }) => {
   const [search, setSearch] = useState('');
   const [source, setSource] = useState<Array<Question>>([]);
   const [destination, setDestination] = useState<Array<Question>>([]);
@@ -29,7 +31,7 @@ const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ quizPool, setQuestions,
     setSource(quizPool);
     setDestination([]);
     setSearch('');
-  }, [quizPool]);
+  }, [quizPool, initialQuiz]);
 
   useEffect(() => {
     if (!search) {

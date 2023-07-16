@@ -1,6 +1,8 @@
 @import '@/assets/styles/global.scss';
 
 .quiz-builder {
+  padding-bottom: toRem(20);
+
   .quiz-builder-footer {
     position: absolute;
     bottom: 0;
@@ -16,6 +18,10 @@
   }
 
   .quiz-builder-content {
+    @media (max-width: 1300px) {
+      max-height: toRem(680);
+    }
+
     height: fit-content;
     max-height: toRem(700);
     overflow-y: scroll;

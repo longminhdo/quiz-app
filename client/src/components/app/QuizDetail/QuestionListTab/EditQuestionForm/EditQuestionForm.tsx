@@ -2,19 +2,18 @@ import { Button, Form, Input, Select, message } from 'antd';
 import { isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { updateFlushQuestion, updateQuestion } from '@/actions/question';
+import { updateFlushQuestion } from '@/actions/question';
 import OptionDetail from '@/components/app/CollectionDetail/QuestionListTab/OptionDetail/OptionDetail';
 import { MyUploadImage } from '@/components/common';
 import { QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants';
 import { NO_QUIZ_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
+import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Question } from '@/types/question';
 import { getNewOptionContent } from '@/utilities/helpers';
 import { transformSendingQuestion } from '@/utilities/quizHelpers';
 import './EditQuestionForm.scss';
-import { flushCollection } from '@/actions/collection';
-import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 
 const { Item } = Form;
 
