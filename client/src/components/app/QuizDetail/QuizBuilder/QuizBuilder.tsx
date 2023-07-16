@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getFlushCollectionById, getFlushCollections } from '@/actions/collection';
-import { createQuiz } from '@/actions/quiz';
+import { createQuiz, updateQuiz } from '@/actions/quiz';
 import ManualQuizForm from '@/components/app/QuizDetail/QuizBuilder/ManualQuizForm/ManualQuizForm';
 import { BuilderType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
@@ -119,15 +119,31 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
       createdIn: collectionId || localQuiz?.createdIn,
     };
 
-    const res = await run(createQuiz(payload));
 
-    if (res.statusCode === 201) {
-      const newQuizId = res.data.data._id;
-      setIsOpen && setIsOpen(false);
-      updateQuery({ query: { timestamp: Date.now() } });
-      setTimeout(() => {
-        window.open(routePaths.QUIZ_DETAIL.replace(':quizId', newQuizId));
-      }, 100);
+    try {
+      if (builderType === BuilderType.CREATE) {
+        const res = await run(createQuiz(payload));
+
+        if (res.statusCode === 201) {
+          const newQuizId = res.data.data._id;
+          setIsOpen && setIsOpen(false);
+          updateQuery({ query: { timestamp: Date.now() } });
+          setTimeout(() => {
+            window.open(routePaths.QUIZ_DETAIL.replace(':quizId', newQuizId));
+          }, 100);
+        }
+      }
+
+      if (builderType === BuilderType.UPDATE) {
+        const res = await run(updateQuiz({ _id: localQuiz?._id, ...payload }));
+
+        if (res.statusCode === 200) {
+          setIsOpen && setIsOpen(false);
+          updateQuery({ query: { timestamp: Date.now() } });
+        }
+      }
+    } catch (error) {
+      messageApi.error(UNEXPECTED_ERROR_MESSAGE);
     }
   };
 

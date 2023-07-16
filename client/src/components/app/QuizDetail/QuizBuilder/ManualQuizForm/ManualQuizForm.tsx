@@ -24,12 +24,14 @@ const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ initialQuiz, quizPool, 
   const [filteredDes, setFilteredDes] = useState<Array<Question>>([]);
 
   useEffect(() => {
+    const initialQuestions = initialQuiz?.questions || [];
+    const initQuestionIds = initialQuestions.map(q => q?._id);
     if (isEmpty(quizPool)) {
       return;
     }
 
-    setSource(quizPool);
-    setDestination([]);
+    setSource(quizPool.filter(q => !initQuestionIds?.includes(q?._id)));
+    setDestination(initialQuestions);
     setSearch('');
   }, [quizPool, initialQuiz]);
 
@@ -183,6 +185,7 @@ const ManualQuizForm: React.FC<ManualQuizFormProps> = ({ initialQuiz, quizPool, 
           dataSource={search ? filteredSrc : source}
           columns={sourceTableColumns}
           rowKey={(item) => item._id || ''}
+          pagination={{ showTotal: (total, range) => `${range[0]}-${range[1]} of ${total} items` }}
           scroll={{ y: needCollectionSelect ? 440 : 494 }}
         />
         <Table

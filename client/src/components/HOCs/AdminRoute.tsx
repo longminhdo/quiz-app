@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Route, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { routePaths } from '@/constants/routePaths';
 
-const AdminRoute = ({ children: Component }) => {
+interface AdminRouteProps {
+  children: any;
+}
+
+const AdminRoute: React.FC<AdminRouteProps> = ({ children: Component }) => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const hasAdminPermission = (() => {

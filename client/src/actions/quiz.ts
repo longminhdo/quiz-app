@@ -25,14 +25,13 @@ export const createQuiz = (payload: { title: string }) => ({
   }),
 });
 
-export const updateQuiz = (newQuiz: { _id?: string; title: string }) => {
-  const data = {
-    title: newQuiz?.title,
-  };
+export const updateQuiz = (newQuiz: any) => {
+  const { _id, ...rest } = newQuiz;
+  const data = rest;
 
   return {
     type: QuizAction.UPDATE_QUIZ,
-    promise: PUT(`/quizzes/${newQuiz._id}`, {
+    promise: PUT(`/quizzes/${_id}`, {
       body: data,
     }),
   };
