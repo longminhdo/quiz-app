@@ -1,47 +1,45 @@
 const express = require('express');
-const quiz = require('../controller/quiz.controller');
+const quizAttempt = require('../controller/quizAttempt.controller');
 const catchAsync = require('../helper/catchAsync');
 const validateAuthentication = require('../middleware/validateAuthentication');
-const { validateQuizId } = require('../middleware/validateId');
+const { validateQuizAttemptId } = require('../middleware/validateId');
 
 const router = express.Router();
 
 router.use(validateAuthentication);
 
-// POST /quiz
+// POST /quizAttempts
 router.post(
   '/',
-  catchAsync(quiz.createQuiz),
+  catchAsync(quizAttempt.create),
 );
 
-// PUT /quizzes/:quizId
+router.post(
+  '/join',
+  catchAsync(quizAttempt.join),
+);
+
+// PUT /quizAttempts/:quizAttemptId
 router.put(
   '/:quizId',
-  validateQuizId,
-  catchAsync(quiz.updateQuiz),
+  validateQuizAttemptId,
+  catchAsync(quizAttempt.updateQuizAttempt),
 );
 
-// GET /quizzes
-router.get('/', catchAsync(quiz.getQuizzes));
+// GET /quizAttempts
+router.get('/', catchAsync(quizAttempt.getQuizAttempts));
 
-// GET /quizzes/:quizId
-router.get('/:quizId',
-  validateQuizId,
-  catchAsync(quiz.getQuizById),
+// GET /quizAttempts/:quizId
+router.get('/:quizAttemptId',
+  validateQuizAttemptId,
+  catchAsync(quizAttempt.getQuizAttemptById),
 );
 
-// DELETE /quizzes/:quizId
+// DELETE /quizAttempts/:quizId
 router.delete(
   '/:quizId',
-  validateQuizId,
-  catchAsync(quiz.deleteQuiz),
-);
-
-// DELETE /quizzes/:quizId
-router.post(
-  '/:quizId/generate-code',
-  validateQuizId,
-  catchAsync(quiz.generateCode),
+  validateQuizAttemptId,
+  catchAsync(quizAttempt.deleteQuiz),
 );
 
 module.exports = router;

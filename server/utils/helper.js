@@ -23,3 +23,17 @@ module.exports.formatDateTime = (date) => {
 
   return formattedDate;
 };
+
+module.exports.shuffleArray = (arr) => {
+  const newArr = [...arr];
+  const n = arr.length;
+
+  for (let i = n - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = newArr[i];
+    newArr[i] = newArr[j];
+    newArr[j] = temp;
+  }
+
+  return newArr;
+};

@@ -22,6 +22,7 @@ module.exports = async (req, res, next) => {
     }
 
     const user = await User.findOne({ hustId: decodedToken.id });
+
     if (!user) {
       return next(new AppError(401, Authentication.USER_NOT_FOUND));
     }
@@ -30,7 +31,8 @@ module.exports = async (req, res, next) => {
       ...decodedToken,
       userId: decodedToken.id.toString(),
     };
-    req.userData = decodeData;
+
+    req.userData = { _id: user._doc._id, ...decodeData };
 
     next();
   } catch (error) {

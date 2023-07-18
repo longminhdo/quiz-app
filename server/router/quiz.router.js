@@ -37,7 +37,7 @@ router.delete(
   catchAsync(quiz.deleteQuiz),
 );
 
-// DELETE /quizzes/:quizId
+// POST /quizzes/:quizId/generate-code
 router.post(
   '/:quizId/generate-code',
   validateQuizId,

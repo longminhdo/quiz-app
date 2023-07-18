@@ -13,6 +13,7 @@ const departmentRoute = require('./router/department.router');
 const authRoute = require('./router/auth.router');
 const collectionRoute = require('./router/collection.router');
 const quizRoute = require('./router/quiz.router');
+const quizAttemptRoute = require('./router/quizAttempt.router');
 const userRoute = require('./router/user.router');
 
 const { MONGO_USERNAME,
@@ -52,6 +53,7 @@ app.use('/department', departmentRoute);
 app.use('/collections', collectionRoute);
 app.use('/quizzes', quizRoute);
 app.use('/users', userRoute);
+app.use('/quizAttempts', quizAttemptRoute);
 
 // Handle error
 // should has 4 params so express can identify this as error handler

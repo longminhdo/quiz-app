@@ -4,19 +4,27 @@ const Quiz = require('../model/quiz');
 const Question = require('../model/question');
 const AppError = require('../helper/AppError');
 const Answer = require('../model/answer');
+const QuizAttempt = require('../model/quizAttempt');
+const { StatusCodes } = require('../constant/statusCodes');
 
 // for edit and delete question
 exports.validateQuestionId = async (req, res, next) => {
   const { questionId, collectionId } = req.params;
   if (!ObjectId.isValid(questionId)) {
-    return next(new AppError(404, 'Invalid Question ID type'));
+    return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Question ID type'));
   }
 
   if (questionId) {
     const question = await Question.findById(questionId);
     if (!question) {
       return next(
-        new AppError(404, 'The question is not found or does not exist'),
+        new AppError(StatusCodes.NOT_FOUND, 'The question is not found or does not exist'),
+      );
+    }
+
+    if (question.deleted) {
+      return next(
+        new AppError(StatusCodes.NOT_FOUND, 'The question is not found or does not exist'),
       );
     }
 
@@ -30,7 +38,7 @@ exports.validateQuestionId = async (req, res, next) => {
     if (!collection) {
       return next(
         new AppError(
-          404,
+          StatusCodes.NOT_FOUND,
           'Your question is not belong to any collection, please double check',
         ),
       );
@@ -39,21 +47,11 @@ exports.validateQuestionId = async (req, res, next) => {
   return next();
 };
 
-// validate response Id
-exports.validateResponseId = async (req, res, next) => {
-  const { responseId } = req.params;
-  if (!ObjectId.isValid(responseId)) { return next(new AppError(404, 'Invalid Response')); }
-  const response = await Response.findById(responseId);
-  //const formResponse = Form.findOne({_id: id, responses:responseId})
-  if (!response) return next(new AppError(404, 'Invalid Response'));
-  return next();
-};
-
 exports.validateAnswerId = async (req, res, next) => {
   const { id } = req.params;
-  if (!ObjectId.isValid(id)) return next(new AppError(404, 'Invalid Answer'));
+  if (!ObjectId.isValid(id)) return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Answer'));
   const answer = await Answer.findById(id);
-  if (!answer) return next(new AppError(404, 'Invalid Answer'));
+  if (!answer) return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Answer'));
   return next();
 };
 
@@ -62,12 +60,17 @@ exports.validateAnswerId = async (req, res, next) => {
 exports.validateCollectionId = async (req, res, next) => {
   const { collectionId } = req.params;
   if (!ObjectId.isValid(collectionId)) {
-    return next(new AppError(404, 'Invalid Collection ID Type'));
+    return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Collection ID Type'));
   }
 
   const collection = await Collection.findById(collectionId);
+
   if (!collection) {
-    return next(new AppError(404, 'The collection is not found or does not exist'));
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The collection is not found or does not exist'));
+  }
+
+  if (collection.deleted) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The collection is not found or does not exist'));
   }
 
   return next();
@@ -78,12 +81,38 @@ exports.validateQuizId = async (req, res, next) => {
   const { quizId } = req.params;
 
   if (!ObjectId.isValid(quizId)) {
-    return next(new AppError(404, 'Invalid Quiz ID Type'));
+    return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Quiz ID Type'));
   }
 
   const quiz = await Quiz.findById(quizId);
+
   if (!quiz) {
-    return next(new AppError(404, 'The quiz is not found or does not exist'));
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
+  }
+
+  if (quiz.deleted) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
+  }
+
+  return next();
+};
+
+// validate quiz attempt id
+exports.validateQuizAttemptId = async (req, res, next) => {
+  const { quizAttemptId } = req.params;
+
+  if (!ObjectId.isValid(quizAttemptId)) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Quiz Attempt ID Type'));
+  }
+
+  const quizAttempt = await QuizAttempt.findById(quizAttemptId);
+
+  if (!quizAttempt) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz attempt is not found or does not exist'));
+  }
+
+  if (quizAttempt.deleted) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz attempt is not found or does not exist'));
   }
 
   return next();

@@ -1,17 +1,62 @@
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
 const QuizAttempt = require('../model/quizAttempt');
+const Quiz = require('../model/quiz');
+const { shuffleArray } = require('../utils/helper.js');
 
 module.exports.join = async (req, res, next) => {
   try {
-    const { userId, quizId } = req;
-    const quizAttempt = new QuizAttempt({ owner: userId, quizId });
+    const { userData } = req;
+    const { code } = req.body;
 
-    await quizAttempt.save();
+    const quiz = await Quiz.findOne({ code }).populate('questions');
+
+    const found = await QuizAttempt
+      .findOne({ quiz: quiz._id, owner: userData.id, deleted: false })
+      .sort({ createdAt: -1 })
+      .populate('shuffledQuestions');
+
+    if (!found || (found.submitted && quiz.multipleAttempts)) {
+      const newQuizAttempt = new QuizAttempt({
+        quiz: quiz._id,
+        owner: userData.id,
+        shuffledQuestions: shuffleArray(quiz.questions),
+      });
+
+      await newQuizAttempt.save();
+
+      return res.status(StatusCodes.CREATED).send({
+        success: true,
+        data: { data: newQuizAttempt },
+      });
+    }
+
+    if (found.submitted) {
+      return res.status(StatusCodes.BAD_REQUEST).send({
+        success: false,
+        data: 'The quiz is closed for joining.',
+      });
+    }
 
     return res.status(StatusCodes.CREATED).send({
       success: true,
-      data: { data: quizAttempt },
+      data: { data: found },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.createQuizAttempt = async (req, res, next) => {
+  try {
+    const { userData, body } = req;
+    const quiz = new QuizAttempt({ owner: userData.userId, ...body });
+
+    await quiz.save();
+
+    return res.status(StatusCodes.CREATED).send({
+      success: true,
+      data: { data: quiz },
     });
   } catch (error) {
     next(error);
@@ -69,10 +114,17 @@ module.exports.getQuizAttempts = async (req, res, next) => {
 
 module.exports.getQuizAttemptById = async (req, res, next) => {
   try {
-    const { quizId, userId } = req.params;
-    const collection = await QuizAttempt.find({ owner: userId, quiz: quizId }).populate('questions');
+    const { quizAttemptId } = req.params;
+    const found = await QuizAttempt.findById(quizAttemptId).populate('shuffledQuestions');
 
-    return res.status(StatusCodes.OK).send({ success: true, data: collection });
+    if (found.submitted) {
+      return res.status(StatusCodes.BAD_REQUEST).send({
+        success: false,
+        data: 'The quiz is closed for joining.',
+      });
+    }
+
+    return res.status(StatusCodes.OK).send({ success: true, data: found });
   } catch (error) {
     next(error);
   }

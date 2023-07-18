@@ -6,4 +6,5 @@ exports.StatusCodes = {
   RESOURCE_EXISTED: 409,
   FORBIDDEN: 403,
   UNAUTHORIZED: 401,
+  BAD_REQUEST: 400,
 };

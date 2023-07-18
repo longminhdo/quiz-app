@@ -5,8 +5,6 @@ const QuestionLevel = {
   CRITICALLY_APPLY: 4,
 };
 
-
-
 module.exports = {
   QuestionLevel,
 };

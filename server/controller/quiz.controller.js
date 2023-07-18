@@ -70,9 +70,9 @@ module.exports.getQuizzes = async (req, res, next) => {
 module.exports.getQuizById = async (req, res, next) => {
   try {
     const { quizId } = req.params;
-    const collection = await Quiz.findById(quizId).populate('questions');
+    const quiz = await Quiz.findById(quizId).populate('questions');
 
-    return res.status(StatusCodes.OK).send({ success: true, data: collection });
+    return res.status(StatusCodes.OK).send({ success: true, data: quiz });
   } catch (error) {
     next(error);
   }
