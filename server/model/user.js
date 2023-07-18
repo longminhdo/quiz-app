@@ -23,10 +23,6 @@ const userSchema = new Schema(
     departmentId: String,
     studentId: String,
     staffCode: String,
-    sharedCollections: {
-      type: Schema.Types.ObjectId,
-      ref: 'Collection',
-    },
   },
   {
     timestamps: {

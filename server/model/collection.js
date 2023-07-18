@@ -9,17 +9,19 @@ const collectionSchema = new Schema(
       type: String,
       default: 'Untitled Collection',
     },
-    questions: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Question',
-      },
-    ],
+    questions: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Question',
+    }],
     owner: String,
     deleted: {
       type: Boolean,
       default: false,
     },
+    sharedWith: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    }],
     createdAt: Number,
     updatedAt: Number,
   },
