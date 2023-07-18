@@ -18,8 +18,9 @@
   }
 
   .quiz-builder-content {
+    min-height: calc(100vh - toRem(230));
     @media (max-width: 1300px) {
-      max-height: toRem(680);
+      max-height: calc(100vh - toRem(230));
     }
 
     height: fit-content;

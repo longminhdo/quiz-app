@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import { getFlushCollectionById, getFlushCollections } from '@/actions/collection';
 import { createQuiz, updateQuiz } from '@/actions/quiz';
 import ManualQuizForm from '@/components/app/admin/QuizDetail/QuizBuilder/ManualQuizForm/ManualQuizForm';
-import { BuilderType } from '@/constants';
+import QuizBuilderConfigurations from '@/components/app/admin/QuizDetail/QuizBuilder/QuizBuilderConfigurations/QuizBuilderConfigurations';
+import { BuilderType, QUIZ_CREATE_MODE, QuizType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
@@ -13,11 +14,7 @@ import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Question } from '@/types/question';
 import { Quiz } from '@/types/quiz';
 import './QuizBuilder.scss';
-
-const QUIZ_CREATE_MODE = {
-  MANUAL: 'manual',
-  RANDOM: 'random',
-};
+import { removeEmptyKeys } from '@/utilities/helpers';
 
 const modeOptions = [
   { label: 'Manual', value: QUIZ_CREATE_MODE.MANUAL },
@@ -100,29 +97,39 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
   }, [builderType, localQuiz?.createdIn, messageApi, quizPool, run]);
 
   useEffect(() => {
-    if (isEmpty(localQuiz?.questions) || !localQuiz?.title) {
+    const disableCondition1 = isEmpty(localQuiz?.questions) || !localQuiz?.title;
+    const disableCondition2 = localQuiz?.quizType === QuizType.ASSIGNMENT && !(localQuiz?.startTime && localQuiz?.endTime);
+    const disableCondition3 = localQuiz?.quizType === QuizType.TEST && !localQuiz?.duration;
+
+    const willDisable = disableCondition1 || disableCondition3 || disableCondition2;
+
+    if (willDisable) {
       setDisabled(true);
       return;
     }
 
     setDisabled(false);
-  }, [localQuiz?.title, localQuiz?.questions]);
+  }, [localQuiz?.title, localQuiz?.questions, localQuiz?.duration, localQuiz?.startTime, localQuiz?.endTime, localQuiz?.quizType]);
 
   const handleModeChange = (e) => {
     setMode(e.target.value);
   };
 
   const handleOk = async () => {
-    const payload = {
+    let payload = {
+      ...localQuiz,
       title: localQuiz?.title || '',
       questions: localQuiz?.questions?.map(q => q?._id),
       createdIn: collectionId || localQuiz?.createdIn,
     };
 
+    if (payload?.quizType === QuizType.TEST) {
+      payload = { ...payload, multipleAttempts: false };
+    }
 
     try {
       if (builderType === BuilderType.CREATE) {
-        const res = await run(createQuiz(payload));
+        const res = await run(createQuiz(removeEmptyKeys(payload)));
 
         if (res.statusCode === 201) {
           const newQuizId = res.data.data._id;
@@ -228,8 +235,12 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
             </Collapse>
 
             <Collapse>
-              <Panel header="Quiz configurations" key="1">
-                configurations
+              <Panel header="Quiz configurations" key="1" forceRender>
+                <QuizBuilderConfigurations
+                  initialQuiz={initialQuiz}
+                  builderType={builderType}
+                  setQuizConfigs={(configs) => setLocalQuiz((prev: any) => ({ ...prev, ...configs }))}
+                />
               </Panel>
             </Collapse>
           </div>

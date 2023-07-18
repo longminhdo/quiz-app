@@ -1,5 +1,6 @@
 import { message } from 'antd';
-import { sortBy, uniq } from 'lodash';
+import dayjs from 'dayjs';
+import { pickBy, sortBy, uniq } from 'lodash';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
 
@@ -69,7 +70,17 @@ export function text2File(text, filename) {
   document.body.removeChild(element);
 }
 
-export const exportExcelFile = ({ data, title, sheetName, width }: { data: Array<any>; title: string; sheetName: string; width?: number }) => {
+export const exportExcelFile = ({
+  data,
+  title,
+  sheetName,
+  width,
+}: {
+  data: Array<any>;
+  title: string;
+  sheetName: string;
+  width?: number;
+}) => {
   /*data under the format of
     [
       ["A1", "B1", "C1"],
@@ -125,7 +136,9 @@ export const findDuplicates = (array: Array<number | string>) => {
 export const getNewOptionContent = (options) => {
   let newOptionNumber = 0;
   const originalOptionRegex = /^(Option) \d+$/gm;
-  const currentOptionNumbers = sortBy(options?.filter((opt) => opt?.content?.match(originalOptionRegex))?.map((opt) => Number(opt?.content.replace('Option ', ''))) || []);
+  const currentOptionNumbers = sortBy(
+    options?.filter((opt) => opt?.content?.match(originalOptionRegex))?.map((opt) => Number(opt?.content.replace('Option ', ''))) || [],
+  );
 
   if (currentOptionNumbers.length === 0 || currentOptionNumbers[0] !== 1) {
     newOptionNumber = 1;
@@ -184,4 +197,25 @@ export const shuffleArray = (arr) => {
   }
 
   return arr;
+};
+
+export const formatDate = (date, dateFormat) => {
+  if (!date) {
+    return null;
+  }
+
+  if (dateFormat) {
+    return dayjs(date, dateFormat);
+  }
+
+  return dayjs(date);
+};
+
+export const removeEmptyKeys = (obj) => {
+  const result = pickBy(
+    obj,
+    (value) => value !== undefined && value !== null && value !== '' && !(Array.isArray(value) && value.length === 0),
+  );
+
+  return result;
 };

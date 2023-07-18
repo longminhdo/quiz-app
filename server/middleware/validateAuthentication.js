@@ -4,6 +4,7 @@ const User = require('../model/user');
 const { Authentication } = require('../constant/errorMessage');
 const AppError = require('../helper/AppError');
 const { getTokenFromReq } = require('../utils/helper');
+const { StatusCodes } = require('../constant/statusCodes');
 
 module.exports = async (req, res, next) => {
   if (req.method === 'OPTIONS') {
@@ -33,6 +34,6 @@ module.exports = async (req, res, next) => {
 
     next();
   } catch (error) {
-    return next(new AppError(401, Authentication.INVALID_TOKEN));
+    return next(new AppError(StatusCodes.UNAUTHORIZED, Authentication.INVALID_TOKEN));
   }
 };

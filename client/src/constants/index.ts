@@ -33,3 +33,28 @@ export const BuilderType = {
   CREATE: 'create',
   UPDATE: 'update',
 };
+
+export const QUIZ_CREATE_MODE = {
+  MANUAL: 'manual',
+  RANDOM: 'random',
+};
+
+export const QuizType = {
+  ASSIGNMENT: 'assignment',
+  TEST: 'test',
+};
+
+export const DATE_FORMAT = {
+  DATE_TIME: 'YYYY/MM/DD HH:mm:ss',
+  DATE: 'YYYY/MM/DD',
+};
+
+export const TIME_SELECT_AFTER = {
+  MINUTES: 'minutes',
+  DAYS: 'days',
+  HOURS: 'hours',
+};
+
+export const MINUTE_TO_MINUTE = 1;
+export const HOUR_TO_MINUTE = 60;
+export const DAY_TO_MINUTE = 1440;

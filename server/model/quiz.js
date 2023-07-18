@@ -23,6 +23,10 @@ const quizSchema = new Schema(
     },
     code: Number,
     owner: String,
+    acceptingResponse: {
+      type: Boolean,
+      default: true,
+    },
     quizType: {
       type: String,
       default: QuizType.MINI_TEST,

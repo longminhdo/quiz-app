@@ -3,6 +3,7 @@ const collection = require('../controller/collection.controller');
 const catchAsync = require('../helper/catchAsync');
 const validateAuthentication = require('../middleware/validateAuthentication');
 const { validateCollectionId } = require('../middleware/validateId');
+const validateAuthorization = require('../middleware/validateAuthorization');
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.post(
 // PUT /collections/:collectionId
 router.put(
   '/:collectionId',
+  validateAuthorization,
   validateCollectionId,
   catchAsync(collection.updateCollection),
 );
@@ -26,6 +28,7 @@ router.get('/', catchAsync(collection.getCollections));
 
 // GET /collections/:collectionId
 router.get('/:collectionId',
+  validateAuthorization,
   validateCollectionId,
   catchAsync(collection.getCollectionById),
 );
@@ -33,6 +36,7 @@ router.get('/:collectionId',
 // DELETE /collections/:collectionId
 router.delete(
   '/:collectionId',
+  validateAuthorization,
   validateCollectionId,
   catchAsync(collection.deleteCollection),
 );

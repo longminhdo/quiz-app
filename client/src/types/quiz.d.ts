@@ -1,9 +1,20 @@
 import { Question } from '@/types/question';
 
-export interface Quiz {
+export interface QuizConfigs {
+  startTime?: string;
+  endTime?: string;
+  duration?: number;
+  quizType: string;
+  resultVisible: boolean;
+  multipleAttempts: boolean;
+  assignTo: Array<string>;
+  acceptingResponse: boolean;
+}
+
+export interface QuizBase {
   _id?: string;
   title: string;
-  questions: [Question];
+  questions: Array<Question>;
   owner: string;
   deleted: boolean;
   createdIn: string;
@@ -11,3 +22,5 @@ export interface Quiz {
   updatedAt: number;
   __v: number;
 }
+
+export type Quiz = QuizBase & QuizConfigs;

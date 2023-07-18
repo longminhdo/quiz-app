@@ -1,6 +1,6 @@
 import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizById } from '@/actions/quiz';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
@@ -20,6 +20,7 @@ const QuestionListTab: React.FC = () => {
   const { currentQuiz } = useTypedSelector((state) => state.quiz);
   const [run, loading] = useDispatchAsyncAction();
   const { quizId } = useParams();
+  const navigate = useNavigate();
 
   // effect for fetching
   useEffect(() => {
@@ -28,7 +29,10 @@ const QuestionListTab: React.FC = () => {
     }
 
     (async () => {
-      await run(getQuizById(quizId));
+      const res = await run(getQuizById(quizId));
+      if (!res?.success) {
+        navigate('/');
+      }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizId, run, window.location.href]);

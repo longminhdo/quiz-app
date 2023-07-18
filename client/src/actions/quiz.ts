@@ -18,7 +18,7 @@ export const getQuizById = (quizId: string) => ({
   promise: GET(`/quizzes/${quizId}`),
 });
 
-export const createQuiz = (payload: { title: string }) => ({
+export const createQuiz = (payload: any) => ({
   type: QuizAction.CREATE_QUIZ,
   promise: POST('/quizzes', {
     body: payload,
