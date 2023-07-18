@@ -3,7 +3,6 @@ const Collection = require('../model/collection');
 const Quiz = require('../model/quiz');
 const Question = require('../model/question');
 const AppError = require('../helper/AppError');
-const Response = require('../model/response');
 const Answer = require('../model/answer');
 
 // for edit and delete question

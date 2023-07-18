@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs');
+const { QuizType } = require('../constant/quizType');
+const { formatDateTime } = require('../utils/helper');
 
 const Schema = mongoose.Schema;
 
@@ -21,6 +23,34 @@ const quizSchema = new Schema(
     },
     code: Number,
     owner: String,
+    quizType: {
+      type: String,
+      default: QuizType.MINI_TEST,
+    },
+    duration: Number, // Duration in minutes
+    startTime: {
+      type: Date,
+      get: formatDateTime,
+    },
+    endTime: {
+      type: Date,
+      get: formatDateTime,
+    },
+    resultVisible: {
+      type: Boolean,
+      default: false,
+    },
+    multipleAttempts: {
+      // used for assignments, after complete quiz, students can re-entry the quiz
+      type: Boolean,
+      default: false,
+    },
+    assignTo: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
     createdIn: String,
     createdAt: Number,
     updatedAt: Number,

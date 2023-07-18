@@ -2,10 +2,10 @@ const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
 const QuizAttempt = require('../model/quizAttempt');
 
-module.exports.createQuizAttempt = async (req, res, next) => {
+module.exports.join = async (req, res, next) => {
   try {
     const { userId, quizId } = req;
-    const quizAttempt = new QuizAttempt({ userId, quizId });
+    const quizAttempt = new QuizAttempt({ owner: userId, quizId });
 
     await quizAttempt.save();
 
@@ -18,7 +18,7 @@ module.exports.createQuizAttempt = async (req, res, next) => {
   }
 };
 
-module.exports.updateQuiz = async (req, res, next) => {
+module.exports.updateQuizAttempt = async (req, res, next) => {
   try {
     const { quizId } = req.params;
     const body = req.body;
@@ -32,7 +32,7 @@ module.exports.updateQuiz = async (req, res, next) => {
   }
 };
 
-module.exports.getQuizzes = async (req, res, next) => {
+module.exports.getQuizAttempts = async (req, res, next) => {
   try {
     const { userId } = req.userData;
     const { offset = 1, limit = 10, sort = '', search, createdIn } = req.query;
@@ -44,7 +44,7 @@ module.exports.getQuizzes = async (req, res, next) => {
     !search && delete searchOptions.title;
     !createdIn && delete searchOptions.createdIn;
 
-    const quizzes = await QuizAttempt.find({ owner: userId, ...searchOptions })
+    const quizAttempts = await QuizAttempt.find({ owner: userId, ...searchOptions })
       .sort(sortOptions)
       .skip(skipCount)
       .limit(Number(limit));
@@ -54,7 +54,7 @@ module.exports.getQuizzes = async (req, res, next) => {
     return res.status(StatusCodes.OK).send({
       success: true,
       data: {
-        data: quizzes.map(c => ({ ...c._doc, ownerData: req.userData })),
+        data: quizAttempts.map(c => ({ ...c._doc, ownerData: req.userData })),
         pagination: {
           total: totalQuizzes,
           offset: Number(offset),
@@ -67,53 +67,12 @@ module.exports.getQuizzes = async (req, res, next) => {
   }
 };
 
-module.exports.getQuizById = async (req, res, next) => {
+module.exports.getQuizAttemptById = async (req, res, next) => {
   try {
-    const { quizId } = req.params;
-    const collection = await QuizAttempt.findById(quizId).populate('questions');
+    const { quizId, userId } = req.params;
+    const collection = await QuizAttempt.find({ owner: userId, quiz: quizId }).populate('questions');
 
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.deleteQuiz = async (req, res, next) => {
-  try {
-    const { quizId } = req.params;
-    await QuizAttempt.findByIdAndDelete(quizId);
-
-    return res.status(StatusCodes.OK).send({
-      success: true,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.generateCode = async (req, res, next) => {
-  try {
-    const { quizId } = req.params;
-    const quiz = await QuizAttempt.findById(quizId);
-
-    if (quiz?.code) {
-      return res.status(StatusCodes.RESOURCE_EXISTED).send({ success: false, message: 'This quiz has already had a code!' });
-    }
-
-    const quizWithBiggestCode = await QuizAttempt.findOne().sort({ code: -1 });
-    let newCode;
-    if (!quizWithBiggestCode?.code) {
-      newCode = 1;
-    } else {
-      newCode = quizWithBiggestCode.code + 1;
-    }
-
-    await QuizAttempt.findByIdAndUpdate(quizId, { code: newCode }, { new: true });
-
-    return res.status(StatusCodes.OK).send({
-      success: true,
-      data: { code: newCode },
-    });
   } catch (error) {
     next(error);
   }
