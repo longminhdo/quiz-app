@@ -9,12 +9,11 @@ module.exports.join = async (req, res, next) => {
     const { userData } = req;
     const { code } = req.body;
 
-    const quiz = await Quiz.findOne({ code }).populate('questions');
+    const quiz = await Quiz.findOne({ code });
 
     const found = await QuizAttempt
       .findOne({ quiz: quiz._id, owner: userData.id, deleted: false })
-      .sort({ createdAt: -1 })
-      .populate('shuffledQuestions');
+      .sort({ createdAt: -1 });
 
     if (!found || (found.submitted && quiz.multipleAttempts)) {
       const newQuizAttempt = new QuizAttempt({
@@ -27,7 +26,7 @@ module.exports.join = async (req, res, next) => {
 
       return res.status(StatusCodes.CREATED).send({
         success: true,
-        data: { data: newQuizAttempt },
+        data: { data: newQuizAttempt._id },
       });
     }
 
@@ -40,7 +39,7 @@ module.exports.join = async (req, res, next) => {
 
     return res.status(StatusCodes.CREATED).send({
       success: true,
-      data: { data: found },
+      data: { data: found._id },
     });
   } catch (error) {
     next(error);
