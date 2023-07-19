@@ -21,7 +21,7 @@ const quizSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    code: Number,
+    code: String,
     owner: String,
     acceptingResponse: {
       type: Boolean,

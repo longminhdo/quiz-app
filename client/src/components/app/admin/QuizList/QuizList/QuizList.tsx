@@ -111,7 +111,7 @@ const QuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) => {
             color="green"
             style={{ userSelect: 'none', fontSize: 14, cursor: 'pointer' }}
           >
-            {formatCode(code)}
+            {code}
           </Tag>
         ) : (
           <Button

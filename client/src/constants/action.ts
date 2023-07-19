@@ -38,6 +38,14 @@ export enum QuizAction {
   FLUSH_QUIZ = 'flush_quiz',
 }
 
+export enum QuizAttemptAction {
+  JOIN = 'join',
+  GET_ATTEMPTS = 'get_attempts',
+  GET_ATTEMPT_BY_ID = 'get_attempt_by_id',
+  SUBMIT = 'submit',
+  UPDATE_ATTEMPT = 'update_attempt',
+}
+
 export enum AuthenticationAction {
   GET_SSO_TOKEN = 'get_sso_token',
   SSO_LOGIN = 'sso_login',

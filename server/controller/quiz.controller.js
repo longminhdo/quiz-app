@@ -101,12 +101,14 @@ module.exports.generateCode = async (req, res, next) => {
     }
 
     const quizWithBiggestCode = await Quiz.findOne().sort({ code: -1 });
-    let newCode;
+    let newCodeNum;
     if (!quizWithBiggestCode?.code) {
-      newCode = 1;
+      newCodeNum = 1;
     } else {
-      newCode = quizWithBiggestCode.code + 1;
+      newCodeNum = Number(String(Number(quizWithBiggestCode.code))) + 1;
     }
+
+    const newCode = String(newCodeNum).padStart(6, '0');
 
     await Quiz.findByIdAndUpdate(quizId, { code: newCode }, { new: true });
 

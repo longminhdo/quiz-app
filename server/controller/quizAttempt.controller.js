@@ -3,6 +3,7 @@ const { parseSortOption } = require('../helper/utils');
 const QuizAttempt = require('../model/quizAttempt');
 const Quiz = require('../model/quiz');
 const { shuffleArray } = require('../utils/helper.js');
+const AppError = require('../helper/AppError.js');
 
 module.exports.join = async (req, res, next) => {
   try {
@@ -10,6 +11,10 @@ module.exports.join = async (req, res, next) => {
     const { code } = req.body;
 
     const quiz = await Quiz.findOne({ code });
+
+    if (!quiz) {
+      return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
+    }
 
     const found = await QuizAttempt
       .findOne({ quiz: quiz._id, owner: userData.id, deleted: false })
@@ -26,7 +31,9 @@ module.exports.join = async (req, res, next) => {
 
       return res.status(StatusCodes.CREATED).send({
         success: true,
-        data: { data: newQuizAttempt._id },
+        data: {
+          attemptId: newQuizAttempt._id,
+        },
       });
     }
 
@@ -39,7 +46,9 @@ module.exports.join = async (req, res, next) => {
 
     return res.status(StatusCodes.CREATED).send({
       success: true,
-      data: { data: found._id },
+      data: {
+        attemptId: found._id,
+      },
     });
   } catch (error) {
     next(error);

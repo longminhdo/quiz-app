@@ -10,7 +10,7 @@ export const routePaths = {
   QUIZ_DETAIL: '/admin/quizzes/:quizId',
 
   JOIN: '/quiz/join',
-  QUIZ: '/quiz/:quizId',
+  QUIZ: '/quiz/:attemptId',
   HOME: '/',
 
   ACCESS_DENIED: '/access-denied',
