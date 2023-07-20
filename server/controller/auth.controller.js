@@ -56,7 +56,6 @@ exports.createUserInfoToken = async (req, res, next) => {
       || (!!data.staffCode && !data.userName)
       || (!!data.studentId && !data.email)
     ) {
-      console.log(data, !data, !data.id, (!!data.staffCode && !data.userName), (!!data.studentId && !data.email));
       return next(new AppError(400, SSOAuthentication.INVALID_DATA));
     }
 

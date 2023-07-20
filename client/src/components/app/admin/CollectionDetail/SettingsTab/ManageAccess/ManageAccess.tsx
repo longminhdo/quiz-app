@@ -76,7 +76,6 @@ const ManageAccess: React.FC = () => {
   };
 
   const handleOk = async() => {
-    console.log('current', currentCollection);
     const res = await run(addCollaborator({ collaborator: newCollaborator, collectionId: currentCollection?._id }));
     if (!res?.success) {
       setError(res?.data);

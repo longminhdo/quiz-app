@@ -29,8 +29,6 @@ const UserAvatar = () => {
     },
   ];
 
-  console.log(avatar);
-
   return (
     <div className="user-avatar">
       <Dropdown overlayClassName="custom-user-dropdown" menu={{ items: dropdownItems }} trigger={['click']}>

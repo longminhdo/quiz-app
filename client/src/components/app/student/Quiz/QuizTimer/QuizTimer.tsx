@@ -4,7 +4,7 @@ import './QuizTimer.scss';
 
 const { Countdown } = Statistic;
 
-
+// TODO: timer
 const QuizTimer: React.FC = () => {
   console.log('timer');
   return (
