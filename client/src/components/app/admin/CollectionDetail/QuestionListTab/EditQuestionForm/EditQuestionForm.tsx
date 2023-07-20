@@ -21,6 +21,7 @@ const levelOptions = Object.entries(QuestionLevelEnums)
 
 const typeOptions = Object.entries(QuestionTypeEnums).map(([key, value]) => ({ label: value, value: key }));
 
+// TODO: handle add max 5 options
 const EditQuestionForm = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {editType?: string, selectedQuestion: Question, onCancel?: any}) => {
   const [localQuestion, setLocalQuestion] = useState<Question>();
   const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState<boolean>(false);
