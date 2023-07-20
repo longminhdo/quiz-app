@@ -1,11 +1,11 @@
-import { UserOutlined, TeamOutlined, SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Checkbox, Input, Modal, Select } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '@/hooks/useTypedSelector';
-import './ManageAccess.scss';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { addCollaborator } from '@/actions/collection';
+import './ManageAccess.scss';
 
 const { Grid } = Card;
 
@@ -44,7 +44,8 @@ const ManageAccess: React.FC = () => {
 
     const { viewers, editors } = currentCollection;
 
-    setCollaborators([...viewers, ...editors]);
+    setCollaborators([...(viewers || []).map(item => ({ ...item, type: 'Viewer' })),
+      ...(editors || []).map(item => ({ ...item, type: 'Editor' }))]);
   }, [currentCollection]);
 
   const handleAddPeople = () => {
@@ -71,6 +72,7 @@ const ManageAccess: React.FC = () => {
       return;
     }
 
+    setOpen(false);
     setError('');
   };
 
@@ -108,10 +110,22 @@ const ManageAccess: React.FC = () => {
         <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column' }} onChange={onChange}>
           {collaborators.map(c => (
             <Grid style={gridStyles} hoverable={false}>
-              <Checkbox value="A">
-                <Avatar icon={<UserOutlined />} />
-                {c?.email}
+              <Checkbox value="A" className="collaborator">
+                <div className="collaborator-content">
+                  <div className="user-item">
+                    { c?.avatar ? <Avatar src={c?.avatar} /> : <Avatar icon={<UserOutlined />} />}
+                    <div className="user-item-info">
+                      <span>
+                        {c?.email}
+                      </span>
+                      <span>
+                        {c?.type}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </Checkbox>
+              <Button>Remove</Button>
             </Grid>
           )) }
         </Checkbox.Group>

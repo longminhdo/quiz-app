@@ -43,8 +43,8 @@ router.delete(
 
 router.post(
   '/:collectionId/add-collaborator',
-  // validateAuthorization,
-  // validateCollectionId,
+  validateAuthorization,
+  validateCollectionId,
   catchAsync(collection.addCollaborator),
 );
 

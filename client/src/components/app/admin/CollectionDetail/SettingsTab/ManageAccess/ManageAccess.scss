@@ -24,9 +24,44 @@
     .ant-card-grid {
       box-shadow: none;
       border-bottom: toRem(1) solid #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
 
       &:nth-last-child(1) {
         border-bottom: none;
+      }
+
+      .collaborator {
+        .collaborator-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 100%;
+
+          .user-item {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: toRem(14);
+
+            .user-item-info {
+              display: flex;
+              flex-direction: column;
+              gap: toRem(4);
+
+              span {
+                line-height: toRem(14);
+                font-size: toRem(12);
+
+                &:first-child {
+                  font-weight: 600;
+                  font-size: toRem(14);
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

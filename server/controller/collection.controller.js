@@ -136,6 +136,7 @@ module.exports.addCollaborator = async (req, res, next) => {
     }
 
     const updatedLibrary = await Collection.findByIdAndUpdate(collectionId, payload, { new: true })
+      .populate('editors viewers')
       .populate({ path: 'questions', match: { deleted: false } });
 
     return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedLibrary } });
