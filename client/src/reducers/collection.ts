@@ -12,6 +12,7 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
   switch (action.type) {
     case CollectionAction.GET_COLLECTION_BY_ID:
     case CollectionAction.UPDATE_COLLECTION:
+    case CollectionAction.ADD_COLLABORATOR:
     case QuestionAction.UPDATE_QUESTION:
     case QuestionAction.CREATE_QUESTION:
     case QuestionAction.DELETE_QUESTION:
