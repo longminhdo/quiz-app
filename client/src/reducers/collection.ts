@@ -19,6 +19,12 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
     case QuestionAction.DUPLICATE_QUESTION: {
       const collection = action.payload.data;
 
+      if (!action.payload.success) {
+        return {
+          currentCollection: state.currentCollection,
+        };
+      }
+
       return {
         currentCollection: collection,
       };

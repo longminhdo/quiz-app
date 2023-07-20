@@ -2,9 +2,10 @@ import { SearchOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Card, Checkbox, Input, Modal, Select } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import useTypedSelector from '@/hooks/useTypedSelector';
+import { addCollaborator, updateCollection } from '@/actions/collection';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import { addCollaborator } from '@/actions/collection';
+import useTypedSelector from '@/hooks/useTypedSelector';
+import { setLoading } from '@/modules/redux/slices/appReducer';
 import './ManageAccess.scss';
 
 const { Grid } = Card;
@@ -18,34 +19,44 @@ const addCollaboratorOptions = [
   { label: 'Editor', value: 'editor' },
 ];
 
-// TODO: manage access collection settings tab
+const DEFAULT_COLLABORATOR = { user: '', type: undefined };
+
 const ManageAccess: React.FC = () => {
   const [open, setOpen] = useState(false);
-  const [checkedList, setCheckedList] = useState<any>([]);
-  const [indeterminate, setIndeterminate] = useState(true);
+  const [selectedCollaborators, setSelectedCollaborators] = useState<any>([]);
+  const [viewingCollaborators, setViewingCollaborators] = useState<any>([]);
+  const [indeterminate, setIndeterminate] = useState(false);
   const [checkAll, setCheckAll] = useState(false);
   const [collaborators, setCollaborators] = useState<any>([]);
   const [search, setSearch] = useState('');
-  const [newCollaborator, setNewCollaborator] = useState({ user: '', type: undefined });
+  const [newCollaborator, setNewCollaborator] = useState(DEFAULT_COLLABORATOR);
   const [error, setError] = useState('');
 
   const { currentCollection } = useTypedSelector((state) => state.collection);
   const [run, loading] = useDispatchAsyncAction();
 
   const handleSearchChange = (e) => {
-    setSearch(e.target.value);
+    const value = e.target.value;
+    setSearch(value);
+
+    if (!value) {
+      setViewingCollaborators(collaborators);
+    }
+
+    setViewingCollaborators(collaborators?.filter(c => c?.email?.toLowerCase().includes(value?.toLowerCase())));
   };
 
   useEffect(() => {
-    // fetch shared list
     if (isEmpty(currentCollection)) {
       return;
     }
 
     const { viewers, editors } = currentCollection;
+    const currentCollaborators = [...(viewers || []).map(item => ({ ...item, type: 'Viewer' })),
+      ...(editors || []).map(item => ({ ...item, type: 'Editor' }))];
 
-    setCollaborators([...(viewers || []).map(item => ({ ...item, type: 'Viewer' })),
-      ...(editors || []).map(item => ({ ...item, type: 'Editor' }))]);
+    setCollaborators(currentCollaborators);
+    setViewingCollaborators(currentCollaborators);
   }, [currentCollection]);
 
   const handleAddPeople = () => {
@@ -53,19 +64,19 @@ const ManageAccess: React.FC = () => {
   };
 
   const handleCheckAll = useCallback((e) => {
-    setCheckedList(e.target.checked ? [] : []);
+    setSelectedCollaborators(e.target.checked ? collaborators.map(item => item?._id) : []);
     setIndeterminate(false);
     setCheckAll(e.target.checked);
-  }, []);
+  }, [collaborators]);
 
   const onChange = (list) => {
-    console.log(list);
-    // setCheckedList(list);
-    // setIndeterminate(!!list.length && list.length < accesses.length);
-    // setCheckAll(list.length === accesses.length);
+    setSelectedCollaborators(list);
+    setIndeterminate(!!list.length && list.length < collaborators.length);
+    setCheckAll(list.length === collaborators.length);
   };
 
   const handleOk = async() => {
+    console.log('current', currentCollection);
     const res = await run(addCollaborator({ collaborator: newCollaborator, collectionId: currentCollection?._id }));
     if (!res?.success) {
       setError(res?.data);
@@ -77,15 +88,45 @@ const ManageAccess: React.FC = () => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setOpen(false);
+    setTimeout(() => {
+      setNewCollaborator(DEFAULT_COLLABORATOR);
+      setError('');
+    }, 50);
   };
 
-  const RemoveButton = useMemo(() => <Button danger>Remove</Button>, []);
+  const removeCollaborators = useCallback(async (removeItems) => {
+    let newEditors = currentCollection?.editors;
+    let newViewers = currentCollection?.viewers;
+    removeItems.forEach(itemToRemove => {
+      newEditors = newEditors.filter(item => item?._id !== itemToRemove);
+      newViewers = newViewers.filter(item => item?._id !== itemToRemove);
+    });
+
+    const newCollection = { ...currentCollection, editors: newEditors, viewers: newViewers };
+    run(setLoading(true));
+    await run(updateCollection(newCollection));
+    run(setLoading(false));
+  }, [currentCollection, run]);
+
+  const RemoveAllButton = useMemo(() => (
+    <Button
+      type="primary"
+      disabled={!selectedCollaborators.length}
+      danger
+      onClick={() => removeCollaborators(selectedCollaborators)}
+    >
+      Remove
+    </Button>
+  ), [removeCollaborators, selectedCollaborators]);
 
   const CardTitle = useMemo(() => (
     <div>
-      <Checkbox indeterminate={indeterminate} onChange={handleCheckAll} checked={checkAll}>
+      <Checkbox
+        indeterminate={indeterminate}
+        onChange={handleCheckAll}
+        checked={checkAll}
+      >
         Check all
       </Checkbox>
     </div>
@@ -97,7 +138,7 @@ const ManageAccess: React.FC = () => {
         <p className="title">Manage access</p>
         <Button type="primary" onClick={handleAddPeople}>Add people</Button>
       </div>
-      <Card type="inner" title={CardTitle} extra={RemoveButton}>
+      <Card type="inner" title={CardTitle} extra={RemoveAllButton}>
         <Grid style={{ ...gridStyles, paddingTop: 18, paddingBottom: 18 }} hoverable={false}>
           <Input
             placeholder="search"
@@ -107,10 +148,14 @@ const ManageAccess: React.FC = () => {
             onChange={handleSearchChange}
           />
         </Grid>
-        <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column' }} onChange={onChange}>
-          {collaborators.map(c => (
-            <Grid style={gridStyles} hoverable={false}>
-              <Checkbox value="A" className="collaborator">
+        <Checkbox.Group
+          style={{ width: '100%', display: 'flex', flexDirection: 'column' }}
+          onChange={onChange}
+          value={selectedCollaborators}
+        >
+          {viewingCollaborators.map(c => (
+            <Grid style={gridStyles} hoverable={false} key={c?._id}>
+              <Checkbox value={c?._id} className="collaborator">
                 <div className="collaborator-content">
                   <div className="user-item">
                     { c?.avatar ? <Avatar src={c?.avatar} /> : <Avatar icon={<UserOutlined />} />}
@@ -125,7 +170,7 @@ const ManageAccess: React.FC = () => {
                   </div>
                 </div>
               </Checkbox>
-              <Button>Remove</Button>
+              <Button onClick={() => removeCollaborators([c?._id])} danger>Remove</Button>
             </Grid>
           )) }
         </Checkbox.Group>

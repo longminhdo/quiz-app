@@ -37,10 +37,10 @@ export const createCollection = (payload: { title: string }) => ({
   }),
 });
 
-export const updateCollection = (newCollection: { _id: string; title: string }) => {
-  const data = {
-    title: newCollection?.title,
-  };
+export const updateCollection = (newCollection: any) => {
+  const data = { ...newCollection };
+  data?._id && delete data?._id;
+
   return {
     type: CollectionAction.UPDATE_COLLECTION,
     promise: PUT(`/collections/${newCollection._id}`, {

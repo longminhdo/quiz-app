@@ -29,10 +29,11 @@ module.exports.updateCollection = async (req, res) => {
   const { collectionId } = req.params;
   const body = req.body;
 
-  const updatedLibrary = await Collection.findByIdAndUpdate(collectionId, body, { new: true })
+  const updatedCollection = await Collection.findByIdAndUpdate(collectionId, body, { new: true })
+    .populate('editors viewers')
     .populate({ path: 'questions', match: { deleted: false } });
 
-  return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedLibrary } });
+  return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedCollection } });
 };
 
 module.exports.getCollections = async (req, res) => {
@@ -106,7 +107,6 @@ module.exports.addCollaborator = async (req, res, next) => {
     const { user, type } = req.body;
     let payload;
 
-    console.log(user);
     const foundCollection = await Collection.findById(collectionId);
     const foundUser = await User.findOne({ $or: [{ email: user }, { studentId: user }] });
 
@@ -135,13 +135,12 @@ module.exports.addCollaborator = async (req, res, next) => {
       };
     }
 
-    const updatedLibrary = await Collection.findByIdAndUpdate(collectionId, payload, { new: true })
+    const updatedCollection = await Collection.findByIdAndUpdate(collectionId, payload, { new: true })
       .populate('editors viewers')
       .populate({ path: 'questions', match: { deleted: false } });
 
-    return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedLibrary } });
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedCollection });
   } catch (error) {
-    console.log('first');
     next(error);
   }
 };
