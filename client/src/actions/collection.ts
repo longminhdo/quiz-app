@@ -52,3 +52,10 @@ export const updateCollection = (newCollection: { _id: string; title: string }) 
 export const flushCollection = () => ({
   type: CollectionAction.FLUSH_COLLECTION,
 });
+
+export const addCollaborator = ({ collaborator, collectionId }) => ({
+  type: CollectionAction.ADD_COLLABORATOR,
+  promise: POST(`/collections/${collectionId}/add-collaborator`, {
+    body: collaborator,
+  }),
+});

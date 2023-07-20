@@ -17,13 +17,13 @@ module.exports.join = async (req, res, next) => {
     }
 
     const found = await QuizAttempt
-      .findOne({ quiz: quiz._id, owner: userData.id, deleted: false })
+      .findOne({ quiz: quiz._id, owner: userData._id, deleted: false })
       .sort({ createdAt: -1 });
 
     if (!found || (found.submitted && quiz.multipleAttempts)) {
       const newQuizAttempt = new QuizAttempt({
         quiz: quiz._id,
-        owner: userData.id,
+        owner: userData._id,
         shuffledQuestions: shuffleArray(quiz.questions),
       });
 
@@ -58,7 +58,7 @@ module.exports.join = async (req, res, next) => {
 module.exports.createQuizAttempt = async (req, res, next) => {
   try {
     const { userData, body } = req;
-    const quiz = new QuizAttempt({ owner: userData.userId, ...body });
+    const quiz = new QuizAttempt({ owner: userData._id, ...body });
 
     await quiz.save();
 
@@ -87,7 +87,7 @@ module.exports.updateQuizAttempt = async (req, res, next) => {
 
 module.exports.getQuizAttempts = async (req, res, next) => {
   try {
-    const { userId } = req.userData;
+    const { _id } = req.userData;
     const { offset = 1, limit = 10, sort = '', search, createdIn } = req.query;
 
     const sortOptions = parseSortOption(sort);
@@ -97,12 +97,12 @@ module.exports.getQuizAttempts = async (req, res, next) => {
     !search && delete searchOptions.title;
     !createdIn && delete searchOptions.createdIn;
 
-    const quizAttempts = await QuizAttempt.find({ owner: userId, ...searchOptions })
+    const quizAttempts = await QuizAttempt.find({ owner: _id, ...searchOptions })
       .sort(sortOptions)
       .skip(skipCount)
       .limit(Number(limit));
 
-    const totalQuizzes = await QuizAttempt.countDocuments({ owner: userId, ...searchOptions });
+    const totalQuizzes = await QuizAttempt.countDocuments({ owner: _id, ...searchOptions });
 
     return res.status(StatusCodes.OK).send({
       success: true,

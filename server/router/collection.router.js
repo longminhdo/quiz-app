@@ -41,4 +41,11 @@ router.delete(
   catchAsync(collection.deleteCollection),
 );
 
+router.post(
+  '/:collectionId/add-collaborator',
+  // validateAuthorization,
+  // validateCollectionId,
+  catchAsync(collection.addCollaborator),
+);
+
 module.exports = router;

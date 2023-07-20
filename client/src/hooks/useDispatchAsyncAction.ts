@@ -1,7 +1,5 @@
-import { message } from 'antd';
 import { useCallback, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 
 interface Options<R, E> {
   onSuccess?: (result: R) => void;
@@ -20,13 +18,11 @@ const useDispatchAsyncAction = () => {
       actionCount.current += 1;
       const response = await dispatch(action);
       const { onSuccess, onError, disableErrorToast } = options;
-
       if (response.success) {
         onSuccess?.(response.result);
       } else {
         onError?.(response.error);
         if (!response.type && !disableErrorToast) {
-          message.error(UNEXPECTED_ERROR_MESSAGE);
           console.error(response);
         }
       }

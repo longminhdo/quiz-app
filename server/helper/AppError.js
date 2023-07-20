@@ -2,7 +2,7 @@ const errorMsg = {
   400: 'Please make sure your input is correct',
   404: 'Invalid Id',
   409: 'Duplicated',
-  403: 'Forbinden',
+  403: 'Forbidden',
   405: 'Method not allowed',
   401: 'Unauthorized',
 };

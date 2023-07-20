@@ -19,6 +19,7 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    avatar: String,
     refreshToken: String,
     departmentId: String,
     studentId: String,

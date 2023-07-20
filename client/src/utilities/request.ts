@@ -33,14 +33,10 @@ export const createRequest = async ({ endpoint, method = 'GET', body = null, par
   if (isEmpty(params)) {
     requestUrl = requestUrl.slice(0, -1);
   }
-
   const response = await fetch(requestUrl, requestConfig);
 
-  if (response.status >= 400 && response.status < 500) {
-    throw new RequestError('Authentication Error', response.status);
-  }
-
   const result = await response.json();
+
   return new Promise((resolve) => {
     resolve({ ...result, statusCode: response?.status });
   });

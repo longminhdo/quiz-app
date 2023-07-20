@@ -1,6 +1,7 @@
 import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { message } from 'antd';
 import { getCollectionById } from '@/actions/collection';
 import QuestionList from '@/components/app/admin/CollectionDetail/QuestionListTab/QuestionList/QuestionList';
 import QuestionListFilter from '@/components/app/admin/CollectionDetail/QuestionListTab/QuestionListFilter/QuestionListFilter';
@@ -8,6 +9,7 @@ import QuestionListToolbar from '@/components/app/admin/CollectionDetail/Questio
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { Collection } from '@/types/collection';
+import { routePaths } from '@/constants/routePaths';
 
 const QuestionListTab: React.FC = () => {
   const [collection, setCollection] = useState<Collection>();
@@ -20,6 +22,7 @@ const QuestionListTab: React.FC = () => {
   const { currentCollection } = useTypedSelector((state) => state.collection);
   const [run, loading] = useDispatchAsyncAction();
   const { collectionId } = useParams();
+  const navigate = useNavigate();
 
   const handleAddQuestion = () => {
     childRef?.current?.createNewQuestion && childRef.current.createNewQuestion();
@@ -32,9 +35,13 @@ const QuestionListTab: React.FC = () => {
     }
 
     (async () => {
-      await run(getCollectionById(collectionId));
+      const res = await run(getCollectionById(collectionId));
+      if (res?.statusCode === 404) {
+        message.error('Not found!');
+        navigate(routePaths.COLLECTIONS);
+      }
     })();
-  }, [collectionId, run]);
+  }, [collectionId, navigate, run]);
 
   // effect for locally filtering
   useEffect(() => {

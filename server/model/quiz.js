@@ -22,7 +22,10 @@ const quizSchema = new Schema(
       default: false,
     },
     code: String,
-    owner: String,
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     acceptingResponse: {
       type: Boolean,
       default: true,

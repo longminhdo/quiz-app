@@ -5,7 +5,10 @@ const Schema = mongoose.Schema;
 
 const quizAttempt = new Schema(
   {
-    owner: String,
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     quiz: {
       type: Schema.Types.ObjectId,
       ref: 'Quiz',

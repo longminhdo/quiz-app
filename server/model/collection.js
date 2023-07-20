@@ -13,12 +13,19 @@ const collectionSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Question',
     }],
-    owner: String,
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
     deleted: {
       type: Boolean,
       default: false,
     },
-    sharedWith: [{
+    editors: [{
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    }],
+    viewers: [{
       type: Schema.Types.ObjectId,
       ref: 'User',
     }],

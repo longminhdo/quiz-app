@@ -5,7 +5,7 @@ const Quiz = require('../model/quiz');
 module.exports.createQuiz = async (req, res, next) => {
   try {
     const { userData, body } = req;
-    const quiz = new Quiz({ owner: userData.userId, ...body });
+    const quiz = new Quiz({ owner: userData._id, ...body });
 
     await quiz.save();
 
@@ -34,7 +34,7 @@ module.exports.updateQuiz = async (req, res, next) => {
 
 module.exports.getQuizzes = async (req, res, next) => {
   try {
-    const { userId } = req.userData;
+    const { _id } = req.userData;
     const { offset = 1, limit = 10, sort = '', search, createdIn } = req.query;
 
     const sortOptions = parseSortOption(sort);
@@ -44,12 +44,12 @@ module.exports.getQuizzes = async (req, res, next) => {
     !search && delete searchOptions.title;
     !createdIn && delete searchOptions.createdIn;
 
-    const quizzes = await Quiz.find({ owner: userId, ...searchOptions })
+    const quizzes = await Quiz.find({ owner: _id, ...searchOptions })
       .sort(sortOptions)
       .skip(skipCount)
       .limit(Number(limit));
 
-    const totalQuizzes = await Quiz.countDocuments({ owner: userId, ...searchOptions });
+    const totalQuizzes = await Quiz.countDocuments({ owner: _id, ...searchOptions });
 
     return res.status(StatusCodes.OK).send({
       success: true,

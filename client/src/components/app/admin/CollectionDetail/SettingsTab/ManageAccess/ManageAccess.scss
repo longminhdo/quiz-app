@@ -1,0 +1,77 @@
+@import '@/assets/styles/global.scss';
+
+.manage-access {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: toRem(14);
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .title {
+      font-size: toRem(24);
+      font-weight: 400;
+    }
+  }
+
+  .ant-card-body {
+    padding: 0;
+    overflow: hidden;
+
+    .ant-card-grid {
+      box-shadow: none;
+      border-bottom: toRem(1) solid #f0f0f0;
+
+      &:nth-last-child(1) {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.add-collaborator-modal {
+  .ant-modal-body {
+    margin-top: toRem(30);
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: toRem(14);
+
+      .title {
+        font-size: toRem(18);
+
+        .collection-title {
+          font-weight: 600;
+        }
+      }
+    }
+
+    .main {
+      margin-top: toRem(30);
+      margin-bottom: toRem(30);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: toRem(12);
+      flex-direction: column;
+
+      .input-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: toRem(4);
+        width: 100%;
+
+        .error-message {
+          color: $error-color;
+          font-size: toRem(12);
+        }
+      }
+    }
+  }
+}

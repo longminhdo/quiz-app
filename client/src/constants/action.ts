@@ -17,6 +17,7 @@ export enum CollectionAction {
   CREATE_COLLECTION = 'create_collection',
   DELETE_COLLECTION = 'delete_collection',
   UPDATE_COLLECTION = 'update_collection',
+  ADD_COLLABORATOR = 'add_collaborator',
 }
 
 export enum QuestionAction {
