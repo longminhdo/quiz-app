@@ -38,3 +38,18 @@ module.exports.getStudents = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getUserInfo = async (req, res, next) => {
+  try {
+    const { userData } = req;
+
+    const user = await User.findById(userData._id);
+
+    return res.status(StatusCodes.OK).send({
+      success: true,
+      data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

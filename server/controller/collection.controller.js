@@ -78,7 +78,7 @@ module.exports.getCollections = async (req, res) => {
 module.exports.getCollectionById = async (req, res) => {
   try {
     const { collectionId } = req.params;
-    const collection = await Collection.findById(collectionId).populate({ path: 'questions', match: { deleted: false } });
+    const collection = await Collection.findById(collectionId).populate('editors viewers').populate({ path: 'questions', match: { deleted: false } });
 
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {

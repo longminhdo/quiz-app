@@ -12,7 +12,7 @@ import LoginPage from '@/pages/LoginPage/LoginPage';
 
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
-import { setWindowWidth } from '@/modules/redux/slices/appReducer';
+import { setLoading, setWindowWidth } from '@/modules/redux/slices/appReducer';
 import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 import CollectionListPage from '@/pages/CollectionListPage/CollectionListPage';
 import QuizListPage from '@/pages/QuizListPage/QuizListPage';
@@ -24,6 +24,7 @@ import AdminRoute from '@/components/HOCs/AdminRoute';
 import JoinPage from '@/pages/JoinPage/JoinPage';
 import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
+import { getCurrentUser } from '@/actions/user';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -54,8 +55,12 @@ const App: React.FC = () => {
 
   // TODO: user role
   useEffect(() => {
-    console.log('get user role');
-  }, []);
+    (async() => {
+      run(setLoading(true));
+      await run(getCurrentUser());
+      run(setLoading(false));
+    })();
+  }, [run]);
 
   return (
     <MessageWrapper>

@@ -44,7 +44,6 @@ const EditQuestionForm = ({ selectedQuestion, onCancel, editType = 'CREATE' }: {
   }, [selectedQuestion]);
 
   const handleSubmit = async () => {
-    console.log('heẻe');
     const payload = transformSendingQuestion(localQuestion);
 
     if (!collectionId) {

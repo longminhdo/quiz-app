@@ -1,5 +1,5 @@
-import { TeamOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Card, Checkbox, Input, Modal, Select } from 'antd';
+import { UserOutlined, TeamOutlined, SearchOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Checkbox, Input, Modal, Select } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useTypedSelector from '@/hooks/useTypedSelector';
@@ -24,7 +24,7 @@ const ManageAccess: React.FC = () => {
   const [checkedList, setCheckedList] = useState<any>([]);
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
-  const [accesses, setAccesses] = useState([]);
+  const [collaborators, setCollaborators] = useState<any>([]);
   const [search, setSearch] = useState('');
   const [newCollaborator, setNewCollaborator] = useState({ user: '', type: undefined });
   const [error, setError] = useState('');
@@ -42,7 +42,9 @@ const ManageAccess: React.FC = () => {
       return;
     }
 
-    console.log(currentCollection);
+    const { viewers, editors } = currentCollection;
+
+    setCollaborators([...viewers, ...editors]);
   }, [currentCollection]);
 
   const handleAddPeople = () => {
@@ -104,12 +106,14 @@ const ManageAccess: React.FC = () => {
           />
         </Grid>
         <Checkbox.Group style={{ width: '100%', display: 'flex', flexDirection: 'column' }} onChange={onChange}>
-          <Grid style={gridStyles} hoverable={false}>
-            <Checkbox value="A">A</Checkbox>
-          </Grid>
-          <Grid style={gridStyles} hoverable={false}>
-            <Checkbox value="B">B</Checkbox>
-          </Grid>
+          {collaborators.map(c => (
+            <Grid style={gridStyles} hoverable={false}>
+              <Checkbox value="A">
+                <Avatar icon={<UserOutlined />} />
+                {c?.email}
+              </Checkbox>
+            </Grid>
+          )) }
         </Checkbox.Group>
       </Card>
 

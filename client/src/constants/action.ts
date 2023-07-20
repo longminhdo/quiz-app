@@ -52,3 +52,8 @@ export enum AuthenticationAction {
   SSO_LOGIN = 'sso_login',
   LOGOUT = 'logout',
 }
+
+export enum UserAction {
+  GET_CURRENT_USER = 'get_current_user',
+  FLUSH_USER = 'flush_user',
+}

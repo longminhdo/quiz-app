@@ -5,6 +5,7 @@ import { Avatar, Dropdown } from 'antd';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { logout } from '@/actions/authentication';
 import './UserAvatar.scss';
+import useTypedSelector from '@/hooks/useTypedSelector';
 
 const LogoutItem = ({ onClick }) => (
   <a href="#" onClick={onClick} className="custom-user-dropdown-item">
@@ -13,8 +14,9 @@ const LogoutItem = ({ onClick }) => (
   </a>
 );
 
-function UserAvatar() {
+const UserAvatar = () => {
   const [run] = useDispatchAsyncAction();
+  const { avatar } = useTypedSelector(state => state.user);
 
   const handleLogout = () => {
     run(logout());
@@ -27,14 +29,17 @@ function UserAvatar() {
     },
   ];
 
+  console.log(avatar);
+
   return (
     <div className="user-avatar">
       <Dropdown overlayClassName="custom-user-dropdown" menu={{ items: dropdownItems }} trigger={['click']}>
         <a onClick={(e) => e.preventDefault()}>
-          <Avatar icon={<UserOutlined />} />
+          { avatar ? <Avatar src={avatar} /> : <Avatar icon={<UserOutlined />} />}
         </a>
       </Dropdown>
     </div>
   );
-}
+};
+
 export default UserAvatar;

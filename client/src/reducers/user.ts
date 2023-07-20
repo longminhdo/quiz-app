@@ -1,5 +1,4 @@
-import { AuthenticationAction } from 'src/constants/action';
-import type { Action } from 'src/actions/authentication';
+import { AuthenticationAction, UserAction } from 'src/constants/action';
 import jwt_decode from 'jwt-decode';
 import configs from '@/configuration';
 
@@ -10,6 +9,7 @@ interface UserState {
   studentId: string | null;
   staffCode: string | null;
   role: string | null;
+  avatar?: string | null;
 }
 
 interface Token {
@@ -46,7 +46,7 @@ const getInitialState = () => {
 
 const INITIAL_STATE: UserState = getInitialState();
 
-export const userReducer = (state = INITIAL_STATE, action: Action): UserState => {
+export const userReducer = (state = INITIAL_STATE, action): UserState => {
   switch (action.type) {
     case AuthenticationAction.SSO_LOGIN: {
       const { token, refreshToken } = action.payload.data;
@@ -80,6 +80,15 @@ export const userReducer = (state = INITIAL_STATE, action: Action): UserState =>
         studentId: null,
         staffCode: null,
         role: null,
+      };
+    }
+
+    case UserAction.GET_CURRENT_USER: {
+      const currentUser = action.payload.data;
+
+      return {
+        ...state,
+        ...currentUser,
       };
     }
 
