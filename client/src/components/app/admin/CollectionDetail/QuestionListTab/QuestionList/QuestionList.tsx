@@ -108,13 +108,39 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
       title: 'Question',
       dataIndex: 'title',
       key: 'title',
+      ellipsis: true,
+      render: (v) => (
+        <Tooltip
+          overlayClassName={v?.length > 200 ? 'custom-tooltip-hide-arrow' : ''}
+          overlayInnerStyle={{ whiteSpace: 'pre-line', width: 'max-content', maxWidth: '42vw' }}
+          destroyTooltipOnHide
+          title={v}
+          placement="topLeft"
+        >
+          <span>{v}</span>
+        </Tooltip>
+      ),
     },
     {
       title: 'Answers',
       dataIndex: 'keys',
       key: 'keys',
       ellipsis: true,
-      render: (answers) => <Tooltip placement="topLeft" title={answers.join(', ')}>{answers.join(', ')}</Tooltip>,
+      render: (answers) => {
+        const content = answers?.join(', ') || '';
+
+        return (
+          <Tooltip
+            overlayClassName={content?.length > 200 ? 'custom-tooltip-hide-arrow' : ''}
+            overlayInnerStyle={{ whiteSpace: 'pre-line', width: 'max-content', maxWidth: '42vw' }}
+            destroyTooltipOnHide
+            placement="topLeft"
+            title={content}
+          >
+            {content}
+          </Tooltip>
+        );
+      },
     },
     {
       title: 'Type',
@@ -176,7 +202,22 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
     const data :any = props?.options || [];
     const { keys } = props;
     const columns: any = [
-      { title: 'Option', dataIndex: 'content', key: 'content' },
+      { title: 'Option',
+        dataIndex: 'content',
+        ellipsis: true,
+        key: 'content',
+        render: (v) => (
+          <Tooltip
+            overlayClassName={v?.length > 200 ? 'custom-tooltip-hide-arrow' : ''}
+            overlayInnerStyle={{ whiteSpace: 'pre-line', width: 'max-content', maxWidth: '42vw' }}
+            destroyTooltipOnHide
+            title={v}
+            placement="topLeft"
+          >
+            <span>{v}</span>
+          </Tooltip>
+        ),
+      },
       { title: 'Correct answer',
         dataIndex: 'isCorrectAnswer',
         key: 'isCorrectAnswer',

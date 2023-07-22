@@ -49,3 +49,9 @@
     }
   }
 }
+
+.custom-tooltip-hide-arrow {
+  .ant-tooltip-arrow {
+    display: none;
+  }
+}
