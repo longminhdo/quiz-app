@@ -21,7 +21,7 @@ router.post(
 
 // PUT /quizAttempts/:quizAttemptId
 router.put(
-  '/:quizId',
+  '/:quizAttemptId',
   validateQuizAttemptId,
   catchAsync(quizAttempt.updateQuizAttempt),
 );

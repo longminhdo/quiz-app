@@ -5,7 +5,7 @@ interface QuizState {
 }
 
 const INITIAL_STATE: any = {
-  quiz: null,
+  currentQuiz: null,
 };
 
 export const quizReducer = (state = INITIAL_STATE, action: any): QuizState => {

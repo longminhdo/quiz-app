@@ -19,3 +19,15 @@ export const joinQuiz = (code) => ({
     body: { code },
   }),
 });
+
+export const updateQuizAttempt = (newQuizAttempt) => {
+  const { _id, ...rest } = newQuizAttempt;
+  const data = rest;
+
+  return {
+    type: QuizAttemptAction.UPDATE_ATTEMPT,
+    promise: PUT(`/quizAttempts/${_id}`, {
+      body: data,
+    }),
+  };
+};

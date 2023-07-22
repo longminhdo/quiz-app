@@ -47,6 +47,7 @@ export const QuizType = {
 export const DATE_FORMAT = {
   DATE_TIME: 'YYYY/MM/DD HH:mm:ss',
   DATE: 'YYYY/MM/DD',
+  DATE_CALENDAR: 'MMM DD, YYYY',
 };
 
 export const TIME_SELECT_AFTER = {

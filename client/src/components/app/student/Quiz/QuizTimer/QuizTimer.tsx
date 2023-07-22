@@ -1,15 +1,21 @@
 import { Statistic } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import './QuizTimer.scss';
 
 const { Countdown } = Statistic;
 
-// TODO: timer
-const QuizTimer: React.FC = () => {
-  console.log('timer');
+const DEFAULT_TIME_UNIT = 1000;
+
+interface QuizTimerProps {
+  initialTime: number; // unit is in second
+}
+
+const QuizTimer: React.FC<QuizTimerProps> = ({ initialTime }) => {
+  const duration = useMemo(() => (initialTime || 0) * DEFAULT_TIME_UNIT, [initialTime]);
+
   return (
     <div className="quiz-timer">
-      <Countdown className="timer" value={Date.now() + 100000} format="mm:ss" />
+      <Countdown className="timer" value={Date.now() + duration} format="mm:ss" />
     </div>
   );
 };

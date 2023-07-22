@@ -73,11 +73,11 @@ module.exports.createQuizAttempt = async (req, res, next) => {
 
 module.exports.updateQuizAttempt = async (req, res, next) => {
   try {
-    const { quizId } = req.params;
+    const { quizAttemptId } = req.params;
     const body = req.body;
 
-    const updatedQuiz = await QuizAttempt.findByIdAndUpdate(quizId, body, { new: true })
-      .populate('questions');
+    const updatedQuiz = await QuizAttempt.findByIdAndUpdate(quizAttemptId, body, { new: true })
+      .populate('shuffledQuestions quiz');
 
     return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedQuiz } });
   } catch (error) {
@@ -123,7 +123,7 @@ module.exports.getQuizAttempts = async (req, res, next) => {
 module.exports.getQuizAttemptById = async (req, res, next) => {
   try {
     const { quizAttemptId } = req.params;
-    const found = await QuizAttempt.findById(quizAttemptId).populate('shuffledQuestions');
+    const found = await QuizAttempt.findById(quizAttemptId).populate('shuffledQuestions quiz');
 
     if (found.submitted) {
       return res.status(StatusCodes.BAD_REQUEST).send({

@@ -45,6 +45,8 @@ export enum QuizAttemptAction {
   GET_ATTEMPT_BY_ID = 'get_attempt_by_id',
   SUBMIT = 'submit',
   UPDATE_ATTEMPT = 'update_attempt',
+  UPDATE_FLUSH_ATTEMPT = 'update_flush_attempt',
+  FLUSH_QUIZ_ATTEMPT = 'flush_quiz_attempt',
 }
 
 export enum AuthenticationAction {

@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { pickBy, sortBy, uniq } from 'lodash';
 import moment from 'moment';
 import * as XLSX from 'xlsx';
+import { DATE_FORMAT } from '@/constants';
 
 export const isDiff = (A?: any, B?: any) => JSON.stringify(A) !== JSON.stringify(B);
 export const convertTimeToTimeStamp = (time) => moment(time).unix();
@@ -168,12 +169,12 @@ export const moveElement = (array, fromIndex, toIndex) => {
   return array;
 };
 
-export const convertTime = (time: number) => {
+export const convertTime = (time: number, format = DATE_FORMAT.DATE_CALENDAR) => {
   if (!time) {
     return '';
   }
 
-  return moment.unix(time).format('MMM DD, YYYY');
+  return moment.unix(time).format(format);
 };
 
 export const convertLabel = (value: number | string, enums: object) => {

@@ -36,7 +36,7 @@ const NavBarTitle = () => {
       <div className="detail-title">
         <span>/</span>
         <p>
-          {currentQuiz.title}
+          {currentQuiz?.title}
         </p>
       </div>
       )}
