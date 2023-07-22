@@ -56,6 +56,10 @@ const App: React.FC = () => {
   // TODO: user role
   useEffect(() => {
     (async() => {
+      if (!localStorage.getItem('survey-app-token')) {
+        return;
+      }
+
       run(setLoading(true));
       await run(getCurrentUser());
       run(setLoading(false));
