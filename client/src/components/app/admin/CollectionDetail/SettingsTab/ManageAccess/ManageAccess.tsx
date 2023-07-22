@@ -75,6 +75,14 @@ const ManageAccess: React.FC = () => {
     setCheckAll(list.length === collaborators.length);
   };
 
+  const handleCancel = () => {
+    setOpen(false);
+    setTimeout(() => {
+      setNewCollaborator(DEFAULT_COLLABORATOR);
+      setError('');
+    }, 50);
+  };
+
   const handleOk = async() => {
     const res = await run(addCollaborator({ collaborator: newCollaborator, collectionId: currentCollection?._id }));
     if (!res?.success) {
@@ -82,16 +90,7 @@ const ManageAccess: React.FC = () => {
       return;
     }
 
-    setOpen(false);
-    setError('');
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-    setTimeout(() => {
-      setNewCollaborator(DEFAULT_COLLABORATOR);
-      setError('');
-    }, 50);
+    handleCancel();
   };
 
   const removeCollaborators = useCallback(async (removeItems) => {

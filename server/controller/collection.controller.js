@@ -33,36 +33,44 @@ module.exports.updateCollection = async (req, res) => {
     .populate('editors viewers')
     .populate({ path: 'questions', match: { deleted: false } });
 
-  return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedCollection } });
+  return res.status(StatusCodes.OK).send({ success: true, data: updatedCollection });
 };
 
 module.exports.getCollections = async (req, res) => {
   try {
     const { _id } = req.userData;
-    const { offset = 1, limit = 10, sort = '', search, fetchAll = false } = req.query;
+    const { offset = 1, limit = 10, sort = '', search, fetchAll = false, getShared = false } = req.query;
 
     const sortOptions = parseSortOption(sort);
     const skipCount = (Number(offset) - 1) * Number(limit);
     const searchOptions = search ? { title: { $regex: search, $options: 'i' } } : {};
+    const sharedOptions = getShared ? { $or: [{ viewers: { $in: [_id] } }, { editors: { $in: [_id] } }] } : {};
+    const defaultOptions = { owner: _id, deleted: { $ne: true } };
 
     let collections;
 
-    if (fetchAll) {
-      collections = (await Collection.find({ owner: _id, deleted: { $ne: true }, ...searchOptions })
-        .sort(sortOptions))?.filter(item => !isEmpty(item?.questions));
-    } else {
-      collections = await Collection.find({ owner: _id, deleted: { $ne: true }, ...searchOptions })
-        .sort(sortOptions)
-        .skip(skipCount)
-        .limit(Number(limit));
+    if (getShared) {
+      delete defaultOptions.owner;
     }
 
-    const totalCollections = await Collection.countDocuments({ owner: _id, deleted: { $ne: true }, ...searchOptions });
+    if (fetchAll) {
+      collections = (await Collection.find({ ...defaultOptions, ...searchOptions, ...sharedOptions })
+        .sort(sortOptions))?.filter(item => !isEmpty(item?.questions))
+        .populate('owner');
+    } else {
+      collections = await Collection.find({ ...defaultOptions, ...searchOptions, ...sharedOptions })
+        .sort(sortOptions)
+        .skip(skipCount)
+        .limit(Number(limit))
+        .populate('owner');
+    }
+
+    const totalCollections = await Collection.countDocuments({ ...defaultOptions, ...searchOptions, ...sharedOptions });
 
     return res.status(StatusCodes.OK).send({
       success: true,
       data: {
-        data: collections.map(c => ({ ...c._doc, ownerData: req.userData })),
+        data: collections,
         pagination: {
           total: totalCollections,
           offset: Number(offset),

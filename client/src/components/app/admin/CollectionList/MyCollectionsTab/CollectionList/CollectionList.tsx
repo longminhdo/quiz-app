@@ -10,6 +10,7 @@ import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
 import { convertTime } from '@/utilities/helpers';
 import './CollectionList.scss';
+import useTypedSelector from '@/hooks/useTypedSelector';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
@@ -31,6 +32,9 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
   const [run, loading] = useDispatchAsyncAction();
   const titleInputRef = useRef<any>();
   const navigate = useNavigate();
+
+  const { _id: currentUserId } = useTypedSelector(state => state.user);
+
 
   useEffect(() => {
     setTimeout(() => {
@@ -103,9 +107,9 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
       key: 'owner',
       width: 280,
       ellipsis: true,
-      render: (_, record) => (
-        <Tooltip destroyTooltipOnHide title={record?.ownerData?.email} placement="topLeft">
-          <b>{record?.ownerData?.email}</b>
+      render: (v) => (
+        <Tooltip destroyTooltipOnHide title={v?.email} placement="topLeft">
+          <b>{v?.email}</b>
         </Tooltip>
       ),
     },
@@ -123,6 +127,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
       render: (_, record) => (
         <Space size="middle">
           <Button
+            disabled={record?.viewers?.includes(currentUserId)}
             onClick={() => {
               setSelectedCollection(record);
               setModalType(MODAL_TYPES.RENAME);
@@ -137,6 +142,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
             Rename
           </Button>
           <Button
+            disabled={record?.viewers?.includes(currentUserId)}
             danger
             onClick={() => {
               setSelectedCollection(record);

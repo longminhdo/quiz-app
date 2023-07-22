@@ -25,6 +25,7 @@ import JoinPage from '@/pages/JoinPage/JoinPage';
 import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
 import { getCurrentUser } from '@/actions/user';
+import useCurrentPath from '@/hooks/useCurrentPath';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -54,17 +55,7 @@ const App: React.FC = () => {
   }, [run]);
 
   // TODO: user role
-  useEffect(() => {
-    (async() => {
-      if (!localStorage.getItem('survey-app-token')) {
-        return;
-      }
 
-      run(setLoading(true));
-      await run(getCurrentUser());
-      run(setLoading(false));
-    })();
-  }, [run]);
 
   return (
     <MessageWrapper>

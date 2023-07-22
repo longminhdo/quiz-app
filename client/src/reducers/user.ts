@@ -10,6 +10,7 @@ interface UserState {
   staffCode: string | null;
   role: string | null;
   avatar?: string | null;
+  _id?: string | null;
 }
 
 interface Token {
