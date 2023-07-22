@@ -17,13 +17,13 @@ import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizListPage from '@/pages/QuizListPage/QuizListPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
-import HustRedirect from './pages/LoginPage/HustRedirect';
+import HustRedirect from '@/pages/LoginPage/HustRedirect';
 
 import AdminRoute from '@/components/HOCs/AdminRoute';
-import ProtectedRoute from './components/common/ProtectedRoute';
-import UnprotectedRoute from './components/common/UnprotectedRoute';
-import { routePaths } from './constants/routePaths';
-
+import UserWrapper from '@/components/HOCs/UserWrapper';
+import ProtectedRoute from '@/components/common/ProtectedRoute';
+import UnprotectedRoute from '@/components/common/UnprotectedRoute';
+import { routePaths } from '@/constants/routePaths';
 
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from './hooks/useTypedSelector';
@@ -66,9 +66,11 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <AdminRoute>
-                      <QuizManagementLayout>
-                        <CollectionListPage />
-                      </QuizManagementLayout>
+                      <UserWrapper>
+                        <QuizManagementLayout>
+                          <CollectionListPage />
+                        </QuizManagementLayout>
+                      </UserWrapper>
                     </AdminRoute>
                   </ProtectedRoute>
                 )}
@@ -78,9 +80,11 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <AdminRoute>
-                      <QuizManagementLayout>
-                        <CollectionDetailPage />
-                      </QuizManagementLayout>
+                      <UserWrapper>
+                        <QuizManagementLayout>
+                          <CollectionDetailPage />
+                        </QuizManagementLayout>
+                      </UserWrapper>
                     </AdminRoute>
                   </ProtectedRoute>
                 )}
@@ -90,9 +94,11 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <AdminRoute>
-                      <QuizManagementLayout>
-                        <ReportsPage />
-                      </QuizManagementLayout>
+                      <UserWrapper>
+                        <QuizManagementLayout>
+                          <ReportsPage />
+                        </QuizManagementLayout>
+                      </UserWrapper>
                     </AdminRoute>
                   </ProtectedRoute>
                 )}
@@ -102,9 +108,11 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <AdminRoute>
-                      <QuizManagementLayout>
-                        <QuizListPage />
-                      </QuizManagementLayout>
+                      <UserWrapper>
+                        <QuizManagementLayout>
+                          <QuizListPage />
+                        </QuizManagementLayout>
+                      </UserWrapper>
                     </AdminRoute>
                   </ProtectedRoute>
                 )}
@@ -114,9 +122,11 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <AdminRoute>
-                      <QuizManagementLayout>
-                        <QuizDetailPage />
-                      </QuizManagementLayout>
+                      <UserWrapper>
+                        <QuizManagementLayout>
+                          <QuizDetailPage />
+                        </QuizManagementLayout>
+                      </UserWrapper>
                     </AdminRoute>
                   </ProtectedRoute>
                 )}

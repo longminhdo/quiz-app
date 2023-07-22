@@ -35,7 +35,6 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
 
   const { _id: currentUserId } = useTypedSelector(state => state.user);
 
-
   useEffect(() => {
     setTimeout(() => {
       titleInputRef.current?.focus();
@@ -158,7 +157,7 @@ const CollectionList: React.FC<CollectionListProps> = ({ data, total, tableLoadi
         </Space>
       ),
     },
-  ], [navigate]);
+  ], [currentUserId, navigate]);
 
   return (
     <div className="collection-list">
