@@ -1,31 +1,32 @@
 import { Spin, message } from 'antd';
 import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+
+import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
+import { setWindowWidth } from '@/modules/redux/slices/appReducer';
 import RouteWrapper from '@/modules/routes/RouteWrapper';
-import { routePaths } from './constants/routePaths';
-import useTypedSelector from './hooks/useTypedSelector';
 
 import AccessDeniedPage from '@/pages/AccessDeniedPage/AccessDeniedPage';
-import LoginCallback from '@/pages/LoginPage/LoginCallback';
-import LoginPage from '@/pages/LoginPage/LoginPage';
-
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
-import { setLoading, setWindowWidth } from '@/modules/redux/slices/appReducer';
 import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 import CollectionListPage from '@/pages/CollectionListPage/CollectionListPage';
+import JoinPage from '@/pages/JoinPage/JoinPage';
+import LoginCallback from '@/pages/LoginPage/LoginCallback';
+import LoginPage from '@/pages/LoginPage/LoginPage';
+import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizListPage from '@/pages/QuizListPage/QuizListPage';
+import QuizPage from '@/pages/QuizPage/QuizPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
+import HustRedirect from './pages/LoginPage/HustRedirect';
+
+import AdminRoute from '@/components/HOCs/AdminRoute';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import UnprotectedRoute from './components/common/UnprotectedRoute';
-import HustRedirect from './pages/LoginPage/HustRedirect';
-import AdminRoute from '@/components/HOCs/AdminRoute';
-import JoinPage from '@/pages/JoinPage/JoinPage';
-import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
-import QuizPage from '@/pages/QuizPage/QuizPage';
-import { getCurrentUser } from '@/actions/user';
-import useCurrentPath from '@/hooks/useCurrentPath';
+import { routePaths } from './constants/routePaths';
+
+
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useTypedSelector from './hooks/useTypedSelector';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -53,9 +54,6 @@ const App: React.FC = () => {
       window.removeEventListener('resize', handleResize);
     };
   }, [run]);
-
-  // TODO: user role
-
 
   return (
     <MessageWrapper>
