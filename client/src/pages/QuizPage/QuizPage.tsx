@@ -1,21 +1,23 @@
+import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 import { getQuizAttemptById, updateQuizAttempt } from '@/actions/quizAttempt';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
+import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
 import QuizNavigation from '@/components/app/student/Quiz/QuizNavigation/QuizNavigation';
 import QuizSettings from '@/components/app/student/Quiz/QuizSettings/QuizSettings';
 import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
+import { QuizType } from '@/constants';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import './QuizPage.scss';
-import { QuizType } from '@/constants';
 
 const QuizPage: React.FC = () => {
   const { attemptId } = useParams();
-  const [currentQuestion, setCurrentQuestion] = useState();
+  const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [loading, setLoading] = useState(true);
 
   const [run] = useDispatchAsyncAction();
@@ -41,25 +43,47 @@ const QuizPage: React.FC = () => {
     })();
   }, [attemptId, run]);
 
+  useEffect(() => {
+    if (!currentQuizAttempt) {
+      return;
+    }
+
+    let flag = 0;
+    const shuffledQuestions = currentQuizAttempt?.shuffledQuestions || [];
+    for (let i = 0; i < shuffledQuestions.length; i++) {
+      if (isEmpty(shuffledQuestions[i]?.response)) {
+        flag = i;
+        break;
+      }
+    }
+
+    setCurrentQuestion({ question: shuffledQuestions[flag], index: flag });
+  }, [currentQuizAttempt]);
+
   if (loading) {
     return <div>loading</div>;
   }
 
+  const handleNavigationChange = (index) => {
+    setCurrentQuestion({ question: currentQuizAttempt?.shuffledQuestions[index], index });
+  };
+
   return (
     <div className="quiz-page">
       <div className="header">
+        <QuizFraction current={currentQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} />
         <QuizTimer initialTime={moment((currentQuizAttempt?.endedAt || 0) * 1000).diff(moment(), 'seconds')} />
       </div>
       <div className="content">
-        <QuestionSection />
-        <AnswerSection />
+        <QuestionSection currentQuestion={currentQuestion} />
+        <AnswerSection question={currentQuestion} />
       </div>
       <div className="footer">
         <div className="footer-left">
           <QuizSettings />
         </div>
         <div className="footer-right">
-          <QuizNavigation />
+          <QuizNavigation current={currentQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} onChange={handleNavigationChange} />
         </div>
       </div>
     </div>

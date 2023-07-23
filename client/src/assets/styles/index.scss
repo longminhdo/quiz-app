@@ -4,20 +4,22 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-// ::-webkit-scrollbar {
-//   background-color: $gray-color-1;
-//   width: 7px;
-// }
+::-webkit-scrollbar {
+  background-color: $gray-color-1;
+  width: toRem(7);
+  height: toRem(7);
+}
 
-// ::-webkit-scrollbar-thumb {
-//   border-radius: 4px;
-//   background-color: rgba(0, 0, 0, 0.3);
-// }
+::-webkit-scrollbar-thumb {
+  border-radius: toRem(4);
+  background-color: rgba(0, 0, 0, 0.3);
+}
 
 .icon {
   font-size: toRem(18);

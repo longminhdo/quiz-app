@@ -6,11 +6,11 @@ import { deleteCollection, updateCollection } from '@/actions/collection';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Collection } from '@/types/collection';
 import { convertTime } from '@/utilities/helpers';
 import './CollectionList.scss';
-import useTypedSelector from '@/hooks/useTypedSelector';
 
 const MODAL_TYPES = {
   DELETE: 'delete',

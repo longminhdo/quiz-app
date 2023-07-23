@@ -15,6 +15,16 @@
     color: $red-color-2;
     background-color: $main-white-color;
 
+    &[disabled] {
+      background-color: $gray-color-2;
+      color: $gray-color-4;
+
+      &:hover {
+        background-color: $gray-color-2 !important;
+        color: $gray-color-4 !important;
+      }
+    }
+
     &:hover {
       background-color: antiquewhite;
     }

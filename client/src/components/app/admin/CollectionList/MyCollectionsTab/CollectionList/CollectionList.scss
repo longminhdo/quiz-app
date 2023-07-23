@@ -5,6 +5,7 @@
 
   .ant-table-body {
     height: calc(100vh - toRem(410));
+    overflow: auto !important;
   }
 }
 

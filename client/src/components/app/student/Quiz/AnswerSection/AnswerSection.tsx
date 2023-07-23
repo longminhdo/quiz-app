@@ -3,10 +3,10 @@ import { Question } from '@/types/question';
 import './AnswerSection.scss';
 
 interface AnswerSectionProps {
-  questions?: Question
+  question?: Question
 }
 
-const AnswerSection: React.FC<AnswerSectionProps> = ({ questions }) => {
+const AnswerSection: React.FC<AnswerSectionProps> = ({ question }) => {
   console.log('answer');
   return <div className="answer-section">AnswerSection</div>;
 };

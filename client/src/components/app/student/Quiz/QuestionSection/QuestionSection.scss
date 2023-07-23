@@ -1,6 +1,57 @@
 @import '@/assets/styles/global.scss';
 
 .question-section {
-  background-color: aqua;
   height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: toRem(40);
+  position: relative;
+
+  .question-section-content {
+    height: 100%;
+    overflow: auto;
+    white-space: pre-line;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 toRem(40);
+  }
+
+  .question-section-media {
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    background-color: white;
+    border-radius: toRem(4);
+    width: toRem(320);
+    height: toRem(260);
+    position: relative;
+    border: 1px solid $purple-color-0;
+    display: flex;
+    margin: toRem(12) auto;
+    line-height: toRem(195);
+    outline-width: 0;
+    padding: toRem(8);
+
+    @include mobile {
+      max-width: 85%;
+      height: toRem(200);
+    }
+
+    @media (max-width: toRem(320)) {
+      max-width: toRem(200);
+      height: toRem(150);
+    }
+
+    .media-image {
+      box-sizing: border-box;
+      margin: auto;
+      max-height: 100%;
+      max-width: 100%;
+      min-height: 0;
+      min-width: 0;
+      vertical-align: middle;
+      @include select-restricted;
+    }
+  }
 }
