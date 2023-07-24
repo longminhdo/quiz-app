@@ -3,25 +3,28 @@ import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getQuizAttemptById, updateFlushQuizAttempt, updateQuizAttempt } from '@/actions/quizAttempt';
+import { getQuizAttemptById, submitQuizAttempt, updateFlushQuizAttempt, updateQuizAttempt } from '@/actions/quizAttempt';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
 import QuizNavigation from '@/components/app/student/Quiz/QuizNavigation/QuizNavigation';
 import QuizSettings from '@/components/app/student/Quiz/QuizSettings/QuizSettings';
 import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
+import SubmitConfirmation from '@/components/app/student/Quiz/SubmitConfirmation/SubmitConfirmation';
 import { QuizType } from '@/constants';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { QuizAttempt } from '@/types/quizAttempt';
 import './QuizPage.scss';
+import { setLoading } from '@/modules/redux/slices/appReducer';
 
 const QuizPage: React.FC = () => {
   const { attemptId } = useParams();
   const [localQuestion, setLocalQuestion] = useState<any>();
-  const [loading, setLoading] = useState(true);
+  const [localLoading, setLocalLoading] = useState(true);
   const [localAttempt, setLocalAttempt] = useState<QuizAttempt>();
   const [isFirstRender, setIsFirstRender] = useState(true);
+  const [willSubmit, setWillSubmit] = useState(false);
 
   const debounceRef = useRef<any>();
   const attemptRef = useRef<QuizAttempt>();
@@ -35,7 +38,7 @@ const QuizPage: React.FC = () => {
     }
 
     (async () => {
-      setLoading(true);
+      setLocalLoading(true);
       const res = await run(getQuizAttemptById(attemptId));
 
       if (res?.success) {
@@ -46,7 +49,7 @@ const QuizPage: React.FC = () => {
         }
       }
 
-      setLoading(false);
+      setLocalLoading(false);
       setIsFirstRender(false);
     })();
   }, [attemptId, run]);
@@ -87,6 +90,12 @@ const QuizPage: React.FC = () => {
   }, [isFirstRender, localAttempt, run]);
 
   const handleNavigationChange = (index) => {
+    if (index >= currentQuizAttempt?.shuffledQuestions?.length) {
+      setWillSubmit(true);
+      return;
+    }
+
+    setWillSubmit(false);
     setLocalQuestion({ question: currentQuizAttempt?.shuffledQuestions[index], index });
   };
 
@@ -106,7 +115,14 @@ const QuizPage: React.FC = () => {
     });
   };
 
-  if (loading) {
+  const handleSubmit = async () => {
+    console.log('submit', localAttempt);
+    run(setLoading(true));
+    await run(submitQuizAttempt(localAttempt));
+    run(setLoading(false));
+  };
+
+  if (localLoading) {
     return <div>loading</div>;
   }
 
@@ -117,12 +133,20 @@ const QuizPage: React.FC = () => {
         <QuizTimer initialTime={moment((currentQuizAttempt?.endedAt || 0) * 1000).diff(moment(), 'seconds')} />
       </div>
       <div className="content">
-        <QuestionSection currentQuestion={localQuestion} />
-        <AnswerSection
-          currentQuestion={localQuestion}
-          currentResponse={localAttempt?.completedQuestions?.find(item => item.question === localQuestion?.question?._id)?.response || []}
-          onChange={handleAnswerChange}
-        />
+        {willSubmit
+          ? (
+            <SubmitConfirmation onSubmit={handleSubmit} />
+          )
+          : (
+            <>
+              <QuestionSection currentQuestion={localQuestion} />
+              <AnswerSection
+                currentQuestion={localQuestion}
+                currentResponse={localAttempt?.completedQuestions?.find(item => item.question === localQuestion?.question?._id)?.response || []}
+                onChange={handleAnswerChange}
+              />
+            </>
+          )}
       </div>
       <div className="footer">
         <div className="footer-left">
@@ -130,7 +154,7 @@ const QuizPage: React.FC = () => {
         </div>
         <div className="footer-right">
           <QuizNavigation
-            current={localQuestion?.index}
+            current={willSubmit ? currentQuizAttempt?.shuffledQuestions?.length : localQuestion?.index}
             total={currentQuizAttempt?.shuffledQuestions?.length}
             onChange={handleNavigationChange}
           />

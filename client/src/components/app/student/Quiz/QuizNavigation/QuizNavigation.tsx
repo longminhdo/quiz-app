@@ -22,8 +22,23 @@ const QuizNavigation: React.FC<QuizNavigationProps> = ({ current, total, onChang
 
   return (
     <div className="quiz-navigation">
-      <Button className="quiz-nav-btn" onClick={handleBack} type="text" disabled={currentIndex === 0}><CaretLeftFilled /></Button>
-      <Button className="quiz-nav-btn" onClick={handleNext} type="text" disabled={current === totalIndexes - 1}><CaretRightFilled /></Button>
+      <Button
+        className="quiz-nav-btn"
+        onClick={handleBack}
+        type="text"
+        disabled={currentIndex === 0}
+      >
+        <CaretLeftFilled />
+      </Button>
+
+      <Button
+        className="quiz-nav-btn"
+        onClick={handleNext}
+        type="text"
+        disabled={current === totalIndexes}
+      >
+        <CaretRightFilled />
+      </Button>
     </div>
   );
 };

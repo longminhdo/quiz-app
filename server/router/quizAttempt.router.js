@@ -29,17 +29,24 @@ router.put(
 // GET /quizAttempts
 router.get('/', catchAsync(quizAttempt.getQuizAttempts));
 
-// GET /quizAttempts/:quizId
+// GET /quizAttempts/:quizAttemptId
 router.get('/:quizAttemptId',
   validateQuizAttemptId,
   catchAsync(quizAttempt.getQuizAttemptById),
 );
 
-// DELETE /quizAttempts/:quizId
+// DELETE /quizAttempts/:quizAttemptId
 router.delete(
-  '/:quizId',
+  '/:quizAttemptId',
   validateQuizAttemptId,
   catchAsync(quizAttempt.deleteQuiz),
+);
+
+// POST /quizAttempts/:quizAttemptId/submit
+router.post(
+  '/:quizAttemptId/submit',
+  validateQuizAttemptId,
+  catchAsync(quizAttempt.submitQuizAttempt),
 );
 
 module.exports = router;

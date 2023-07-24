@@ -1,0 +1,31 @@
+@import '@/assets/styles/global.scss';
+
+.submit-confirmation {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: toRem(24);
+
+  .submit-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: toRem(8);
+    font-size: toRem(24);
+    height: toRem(48);
+    width: toRem(200);
+    background-color: $red-color;
+    color: $main-white-color;
+
+    @include hover-shadow;
+
+    &:hover {
+      background-color: $red-color;
+      color: $main-white-color;
+      border-color: $red-color-2;
+    }
+  }
+}

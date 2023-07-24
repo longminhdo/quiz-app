@@ -43,3 +43,15 @@ export const updateFlushQuizAttempt = (newQuizAttempt) => {
     }),
   };
 };
+
+export const submitQuizAttempt = (quizAttempt) => {
+  const { _id, ...rest } = quizAttempt;
+  const data = rest;
+
+  return {
+    type: QuizAttemptAction.SUBMIT,
+    promise: POST(`/quizAttempts/${_id}/submit`, {
+      body: data,
+    }),
+  };
+};
