@@ -83,7 +83,7 @@ module.exports.updateQuizAttempt = async (req, res, next) => {
     const updatedQuiz = await QuizAttempt.findByIdAndUpdate(quizAttemptId, body, { new: true })
       .populate('shuffledQuestions quiz');
 
-    return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedQuiz } });
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedQuiz });
   } catch (error) {
     next(error);
   }
@@ -201,7 +201,8 @@ module.exports.submitQuizAttempt = async (req, res, next) => {
 
     const submitContent = { ...body, submitted: true, completedQuestions, grade };
 
-    const submittedQuiz = await QuizAttempt.findByIdAndUpdate(quizAttemptId, submitContent, { new: true });
+    const submittedQuiz = await QuizAttempt.findByIdAndUpdate(quizAttemptId, submitContent, { new: true })
+      .populate('quiz');
 
     return res.status(StatusCodes.OK).send({ success: true, data: submittedQuiz });
   } catch (error) {

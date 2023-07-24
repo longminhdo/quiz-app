@@ -1,0 +1,51 @@
+@import '@/assets/styles/global.scss';
+
+$sider-width: toRem(260);
+$nav-bar-height: toRem(80);
+$footer-height: toRem(60);
+
+.quiz-layout {
+  background-color: #f7f9fc;
+  .sider {
+    overflow: auto;
+    height: 100vh;
+    background: $main-white-color;
+    border-inline-end: 1px solid $gray-color-0_5;
+  }
+
+  .header {
+    background-color: $main-white-color;
+    height: $nav-bar-height;
+    padding: 0 toRem(24);
+    width: 100%;
+    top: 0;
+    left: $sider-width;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .site-layout {
+    min-height: 100vh;
+
+    .content-container {
+      overflow: initial;
+      flex: none !important;
+      height: calc(100vh - $footer-height - $nav-bar-height);
+      padding: toRem(14);
+      padding-bottom: 0;
+
+      .content {
+        height: 100%;
+        border-radius: toRem(8);
+      }
+    }
+
+    .footer {
+      height: $footer-height;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

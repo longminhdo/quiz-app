@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizAttemptById, submitQuizAttempt, updateFlushQuizAttempt, updateQuizAttempt } from '@/actions/quizAttempt';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
@@ -17,6 +17,7 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 import { QuizAttempt } from '@/types/quizAttempt';
 import './QuizPage.scss';
 import { setLoading } from '@/modules/redux/slices/appReducer';
+import { routePaths } from '@/constants/routePaths';
 
 const QuizPage: React.FC = () => {
   const { attemptId } = useParams();
@@ -29,6 +30,8 @@ const QuizPage: React.FC = () => {
   const debounceRef = useRef<any>();
   const attemptRef = useRef<QuizAttempt>();
 
+  const navigate = useNavigate();
+
   const [run] = useDispatchAsyncAction();
   const { currentQuizAttempt } = useTypedSelector(state => state.quizAttempt);
 
@@ -39,20 +42,25 @@ const QuizPage: React.FC = () => {
 
     (async () => {
       setLocalLoading(true);
-      const res = await run(getQuizAttemptById(attemptId));
+      try {
+        const res = await run(getQuizAttemptById(attemptId));
 
-      if (res?.success) {
-        const data = res?.data;
-        if (data?.quiz?.quizType === QuizType.TEST && !data?.endedAt) {
-          const endedAt = dayjs().add(data?.quiz?.duration, 'minutes').unix();
-          await run(updateQuizAttempt({ ...data, endedAt }));
+        if (res?.success) {
+          const data = res?.data;
+          if (data?.quiz?.quizType === QuizType.TEST && !data?.endedAt) {
+            const endedAt = dayjs().add(data?.quiz?.duration, 'minutes').unix();
+            await run(updateQuizAttempt({ ...data, endedAt }));
+          }
+        } else {
+          navigate(routePaths.JOIN);
         }
+      } catch (error) {
+        navigate(routePaths.JOIN);
       }
-
       setLocalLoading(false);
       setIsFirstRender(false);
     })();
-  }, [attemptId, run]);
+  }, [attemptId, navigate, run]);
 
   useEffect(() => {
     if (!currentQuizAttempt) {
@@ -116,9 +124,25 @@ const QuizPage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    console.log('submit', localAttempt);
     run(setLoading(true));
-    await run(submitQuizAttempt(localAttempt));
+
+    try {
+      const res = await run(submitQuizAttempt(localAttempt));
+
+      if (res?.success) {
+        const quiz = res?.data?.quiz;
+        console.log(quiz);
+        if (!quiz?.resultVisible) {
+          navigate(routePaths.HOME);
+          run(setLoading(false));
+          return;
+        }
+      }
+    } catch (error) {
+      navigate(routePaths.HOME);
+      run(setLoading(false));
+    }
+
     run(setLoading(false));
   };
 

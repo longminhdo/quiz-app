@@ -10,6 +10,7 @@ import AccessDeniedPage from '@/pages/AccessDeniedPage/AccessDeniedPage';
 import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 import CollectionListPage from '@/pages/CollectionListPage/CollectionListPage';
 import JoinPage from '@/pages/JoinPage/JoinPage';
+import HustRedirect from '@/pages/LoginPage/HustRedirect';
 import LoginCallback from '@/pages/LoginPage/LoginCallback';
 import LoginPage from '@/pages/LoginPage/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
@@ -17,7 +18,6 @@ import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizListPage from '@/pages/QuizListPage/QuizListPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
-import HustRedirect from '@/pages/LoginPage/HustRedirect';
 
 import AdminRoute from '@/components/HOCs/AdminRoute';
 import UserWrapper from '@/components/HOCs/UserWrapper';
@@ -26,7 +26,9 @@ import UnprotectedRoute from '@/components/common/UnprotectedRoute';
 import { routePaths } from '@/constants/routePaths';
 
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import HomePage from '@/pages/HomePage/HomePage';
 import useTypedSelector from './hooks/useTypedSelector';
+import QuizLayout from '@/layouts/QuizLayout/QuizLayout';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -132,6 +134,16 @@ const App: React.FC = () => {
                 )}
               />
 
+              <Route
+                path={routePaths.HOME}
+                element={(
+                  <ProtectedRoute>
+                    <QuizLayout>
+                      <HomePage />
+                    </QuizLayout>
+                  </ProtectedRoute>
+                )}
+              />
               <Route
                 path={routePaths.JOIN}
                 element={(

@@ -1,9 +1,8 @@
 import React from 'react';
 import './HomePage.scss';
 
-interface HomePageProps {}
 
-const HomePage: React.FC<HomePageProps> = () => {
+const HomePage: React.FC = () => {
   console.log('first');
   return <div className="home-page">HomePage</div>;
 };

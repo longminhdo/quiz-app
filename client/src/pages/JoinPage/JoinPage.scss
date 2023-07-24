@@ -26,4 +26,16 @@
       width: 100%;
     }
   }
+
+  .input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(4);
+    width: 100%;
+
+    .error-message {
+      color: $error-color;
+      font-size: toRem(12);
+    }
+  }
 }
