@@ -138,9 +138,11 @@ const App: React.FC = () => {
                 path={routePaths.HOME}
                 element={(
                   <ProtectedRoute>
-                    <QuizLayout>
-                      <HomePage />
-                    </QuizLayout>
+                    <UserWrapper>
+                      <QuizLayout>
+                        <HomePage />
+                      </QuizLayout>
+                    </UserWrapper>
                   </ProtectedRoute>
                 )}
               />
@@ -148,7 +150,9 @@ const App: React.FC = () => {
                 path={routePaths.JOIN}
                 element={(
                   <ProtectedRoute>
-                    <JoinPage />
+                    <UserWrapper>
+                      <JoinPage />
+                    </UserWrapper>
                   </ProtectedRoute>
                 )}
               />
@@ -156,7 +160,9 @@ const App: React.FC = () => {
                 path={routePaths.QUIZ}
                 element={(
                   <ProtectedRoute>
-                    <QuizPage />
+                    <UserWrapper>
+                      <QuizPage />
+                    </UserWrapper>
                   </ProtectedRoute>
                 )}
               />

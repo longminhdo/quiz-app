@@ -1,0 +1,48 @@
+@import '@/assets/styles/global.scss';
+
+.client-left-menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: toRem(14);
+    margin-bottom: toRem(24);
+
+    .user-avatar {
+      height: toRem(150);
+      width: toRem(150);
+    }
+
+    p {
+      font-style: italic;
+    }
+  }
+
+  .client-left-menu {
+    background-color: $app-background-color;
+    border-inline-end: none !important;
+    user-select: none;
+
+    .ant-menu-item-selected {
+      background-color: $sub-red-color !important;
+      color: $red-color !important;
+      font-weight: bold !important;
+      border-radius: 0;
+    }
+
+    .ant-menu-item {
+      width: 100%;
+      margin-inline: 0;
+      margin-block: 0;
+
+      &:hover {
+        border-radius: 0;
+      }
+    }
+  }
+}

@@ -11,7 +11,9 @@ export const routePaths = {
 
   JOIN: '/quiz/join',
   QUIZ: '/quiz/:attemptId',
-  HOME: '/home',
+  HOME: '/quiz/home',
+  PROFILE: '/quiz/profile',
+  SETTINGS: '/quiz/settings',
 
   ACCESS_DENIED: '/access-denied',
 };

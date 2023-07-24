@@ -1,4 +1,10 @@
 @import '@/assets/styles/global.scss';
 
 .home-page {
+  padding: toRem(32);
+
+  .page-title {
+    font-size: toRem(24);
+    color: $red-color;
+  }
 }

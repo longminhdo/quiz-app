@@ -1,15 +1,21 @@
-import { Layout } from 'antd';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Layout } from 'antd';
 import React, {
   ReactElement,
+  useCallback,
   useMemo,
   useState,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ClientLeftMenu from '@/components/others/ClientLeftMenu/ClientLeftMenu';
 import Logo from '@/components/others/Logo/Logo';
-import { LayoutContext } from '@/contexts/LayoutContext';
+import SearchQuiz from '@/components/others/SearchQuiz/SearchQuiz';
+import { routePaths } from '@/constants/routePaths';
+import { ClientLayoutContext } from '@/contexts/ClientLayoutContext';
 import { MenuItem } from '@/types/layout';
 import './QuizLayout.scss';
 
-const { Header, Content, Sider, Footer } = Layout;
+const { Header, Content, Sider } = Layout;
 
 interface QuizLayoutProps {
   children: ReactElement;
@@ -24,10 +30,15 @@ const QuizLayout: React.FC<QuizLayoutProps> = ({ children }) => {
   const [collapsed, setCollapsed] = useState<boolean>(
     () => !(window.innerWidth > 960),
   );
+  const navigate = useNavigate();
+
+  const handleJointQuiz = useCallback(() => {
+    navigate(routePaths.JOIN);
+  }, [navigate]);
 
   return useMemo(
     () => (
-      <LayoutContext.Provider value={{ selectedMenu, setSelectedMenu }}>
+      <ClientLayoutContext.Provider value={{ selectedMenu, setSelectedMenu }}>
         <Layout hasSider className="quiz-layout">
           <Sider
             width={260}
@@ -48,25 +59,29 @@ const QuizLayout: React.FC<QuizLayoutProps> = ({ children }) => {
               }}
             >
               <Logo
-                style={{ height: 60, gap: 14, transform: 'translateX(-2px)' }}
-                fullLogo
+                style={{ height: 40, gap: 14, transform: 'translateX(-2px)' }}
               />
             </div>
+            <ClientLeftMenu />
+
+            <Button className="join-quiz-btn" onClick={handleJointQuiz}>
+              <PlusCircleOutlined />
+              <span>Join New Quiz</span>
+            </Button>
           </Sider>
 
           <Layout className="site-layout">
-            <Header className="header" />
+            <Header className="header">
+              <SearchQuiz />
+            </Header>
             <Content className="content-container">
               <div className="content">{children}</div>
             </Content>
-            <Footer className="footer" style={{ textAlign: 'center' }}>
-              HUST Quiz ©2023 Hanoi University of Science and Technology
-            </Footer>
           </Layout>
         </Layout>
-      </LayoutContext.Provider>
+      </ClientLayoutContext.Provider>
     ),
-    [children, collapsed, selectedMenu],
+    [children, collapsed, handleJointQuiz, selectedMenu],
   );
 };
 

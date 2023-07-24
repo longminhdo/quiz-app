@@ -1,16 +1,43 @@
 @import '@/assets/styles/global.scss';
 
 $sider-width: toRem(260);
-$nav-bar-height: toRem(60);
-$footer-height: toRem(80);
+$nav-bar-height: toRem(80);
 
 .quiz-layout {
+  * {
+    font-family: 'Be Vietnam Pro', sans-serif !important;
+  }
+
   background-color: $app-background-color;
 
   .sider {
     background-color: $app-background-color;
     overflow: auto;
     height: 100vh;
+
+    .join-quiz-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: toRem(4);
+      font-size: toRem(20);
+      height: toRem(48);
+      width: toRem(200);
+      background-color: $red-color;
+      color: $main-white-color;
+      position: absolute;
+      bottom: toRem(24);
+      transform: translateX(-50%);
+      left: 50%;
+
+      @include hover-shadow;
+
+      &:hover {
+        background-color: $red-color;
+        color: $main-white-color;
+        border-color: $red-color-2;
+      }
+    }
   }
 
   .header {
@@ -32,9 +59,8 @@ $footer-height: toRem(80);
     .content-container {
       overflow: initial;
       flex: none !important;
-      height: calc(100vh - $footer-height - $nav-bar-height);
+      height: calc(100vh - $nav-bar-height);
       padding: 0;
-      padding-right: toRem(14);
 
       @media (max-width: toRem(991)) {
         padding-right: 0;
@@ -44,16 +70,8 @@ $footer-height: toRem(80);
         background-color: $main-white-color;
         height: 100%;
         overflow: auto;
-        border-radius: toRem(12);
+        border-radius: toRem(12) 0 0 0;
       }
-    }
-
-    .footer {
-      background-color: $app-background-color;
-      height: $footer-height;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
   }
 }
