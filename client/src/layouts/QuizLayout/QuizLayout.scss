@@ -1,20 +1,20 @@
 @import '@/assets/styles/global.scss';
 
 $sider-width: toRem(260);
-$nav-bar-height: toRem(80);
-$footer-height: toRem(60);
+$nav-bar-height: toRem(60);
+$footer-height: toRem(80);
 
 .quiz-layout {
-  background-color: #f7f9fc;
+  background-color: $app-background-color;
+
   .sider {
+    background-color: $app-background-color;
     overflow: auto;
     height: 100vh;
-    background: $main-white-color;
-    border-inline-end: 1px solid $gray-color-0_5;
   }
 
   .header {
-    background-color: $main-white-color;
+    background-color: $app-background-color;
     height: $nav-bar-height;
     padding: 0 toRem(24);
     width: 100%;
@@ -26,22 +26,30 @@ $footer-height: toRem(60);
   }
 
   .site-layout {
+    background-color: $app-background-color;
     min-height: 100vh;
 
     .content-container {
       overflow: initial;
       flex: none !important;
       height: calc(100vh - $footer-height - $nav-bar-height);
-      padding: toRem(14);
-      padding-bottom: 0;
+      padding: 0;
+      padding-right: toRem(14);
+
+      @media (max-width: toRem(991)) {
+        padding-right: 0;
+      }
 
       .content {
+        background-color: $main-white-color;
         height: 100%;
-        border-radius: toRem(8);
+        overflow: auto;
+        border-radius: toRem(12);
       }
     }
 
     .footer {
+      background-color: $app-background-color;
       height: $footer-height;
       display: flex;
       justify-content: center;
