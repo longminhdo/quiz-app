@@ -14,11 +14,14 @@ import { QuizType } from '@/constants';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import './QuizPage.scss';
+import { QuizAttempt } from '@/types/quizAttempt';
+import { Question } from '@/types/question';
 
 const QuizPage: React.FC = () => {
   const { attemptId } = useParams();
-  const [currentQuestion, setCurrentQuestion] = useState<any>();
+  const [localQuestion, setLocalQuestion] = useState<any>();
   const [loading, setLoading] = useState(true);
+  const [localAttempt, setLocalAttempt] = useState<QuizAttempt>();
 
   const [run] = useDispatchAsyncAction();
   const { currentQuizAttempt } = useTypedSelector(state => state.quizAttempt);
@@ -57,7 +60,8 @@ const QuizPage: React.FC = () => {
       }
     }
 
-    setCurrentQuestion({ question: shuffledQuestions[flag], index: flag });
+    setLocalAttempt(currentQuizAttempt);
+    setLocalQuestion({ question: shuffledQuestions[flag], index: flag });
   }, [currentQuizAttempt]);
 
   if (loading) {
@@ -65,25 +69,49 @@ const QuizPage: React.FC = () => {
   }
 
   const handleNavigationChange = (index) => {
-    setCurrentQuestion({ question: currentQuizAttempt?.shuffledQuestions[index], index });
+    setLocalQuestion({ question: currentQuizAttempt?.shuffledQuestions[index], index });
+  };
+
+  const handleAnswerChange = (value) => {
+    setLocalAttempt((prev: any) => {
+      const { question } = value;
+      const newCompletedQuestions = prev?.completedQuestions || [];
+      const foundIndex = newCompletedQuestions.findIndex(item => item.question === question);
+
+      if (foundIndex !== -1) {
+        newCompletedQuestions[foundIndex] = value;
+      } else {
+        newCompletedQuestions.push(value);
+      }
+
+      return { ...prev, completedQuestions: newCompletedQuestions };
+    });
   };
 
   return (
     <div className="quiz-page">
       <div className="header">
-        <QuizFraction current={currentQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} />
+        <QuizFraction current={localQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} />
         <QuizTimer initialTime={moment((currentQuizAttempt?.endedAt || 0) * 1000).diff(moment(), 'seconds')} />
       </div>
       <div className="content">
-        <QuestionSection currentQuestion={currentQuestion} />
-        <AnswerSection question={currentQuestion} />
+        <QuestionSection currentQuestion={localQuestion} />
+        <AnswerSection
+          currentQuestion={localQuestion}
+          currentResponse={localAttempt?.completedQuestions?.find(item => item.question === localQuestion?.question?._id)?.response || []}
+          onChange={handleAnswerChange}
+        />
       </div>
       <div className="footer">
         <div className="footer-left">
           <QuizSettings />
         </div>
         <div className="footer-right">
-          <QuizNavigation current={currentQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} onChange={handleNavigationChange} />
+          <QuizNavigation
+            current={localQuestion?.index}
+            total={currentQuizAttempt?.shuffledQuestions?.length}
+            onChange={handleNavigationChange}
+          />
         </div>
       </div>
     </div>

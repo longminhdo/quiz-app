@@ -1,6 +1,12 @@
 @import '@/assets/styles/global.scss';
 
 .answer-section {
-  background-color: red;
   height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: toRem(20);
+  position: relative;
+  gap: toRem(8);
+  padding-top: toRem(6);
 }

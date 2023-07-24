@@ -13,9 +13,11 @@ const QuestionSection: React.FC<QuestionSectionProps> = ({ currentQuestion }) =>
 
   return (
     <div className="question-section">
-      <div className="question-section-media">
-        <Image src={image} className="media-image" />
-      </div>
+      {image ? (
+        <div className="question-section-media">
+          <Image src={image} className="media-image" />
+        </div>
+      ) : null}
       <h1 className="question-section-content">{title}</h1>
     </div>
   );

@@ -18,10 +18,7 @@ const quizAttempt = new Schema(
       ref: 'Question',
     }],
     completedQuestions: [{
-      question: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Question',
-      },
+      question: String,
       response: [String],
       correct: Boolean,
     }],

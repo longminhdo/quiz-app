@@ -5,8 +5,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: toRem(40);
+  padding: toRem(20);
   position: relative;
+  padding-bottom: toRem(6);
 
   .question-section-content {
     height: 100%;
@@ -16,15 +17,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 toRem(40);
+    padding: 0 toRem(20);
   }
 
   .question-section-media {
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
     background-color: white;
     border-radius: toRem(4);
-    width: toRem(320);
-    height: toRem(260);
+    width: toRem(550);
+    height: 100%;
     position: relative;
     border: 1px solid $purple-color-0;
     display: flex;
@@ -32,6 +33,8 @@
     line-height: toRem(195);
     outline-width: 0;
     padding: toRem(8);
+    justify-content: center;
+    align-items: center;
 
     @include mobile {
       max-width: 85%;

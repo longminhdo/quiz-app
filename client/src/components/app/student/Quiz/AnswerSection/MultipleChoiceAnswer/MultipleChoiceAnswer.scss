@@ -1,0 +1,77 @@
+@import '@/assets/styles/global.scss';
+
+.multiple-choice-answer-wrapper {
+  height: 100%;
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: toRem(8);
+  justify-content: center;
+
+  .answer-section-option {
+    overflow: auto;
+    position: relative;
+    height: 98%;
+    width: 100%;
+    padding: 0;
+
+    .option-content {
+      height: 100%;
+      width: 100%;
+      padding: toRem(20);
+      border-radius: toRem(4);
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.selected {
+      @include my-transition(0.15s);
+      height: 100%;
+      padding: toRem(3);
+      padding-bottom: toRem(18);
+      background-color: $red-color;
+    }
+  }
+
+  .option-1 {
+    background-color: $green-color;
+  }
+
+  .option-2 {
+    background-color: $cyan-color;
+  }
+
+  .option-3 {
+    background-color: $yellow-color;
+  }
+
+  .option-4 {
+    background-color: $orange-color;
+  }
+
+  .option-5 {
+    background-color: $green-color;
+  }
+
+  .length-of-1 {
+    width: calc(100vw - toRem(10 * 2 + 20 * 2));
+  }
+
+  .length-of-2 {
+    width: calc((100vw - toRem(10 * 2 + 20 * 2 + 8)) / 2);
+  }
+
+  .length-of-3 {
+    width: calc((100vw - toRem(10 * 2 + 20 * 2 + 8 * 2)) / 3);
+  }
+
+  .length-of-4 {
+    width: calc((100vw - toRem(10 * 2 + 20 * 2 + 8 * 3)) / 4);
+  }
+
+  .length-of-5 {
+    width: calc((100vw - toRem(10 * 2 + 20 * 2 + 8 * 4)) / 5);
+  }
+}
