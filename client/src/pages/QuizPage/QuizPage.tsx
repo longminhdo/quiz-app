@@ -131,7 +131,6 @@ const QuizPage: React.FC = () => {
 
       if (res?.success) {
         const quiz = res?.data?.quiz;
-        console.log(quiz);
         if (!quiz?.resultVisible) {
           navigate(routePaths.HOME);
           run(setLoading(false));

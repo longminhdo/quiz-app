@@ -9,11 +9,13 @@ import RouteWrapper from '@/modules/routes/RouteWrapper';
 import AccessDeniedPage from '@/pages/AccessDeniedPage/AccessDeniedPage';
 import CollectionDetailPage from '@/pages/CollectionDetailPage/CollectionDetailPage';
 import CollectionListPage from '@/pages/CollectionListPage/CollectionListPage';
+import HomePage from '@/pages/HomePage/HomePage';
 import JoinPage from '@/pages/JoinPage/JoinPage';
 import HustRedirect from '@/pages/LoginPage/HustRedirect';
 import LoginCallback from '@/pages/LoginPage/LoginCallback';
 import LoginPage from '@/pages/LoginPage/LoginPage';
 import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage';
+import ProfilePage from '@/pages/ProfilePage/ProfilePage';
 import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizListPage from '@/pages/QuizListPage/QuizListPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
@@ -26,9 +28,9 @@ import UnprotectedRoute from '@/components/common/UnprotectedRoute';
 import { routePaths } from '@/constants/routePaths';
 
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import HomePage from '@/pages/HomePage/HomePage';
-import useTypedSelector from './hooks/useTypedSelector';
 import QuizLayout from '@/layouts/QuizLayout/QuizLayout';
+import useTypedSelector from './hooks/useTypedSelector';
+import SettingsPage from '@/pages/SettingsPage/SettingsPage';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -162,6 +164,30 @@ const App: React.FC = () => {
                   <ProtectedRoute>
                     <UserWrapper>
                       <QuizPage />
+                    </UserWrapper>
+                  </ProtectedRoute>
+                )}
+              />
+              <Route
+                path={routePaths.PROFILE}
+                element={(
+                  <ProtectedRoute>
+                    <UserWrapper>
+                      <QuizLayout>
+                        <ProfilePage />
+                      </QuizLayout>
+                    </UserWrapper>
+                  </ProtectedRoute>
+                )}
+              />
+              <Route
+                path={routePaths.SETTINGS}
+                element={(
+                  <ProtectedRoute>
+                    <UserWrapper>
+                      <QuizLayout>
+                        <SettingsPage />
+                      </QuizLayout>
                     </UserWrapper>
                   </ProtectedRoute>
                 )}

@@ -80,7 +80,6 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
       try {
         (async () => {
           setCollectionLoading(true);
-          console.log('first');
           const res = await run(getFlushCollectionById(localQuiz?.createdIn || ''));
           setCollectionLoading(false);
           if (res?.statusCode === 200) {

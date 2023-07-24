@@ -33,8 +33,6 @@ const ClientLeftMenu: React.FC = () => {
     run(logout());
   }, [run]);
 
-  console.log(email, avatar);
-
   const items: MenuProps['items'] = useMemo(() => menuItems.map((item) => ({
     key: item.key,
     icon: React.createElement(item.icon),
