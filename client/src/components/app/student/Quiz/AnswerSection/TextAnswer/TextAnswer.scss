@@ -1,4 +1,28 @@
 @import '@/assets/styles/global.scss';
 
 .text-answer {
+  margin-top: toRem(12);
+  width: 100%;
+
+  .text-answer-label {
+    font-weight: 400;
+  }
+
+  .text-answer-input {
+    width: 100%;
+    margin-top: toRem(10);
+  }
+
+  .ant-input:focus {
+    border-color: $red-color;
+  }
+
+  .ant-input:hover {
+    border-color: $red-color;
+  }
+
+  .ant-input-clear-icon {
+    margin-top: toRem(14);
+    font-size: toRem(16);
+  }
 }

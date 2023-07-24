@@ -12,8 +12,9 @@ interface MultipleChoiceAnswerProps {
 
 const MultipleChoiceAnswer: React.FC<MultipleChoiceAnswerProps> = ({ currentQuestion, currentResponse, onChange }) => {
   const handleRadioSelect = (value) => {
-    // setSelected([value]);
-    onChange && onChange([value]);
+    const newResponse: any = [value];
+
+    onChange && onChange({ question: currentQuestion?._id, response: newResponse });
   };
 
   const handleCheckboxSelect = (value) => {
@@ -38,7 +39,9 @@ const MultipleChoiceAnswer: React.FC<MultipleChoiceAnswerProps> = ({ currentQues
           >
             <div className={`option-content option-${index + 1}`}>
               <Checkbox value={opt?.content} />
-              {opt.content}
+              <p>
+                {opt.content}
+              </p>
             </div>
           </MyCard>
         ))}
@@ -47,7 +50,7 @@ const MultipleChoiceAnswer: React.FC<MultipleChoiceAnswerProps> = ({ currentQues
   }
 
   return (
-    <Radio.Group className="multiple-choice-answer-wrapper">
+    <Radio.Group className="multiple-choice-answer-wrapper" value={currentResponse?.[0]}>
       {currentQuestion?.options?.map((opt, index) => (
         <MyCard
           className={`answer-section-option length-of-${currentQuestion?.options?.length} ${currentResponse?.includes(opt?.content) ? 'selected' : ''}`}

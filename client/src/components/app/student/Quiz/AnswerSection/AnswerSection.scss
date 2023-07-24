@@ -9,4 +9,14 @@
   position: relative;
   gap: toRem(8);
   padding-top: toRem(6);
+
+  @media (max-width: 992px) {
+    overflow-y: scroll;
+    display: block;
+  }
+}
+
+.answer-section-text {
+  justify-content: center;
+  align-items: flex-start;
 }

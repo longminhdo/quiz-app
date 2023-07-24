@@ -8,18 +8,45 @@
   gap: toRem(8);
   justify-content: center;
 
+  @media (max-width: 992px) {
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: toRem(8) 0;
+    height: auto;
+  }
+
   .answer-section-option {
-    overflow: auto;
     position: relative;
-    height: 98%;
+    height: 96%;
     width: 100%;
     padding: 0;
+
+    @media (max-width: 992px) {
+      width: 100% !important;
+    }
 
     .option-content {
       height: 100%;
       width: 100%;
       padding: toRem(20);
       border-radius: toRem(4);
+      color: $main-white-color;
+      font-weight: 600;
+
+      p {
+        overflow: auto;
+        max-height: 80%;
+        user-select: none;
+      }
+
+      @media (max-width: 992px) {
+        max-height: toRem(362);
+
+        p {
+          overflow: auto;
+          max-height: toRem(200);
+        }
+      }
     }
 
     &:hover {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MultipleChoiceAnswer from '@/components/app/student/Quiz/AnswerSection/MultipleChoiceAnswer/MultipleChoiceAnswer';
 import TextAnswer from '@/components/app/student/Quiz/AnswerSection/TextAnswer/TextAnswer';
 import { QuestionType } from '@/constants';
@@ -14,7 +14,7 @@ interface AnswerSectionProps {
 const AnswerSection: React.FC<AnswerSectionProps> = ({ currentQuestion, currentResponse, onChange }) => {
   if (currentQuestion?.question?.type === QuestionType.MULTIPLE_CHOICE) {
     return (
-      <div className="answer-section">
+      <div className="answer-section answer-section-multiple-choice">
         <MultipleChoiceAnswer
           currentResponse={currentResponse}
           currentQuestion={currentQuestion?.question}
@@ -25,9 +25,11 @@ const AnswerSection: React.FC<AnswerSectionProps> = ({ currentQuestion, currentR
   }
 
   return (
-    <div className="answer-section">
+    <div className="answer-section answer-section-text">
       <TextAnswer
+        currentResponse={currentResponse}
         currentQuestion={currentQuestion?.question}
+        onChange={onChange}
       />
     </div>
   );
