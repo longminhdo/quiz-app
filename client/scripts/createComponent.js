@@ -1,29 +1,30 @@
-var fs = require('fs');
+const fs = require('fs');
 const fsPromise = require('fs').promises;
-var dir = './tmp';
 
 // print process.argv
 let componentName = '';
 let className = '';
 let count = 0;
-process.argv.forEach(function (val, index, array) {
+
+function titleCase(str) {
+  const splitStr = str.toLowerCase().split(' ');
+  for (let i = 0; i < splitStr.length; i++) {
+    // You do not need to check if i is larger than splitStr length, as your for does that for you
+    // Assign it back to the array
+    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+  }
+  // Directly return the joined string
+  return splitStr.join(' ');
+}
+
+process.argv.forEach((val, index) => {
   if (index >= 2) {
     componentName += titleCase(val).replace(/ /g, '');
     className += (count > 0 ? '-' : '') + val.toLowerCase().replace(/ /g, '-');
     count++;
   }
 });
-function titleCase(str) {
-  var splitStr = str.toLowerCase().split(' ');
-  for (var i = 0; i < splitStr.length; i++) {
-    // You do not need to check if i is larger than splitStr length, as your for does that for you
-    // Assign it back to the array
-    splitStr[i] =
-      splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
-  }
-  // Directly return the joined string
-  return splitStr.join(' ');
-}
+
 async function upsertFile(name) {
   try {
     // try to read file
@@ -36,17 +37,18 @@ async function upsertFile(name) {
 
 const componentContent = (
   name = '',
-  className = ''
-) => `import { FunctionComponent } from "react";
+  className = '',
+) => `import React from "react";
 import "./${name}.scss";
 
 interface ${name}Props {}
 
-const ${name}: FunctionComponent<${name}Props> = () => {
+const ${name}: React.FC<${name}Props> = () => {
   return <div className='${className}'>${name}</div>;
 }
 
-export default ${name};`;
+export default ${name};
+`;
 const classContent = (className) => `@import '@/assets/styles/global.scss';
 
 .${className} {
@@ -66,7 +68,6 @@ if (componentName) {
   const folderName = `${process.env.INIT_CWD}/${dir}`;
   if (!fs.existsSync(folderName)) {
     fs.mkdirSync(folderName);
-  } else {
   }
   main(dir);
 }
