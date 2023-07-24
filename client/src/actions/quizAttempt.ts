@@ -31,3 +31,15 @@ export const updateQuizAttempt = (newQuizAttempt) => {
     }),
   };
 };
+
+export const updateFlushQuizAttempt = (newQuizAttempt) => {
+  const { _id, ...rest } = newQuizAttempt;
+  const data = rest;
+
+  return {
+    type: QuizAttemptAction.UPDATE_FLUSH_ATTEMPT,
+    promise: PUT(`/quizAttempts/${_id}`, {
+      body: data,
+    }),
+  };
+};

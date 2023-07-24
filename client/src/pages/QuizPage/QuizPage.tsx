@@ -1,9 +1,9 @@
 import dayjs from 'dayjs';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getQuizAttemptById, updateQuizAttempt } from '@/actions/quizAttempt';
+import { getQuizAttemptById, updateFlushQuizAttempt, updateQuizAttempt } from '@/actions/quizAttempt';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
@@ -13,15 +13,18 @@ import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
 import { QuizType } from '@/constants';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
-import './QuizPage.scss';
 import { QuizAttempt } from '@/types/quizAttempt';
-import { Question } from '@/types/question';
+import './QuizPage.scss';
 
 const QuizPage: React.FC = () => {
   const { attemptId } = useParams();
   const [localQuestion, setLocalQuestion] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [localAttempt, setLocalAttempt] = useState<QuizAttempt>();
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+  const debounceRef = useRef<any>();
+  const attemptRef = useRef<QuizAttempt>();
 
   const [run] = useDispatchAsyncAction();
   const { currentQuizAttempt } = useTypedSelector(state => state.quizAttempt);
@@ -42,7 +45,9 @@ const QuizPage: React.FC = () => {
           await run(updateQuizAttempt({ ...data, endedAt }));
         }
       }
+
       setLoading(false);
+      setIsFirstRender(false);
     })();
   }, [attemptId, run]);
 
@@ -62,11 +67,24 @@ const QuizPage: React.FC = () => {
 
     setLocalAttempt(currentQuizAttempt);
     setLocalQuestion({ question: shuffledQuestions[flag], index: flag });
-  }, [currentQuizAttempt]);
+    if (isFirstRender) {
+      attemptRef.current = cloneDeep(currentQuizAttempt);
+    }
+  }, [currentQuizAttempt, isFirstRender]);
 
-  if (loading) {
-    return <div>loading</div>;
-  }
+  useEffect(() => {
+    clearTimeout(debounceRef.current);
+    if (isFirstRender || isEqual(localAttempt, attemptRef.current) || isEmpty(localAttempt)) {
+      return;
+    }
+
+    const debounce = setTimeout(() => {
+      run(updateFlushQuizAttempt(localAttempt));
+    }, 300);
+
+    attemptRef.current = cloneDeep(localAttempt);
+    debounceRef.current = debounce;
+  }, [isFirstRender, localAttempt, run]);
 
   const handleNavigationChange = (index) => {
     setLocalQuestion({ question: currentQuizAttempt?.shuffledQuestions[index], index });
@@ -87,6 +105,10 @@ const QuizPage: React.FC = () => {
       return { ...prev, completedQuestions: newCompletedQuestions };
     });
   };
+
+  if (loading) {
+    return <div>loading</div>;
+  }
 
   return (
     <div className="quiz-page">
