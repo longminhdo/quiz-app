@@ -4,7 +4,7 @@ import './LoadingScreen.scss';
 
 
 const LoadingScreen: React.FC = () => {
-  const [loadingText, setLoadingText] = useState('Loading');
+  const [loadingText, setLoadingText] = useState('');
   const [dotsCount, setDotsCount] = useState(0);
 
   useEffect(() => {
@@ -18,19 +18,29 @@ const LoadingScreen: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setLoadingText(`Loading${'.'.repeat(dotsCount)}`);
+    setLoadingText(`${'.'.repeat(dotsCount)}`);
   }, [dotsCount]);
 
   return (
     <div className="loading-screen">
       <div className="content-wrapper">
         <img className="logo-img" src={QuizLogo} alt="" />
-        <p>{loadingText}</p>
-        {!loadingText.startsWith('Loading') && (
-        <div>
-          <p>This is the main content.</p>
+        <div className="loading-text">
+          <div>
+            <span className="red-text">HUSTLE</span>
+            <span className="gray-text">ly</span>
+          </div>
+          <span className="gray-text">
+            connecting to
+            {' '}
+          </span>
+          <div className="quiz-text-combination">
+            <span className="yellow-text">QUIZ</span>
+            <span className="gray-text">
+              {loadingText}
+            </span>
+          </div>
         </div>
-        )}
       </div>
     </div>
   );

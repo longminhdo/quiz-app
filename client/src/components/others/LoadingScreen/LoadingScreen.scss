@@ -5,20 +5,71 @@
   height: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 
   .content-wrapper {
-    margin-top: toRem(100);
-    width: 50%;
+    width: 60%;
     height: 50%;
-    overflow: hidden;
+    max-width: toRem(800);
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
+    gap: toRem(60);
 
     .logo-img {
-      width: 50%;
+      width: 30%;
+    }
+
+    .loading-text {
+      font-weight: bold;
+      font-size: toRem(48);
+      width: 100%;
+      max-width: toRem(770);
+      display: flex;
+      gap: toRem(12);
+      transform: translateX(toRem(10));
+
+      .gray-text {
+        color: $gray-color;
+      }
+
+      .yellow-text {
+        color: $yellow-color;
+      }
+
+      .red-text {
+        color: $red-color;
+      }
+    }
+  }
+
+  @media (max-width: 991px) {
+    align-items: flex-start;
+
+    .content-wrapper {
+      margin-top: toRem(100);
+      width: 80%;
+      align-items: center;
+      gap: toRem(80);
+
+      .logo-img {
+        width: 60%;
+      }
+
+      .loading-text {
+        font-size: toRem(36);
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        transform: none;
+
+        .quiz-text-combination {
+          width: toRem(100);
+        }
+      }
     }
   }
 }

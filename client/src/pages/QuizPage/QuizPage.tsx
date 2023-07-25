@@ -152,7 +152,7 @@ const QuizPage: React.FC = () => {
   };
 
   const renderContent = () => {
-    if (true) {
+    if (localLoading) {
       return <LoadingScreen />;
     }
 
