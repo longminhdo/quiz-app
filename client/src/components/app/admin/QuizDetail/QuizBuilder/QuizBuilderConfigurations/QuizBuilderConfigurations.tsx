@@ -1,7 +1,10 @@
-import { Col, DatePicker, Form, Input, Radio, Row, Select, Switch } from 'antd';
+import { Col, DatePicker, Empty, Form, Input, Radio, Row, Select, Spin, Switch, message } from 'antd';
 import { isEmpty, isEqual } from 'lodash';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { getStudents } from '@/actions/user';
 import { BuilderType, DATE_FORMAT, DAY_TO_MINUTE, HOUR_TO_MINUTE, MINUTE_TO_MINUTE, QuizType, TIME_SELECT_AFTER } from '@/constants';
+import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { Quiz, QuizConfigs } from '@/types/quiz';
 import { formatDate } from '@/utilities/helpers';
 import './QuizBuilderConfigurations.scss';
@@ -34,8 +37,13 @@ const QuizBuilderConfigurations: React.FC<QuizBuilderConfigurationsProps> = ({
   builderType,
 }) => {
   const [configs, setConfigs] = useState<QuizConfigs>(defaultConfigs);
-  const [assignOptions, setAssignOptions] = useState([]);
+  const [assignOptions, setAssignOptions] = useState<any>([]);
+  const [userSearch, setUserSearch] = useState<string>();
   const [timeSelect, setTimeSelect] = useState('minutes');
+
+  const userSearchRef = useRef<any>();
+
+  const [run, loading] = useDispatchAsyncAction();
 
   useEffect(() => {
     if (isEmpty(initialQuiz)) {
@@ -49,26 +57,53 @@ const QuizBuilderConfigurations: React.FC<QuizBuilderConfigurationsProps> = ({
       duration: initialQuiz.duration,
       resultVisible: initialQuiz.resultVisible,
       multipleAttempts: initialQuiz.multipleAttempts,
-      assignTo: initialQuiz.assignTo,
+      assignTo: initialQuiz.assignTo?.map((item: any) => item?._id),
       acceptingResponse: initialQuiz.acceptingResponse,
     });
+
+    setAssignOptions(initialQuiz.assignTo?.map((item: any) => ({ ...item, value: item?._id, label: item?.email })));
   }, [initialQuiz]);
 
   useEffect(() => {
     setQuizConfigs(configs);
   }, [configs, setQuizConfigs]);
 
+  useEffect(() => {
+    if (!userSearch) {
+      clearTimeout(userSearchRef.current);
+      return;
+    }
+    clearTimeout(userSearchRef.current);
+
+    const timeout = setTimeout(async () => {
+      try {
+        const res = await run(getStudents({ limit: 10, search: userSearch, forAssigning: true }));
+
+        if (res?.success) {
+          const data = res?.data?.data || [];
+          const options = data?.map(item => ({ ...item, label: item.email, value: item._id }));
+
+          setAssignOptions(options);
+        }
+      } catch (error) {
+        message.error(UNEXPECTED_ERROR_MESSAGE);
+      }
+    }, 150);
+
+    userSearchRef.current = timeout;
+  }, [run, userSearch]);
+
   const handleQuizTypeChange = (e) => {
     const value = e.target.value;
     setConfigs((prev: any) => ({ ...prev, quizType: value }));
   };
 
-  const handleAssignChange = (e) => {
-    console.log(e.target.value);
+  const handleAssignChange = (v) => {
+    setConfigs((prev: any) => ({ ...prev, assignTo: v }));
   };
 
   const handleAssignSearch = (search) => {
-    console.log(search);
+    setUserSearch(search);
   };
 
   const handleAcceptResponseChange = (checked) => {
@@ -201,12 +236,23 @@ const QuizBuilderConfigurations: React.FC<QuizBuilderConfigurationsProps> = ({
         <Col span={24}>
           <Item label="Assign to students">
             <Select
+              allowClear
               value={configs?.assignTo}
               placeholder="Student ID, Email"
               mode="multiple"
               onChange={handleAssignChange}
               options={assignOptions}
+              defaultActiveFirstOption={false}
+              filterOption={false}
               onSearch={handleAssignSearch}
+              notFoundContent={loading ? (
+                <div style={{ paddingTop: 20, paddingBottom: 20, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                  <Spin
+                    spinning
+                    tip="Loading"
+                  />
+                </div>
+              ) : <Empty />}
             />
           </Item>
         </Col>

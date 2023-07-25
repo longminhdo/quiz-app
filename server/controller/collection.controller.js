@@ -55,8 +55,7 @@ module.exports.getCollections = async (req, res) => {
 
     if (fetchAll) {
       collections = (await Collection.find({ ...defaultOptions, ...searchOptions, ...sharedOptions })
-        .sort(sortOptions))?.filter(item => !isEmpty(item?.questions))
-        .populate('owner');
+        .sort(sortOptions).populate('owner'))?.filter(item => !isEmpty(item?.questions));
     } else {
       collections = await Collection.find({ ...defaultOptions, ...searchOptions, ...sharedOptions })
         .sort(sortOptions)

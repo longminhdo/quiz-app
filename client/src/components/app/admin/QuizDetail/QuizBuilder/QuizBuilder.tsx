@@ -13,8 +13,8 @@ import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Question } from '@/types/question';
 import { Quiz } from '@/types/quiz';
-import './QuizBuilder.scss';
 import { removeEmptyKeys } from '@/utilities/helpers';
+import './QuizBuilder.scss';
 
 const modeOptions = [
   { label: 'Manual', value: QUIZ_CREATE_MODE.MANUAL },
@@ -76,11 +76,11 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
       return;
     }
 
-    if (builderType === BuilderType.UPDATE) {
+    if (builderType === BuilderType.UPDATE && localQuiz?.createdIn) {
       try {
         (async () => {
           setCollectionLoading(true);
-          const res = await run(getFlushCollectionById(localQuiz?.createdIn || ''));
+          const res = await run(getFlushCollectionById(localQuiz.createdIn));
           setCollectionLoading(false);
           if (res?.statusCode === 200) {
             const data = res?.data;
