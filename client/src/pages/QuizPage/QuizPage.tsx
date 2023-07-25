@@ -10,6 +10,7 @@ import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFractio
 import QuizNavigation from '@/components/app/student/Quiz/QuizNavigation/QuizNavigation';
 import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
 import SubmitConfirmation from '@/components/app/student/Quiz/SubmitConfirmation/SubmitConfirmation';
+import LoadingScreen from '@/components/others/LoadingScreen/LoadingScreen';
 import MuteButton from '@/components/others/MuteButton/MuteButton';
 import PlayButton from '@/components/others/PlayButton/PlayButton';
 import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
@@ -150,31 +151,35 @@ const QuizPage: React.FC = () => {
     run(setLoading(false));
   };
 
-  if (localLoading) {
-    return <div>loading</div>;
-  }
+  const renderContent = () => {
+    if (true) {
+      return <LoadingScreen />;
+    }
+
+    if (willSubmit) {
+      return <SubmitConfirmation onSubmit={handleSubmit} />;
+    }
+
+    return (
+      <>
+        <QuestionSection currentQuestion={localQuestion} />
+        <AnswerSection
+          currentQuestion={localQuestion}
+          currentResponse={localAttempt?.completedQuestions?.find(item => item.question === localQuestion?.question?._id)?.response || []}
+          onChange={handleAnswerChange}
+        />
+      </>
+    );
+  };
 
   return (
     <div className="quiz-page">
       <div className="header">
-        <QuizFraction current={localQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} />
+        { localQuestion && <QuizFraction current={localQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} />}
         <QuizTimer initialTime={moment((currentQuizAttempt?.endedAt || 0) * 1000).diff(moment(), 'seconds')} />
       </div>
       <div className="content">
-        {willSubmit
-          ? (
-            <SubmitConfirmation onSubmit={handleSubmit} />
-          )
-          : (
-            <>
-              <QuestionSection currentQuestion={localQuestion} />
-              <AnswerSection
-                currentQuestion={localQuestion}
-                currentResponse={localAttempt?.completedQuestions?.find(item => item.question === localQuestion?.question?._id)?.response || []}
-                onChange={handleAnswerChange}
-              />
-            </>
-          )}
+        {renderContent()}
       </div>
       <div className="footer">
         <div className="footer-left">
