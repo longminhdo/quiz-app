@@ -1,0 +1,8 @@
+@import '@/assets/styles/global.scss';
+
+.client-quiz-list {
+  .quiz-list-title {
+    margin-bottom: toRem(16);
+  }
+  padding: 0 toRem(32);
+}

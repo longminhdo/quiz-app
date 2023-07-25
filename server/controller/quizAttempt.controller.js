@@ -92,26 +92,29 @@ module.exports.updateQuizAttempt = async (req, res, next) => {
 module.exports.getQuizAttempts = async (req, res, next) => {
   try {
     const { _id } = req.userData;
-    const { offset = 1, limit = 10, sort = '', search, createdIn } = req.query;
+    const { offset = 1, limit = 10, sort = '', search, submitted } = req.query;
 
     const sortOptions = parseSortOption(sort);
     const skipCount = (Number(offset) - 1) * Number(limit);
-    const searchOptions = { title: { $regex: search, $options: 'i' }, createdIn: { $regex: createdIn } };
+    const searchOptions = { title: { $regex: search, $options: 'i' }, submitted };
+    const defaultOptions = { owner: _id, deleted: { $ne: true } };
 
     !search && delete searchOptions.title;
-    !createdIn && delete searchOptions.createdIn;
+    submitted === undefined && delete searchOptions.submitted;
 
-    const quizAttempts = await QuizAttempt.find({ owner: _id, ...searchOptions })
+
+    const quizAttempts = await QuizAttempt.find({ ...defaultOptions, ...searchOptions })
       .sort(sortOptions)
       .skip(skipCount)
-      .limit(Number(limit));
+      .limit(Number(limit))
+      .populate('quiz');
 
-    const totalQuizzes = await QuizAttempt.countDocuments({ owner: _id, ...searchOptions });
+    const totalQuizzes = await QuizAttempt.countDocuments({ ...defaultOptions, ...searchOptions });
 
     return res.status(StatusCodes.OK).send({
       success: true,
       data: {
-        data: quizAttempts.map(c => ({ ...c._doc, ownerData: req.userData })),
+        data: quizAttempts,
         pagination: {
           total: totalQuizzes,
           offset: Number(offset),

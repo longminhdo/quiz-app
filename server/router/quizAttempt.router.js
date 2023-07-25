@@ -27,7 +27,10 @@ router.put(
 );
 
 // GET /quizAttempts
-router.get('/', catchAsync(quizAttempt.getQuizAttempts));
+router.get(
+  '/',
+  catchAsync(quizAttempt.getQuizAttempts),
+);
 
 // GET /quizAttempts/:quizAttemptId
 router.get('/:quizAttemptId',

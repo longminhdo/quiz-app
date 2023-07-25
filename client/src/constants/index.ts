@@ -59,3 +59,9 @@ export const TIME_SELECT_AFTER = {
 export const MINUTE_TO_MINUTE = 1;
 export const HOUR_TO_MINUTE = 60;
 export const DAY_TO_MINUTE = 1440;
+
+export const QuizStatus = {
+  DOING: 'doing',
+  OPEN: 'open',
+  DONE: 'done',
+};
