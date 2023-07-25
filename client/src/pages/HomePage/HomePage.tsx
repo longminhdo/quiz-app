@@ -8,6 +8,7 @@ import { QuizStatus } from '@/constants';
 
 const HomePage: React.FC = () => {
   const [onGoing, setOnGoing] = useState<any>([]);
+  const [assigned, setAssigned] = useState<any>([]);
 
   const [run, loading] = useDispatchAsyncAction();
 
@@ -29,7 +30,18 @@ const HomePage: React.FC = () => {
     <Spin spinning={loading}>
       <div className="home-page">
         <h1 className="page-title">My quizzes</h1>
-        <ClientQuizList data={onGoing} title="On going" status={QuizStatus.DOING} />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <ClientQuizList
+            data={onGoing}
+            title="On going"
+            status={QuizStatus.DOING}
+          />
+          <ClientQuizList
+            data={assigned}
+            title="Assigned"
+            status={QuizStatus.DOING}
+          />
+        </div>
       </div>
     </Spin>
 
