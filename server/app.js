@@ -25,7 +25,7 @@ const options = {
 };
 
 const url = process.env.APP_ENV === 'prod'
-  ? `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?replicaSet=${RS_NAME}&directConnection=true`
+  ? `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}/quiz-app?retryWrites=true&w=majority`
   : `mongodb+srv://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}/quiz-app?retryWrites=true&w=majority`;
 
 mongoose
