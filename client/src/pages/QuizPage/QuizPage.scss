@@ -35,5 +35,12 @@
     justify-content: space-between;
     padding: 0 toRem(14);
     height: toRem(80);
+
+    .footer-left {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: toRem(8);
+    }
   }
 }

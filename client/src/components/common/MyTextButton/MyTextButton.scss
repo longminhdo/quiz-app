@@ -1,15 +1,15 @@
 @import '@/assets/styles/global.scss';
 
 .my-text-button {
-  height: toRem(50);
+  height: toRem(40);
   font-size: toRem(24);
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: $main-white-color;
-  padding-left: toRem(20);
+  padding-left: toRem(14);
   color: $red-color-2;
-  padding-right: toRem(20);
+  padding-right: toRem(14);
 
   &[disabled] {
     background-color: $gray-color-2;

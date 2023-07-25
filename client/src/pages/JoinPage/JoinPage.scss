@@ -29,6 +29,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    gap: toRem(8);
   }
 
   @media (max-width: toRem(921)) {

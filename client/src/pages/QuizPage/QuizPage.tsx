@@ -1,18 +1,21 @@
 import dayjs from 'dayjs';
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import moment from 'moment';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getQuizAttemptById, submitQuizAttempt, updateFlushQuizAttempt, updateQuizAttempt } from '@/actions/quizAttempt';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
 import QuizNavigation from '@/components/app/student/Quiz/QuizNavigation/QuizNavigation';
-import QuizSettings from '@/components/app/student/Quiz/QuizSettings/QuizSettings';
 import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
 import SubmitConfirmation from '@/components/app/student/Quiz/SubmitConfirmation/SubmitConfirmation';
+import MuteButton from '@/components/others/MuteButton/MuteButton';
+import PlayButton from '@/components/others/PlayButton/PlayButton';
+import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
 import { QuizType } from '@/constants';
 import { routePaths } from '@/constants/routePaths';
+import { AudioContext } from '@/contexts/AudioContext';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
@@ -34,6 +37,8 @@ const QuizPage: React.FC = () => {
 
   const [run] = useDispatchAsyncAction();
   const { currentQuizAttempt } = useTypedSelector(state => state.quizAttempt);
+
+  const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
   useEffect(() => {
     if (!attemptId) {
@@ -173,7 +178,9 @@ const QuizPage: React.FC = () => {
       </div>
       <div className="footer">
         <div className="footer-left">
-          <QuizSettings />
+          <SettingsButton />
+          <PlayButton onClick={handleTogglePlay} isPlaying={isPlaying} />
+          <MuteButton onClick={handleToggleMute} muted={muted} />
         </div>
         <div className="footer-right">
           <QuizNavigation

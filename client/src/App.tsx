@@ -31,6 +31,7 @@ import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import QuizLayout from '@/layouts/QuizLayout/QuizLayout';
 import useTypedSelector from './hooks/useTypedSelector';
 import SettingsPage from '@/pages/SettingsPage/SettingsPage';
+import AudioWrapper from '@/components/HOCs/AudioWrapper';
 
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
@@ -153,7 +154,9 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <UserWrapper>
-                      <JoinPage />
+                      <AudioWrapper>
+                        <JoinPage />
+                      </AudioWrapper>
                     </UserWrapper>
                   </ProtectedRoute>
                 )}
@@ -163,7 +166,9 @@ const App: React.FC = () => {
                 element={(
                   <ProtectedRoute>
                     <UserWrapper>
-                      <QuizPage />
+                      <AudioWrapper>
+                        <QuizPage />
+                      </AudioWrapper>
                     </UserWrapper>
                   </ProtectedRoute>
                 )}

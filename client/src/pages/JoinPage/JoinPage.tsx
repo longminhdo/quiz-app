@@ -1,12 +1,16 @@
 import { HomeFilled } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import { routePaths } from '@/constants/routePaths';
-import MyTextButton from '@/components/common/MyTextButton/MyTextButton';
 import { joinQuiz } from '@/actions/quizAttempt';
+import MyTextButton from '@/components/common/MyTextButton/MyTextButton';
+import MuteButton from '@/components/others/MuteButton/MuteButton';
+import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
+import { routePaths } from '@/constants/routePaths';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './JoinPage.scss';
+import { AudioContext } from '@/contexts/AudioContext';
+import PlayButton from '@/components/others/PlayButton/PlayButton';
 
 const JoinPage: React.FC = () => {
   const [code, setCode] = useState('');
@@ -14,6 +18,8 @@ const JoinPage: React.FC = () => {
 
   const [run, loading] = useDispatchAsyncAction();
   const navigate = useNavigate();
+
+  const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
   const handleJoinClick = async () => {
     const res = await run(joinQuiz(code));
@@ -31,37 +37,8 @@ const JoinPage: React.FC = () => {
     navigate(routePaths.HOME);
   };
 
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const audioRef = useRef<any>(null);
-
-
-  useEffect(() => {
-    if (isPlaying) {
-      audioRef.current.play();
-    } else {
-      audioRef.current.pause();
-    }
-  }, [isPlaying]);
-
-  const handleTogglePlay = () => {
-    setIsPlaying((prevState) => !prevState);
-  };
-
-  const handleToggleMute = () => {
-    setIsMuted((prevState) => !prevState);
-  };
-
   return (
     <div className="join-page">
-      <audio ref={audioRef} loop muted={isMuted} preload="auto">
-        <source
-          src="https://res.cloudinary.com/thecodingpanda/video/upload/v1690269177/y2mate.com_-_Quiz_Background_Music_4_No_Copyright_dmbz3j.mp3"
-          type="audio/mpeg"
-        />
-        <track kind="captions" label="English Captions" srcLang="en" default />
-        Your browser does not support the audio element.
-      </audio>
       <div className="join-page-header">
         <MyTextButton onClick={handleHomeClick} style={{ fontSize: 18, height: 34 }}><HomeFilled /></MyTextButton>
       </div>
@@ -74,8 +51,9 @@ const JoinPage: React.FC = () => {
         <Button className="enter-btn" onClick={handleJoinClick} loading={loading}>Enter</Button>
       </div>
       <div className="join-page-footer">
-        <MyTextButton onClick={handleTogglePlay} />
-        <MyTextButton onClick={handleToggleMute}>mute</MyTextButton>
+        <SettingsButton />
+        <PlayButton onClick={handleTogglePlay} isPlaying={isPlaying} />
+        <MuteButton onClick={handleToggleMute} muted={muted} />
       </div>
     </div>
   );
