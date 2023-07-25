@@ -1,0 +1,28 @@
+@import '@/assets/styles/global.scss';
+
+.my-text-button {
+  height: toRem(50);
+  font-size: toRem(24);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $main-white-color;
+  padding-left: toRem(20);
+  color: $red-color-2;
+  padding-right: toRem(20);
+
+  &[disabled] {
+    background-color: $gray-color-2;
+    color: $gray-color-4;
+
+    &:hover {
+      background-color: $gray-color-2 !important;
+      color: $gray-color-4 !important;
+    }
+  }
+
+  &:hover {
+    color: $red-color !important;
+    background-color: antiquewhite !important;
+  }
+}

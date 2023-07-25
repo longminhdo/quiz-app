@@ -12,12 +12,12 @@ import QuizSettings from '@/components/app/student/Quiz/QuizSettings/QuizSetting
 import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
 import SubmitConfirmation from '@/components/app/student/Quiz/SubmitConfirmation/SubmitConfirmation';
 import { QuizType } from '@/constants';
+import { routePaths } from '@/constants/routePaths';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
+import { setLoading } from '@/modules/redux/slices/appReducer';
 import { QuizAttempt } from '@/types/quizAttempt';
 import './QuizPage.scss';
-import { setLoading } from '@/modules/redux/slices/appReducer';
-import { routePaths } from '@/constants/routePaths';
 
 const QuizPage: React.FC = () => {
   const { attemptId } = useParams();

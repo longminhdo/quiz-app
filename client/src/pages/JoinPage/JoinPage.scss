@@ -1,29 +1,76 @@
 @import '@/assets/styles/global.scss';
 
 .join-page {
+  * {
+    font-family: 'Be Vietnam Pro', sans-serif !important;
+  }
+
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-color: $background-blue-color;
+  background-color: $background-red-color;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0 toRem(14);
+  flex-direction: column;
+
+  .join-page-header {
+    height: toRem(64);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .join-page-footer {
+    height: toRem(80);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  @media (max-width: toRem(921)) {
+  }
 
   .card-container {
     @include box-shadow;
-    width: 90%;
-    max-width: toRem(360);
+    width: 100%;
     padding: toRem(16);
     background: $main-white-color;
     border-radius: toRem(10);
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: toRem(110);
     align-items: center;
-    gap: toRem(12);
+    gap: toRem(8);
     flex-direction: column;
+    height: 100%;
 
     .enter-btn {
-      width: 100%;
+      width: 90%;
+      max-width: toRem(300);
+      height: toRem(60);
+      background-color: $red-color;
+      color: $main-white-color;
+      font-size: toRem(36);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      box-sizing: border-box;
+
+      &:hover {
+        border-color: $red-color;
+      }
+    }
+
+    h1 {
+      font-size: toRem(80);
+      margin-bottom: toRem(100);
+      font-weight: 600;
+      @include select-restricted;
     }
   }
 
@@ -31,11 +78,18 @@
     display: flex;
     flex-direction: column;
     gap: toRem(4);
-    width: 100%;
+    width: 90%;
+    max-width: toRem(300);
+
+    .ant-input {
+      height: toRem(60);
+      border: toRem(2) solid $red-color;
+      font-size: toRem(24);
+    }
 
     .error-message {
       color: $error-color;
-      font-size: toRem(12);
+      font-size: toRem(14);
     }
   }
 }
