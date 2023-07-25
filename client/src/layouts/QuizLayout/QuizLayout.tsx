@@ -7,8 +7,8 @@ import React, {
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import QuizLogo from '@/assets/images/quiz-logo.png';
 import ClientLeftMenu from '@/components/others/ClientLeftMenu/ClientLeftMenu';
-import Logo from '@/components/others/Logo/Logo';
 import SearchQuiz from '@/components/others/SearchQuiz/SearchQuiz';
 import { routePaths } from '@/constants/routePaths';
 import { ClientLayoutContext } from '@/contexts/ClientLayoutContext';
@@ -56,11 +56,10 @@ const QuizLayout: React.FC<QuizLayoutProps> = ({ children }) => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 height: 80,
+                marginBottom: 20,
               }}
             >
-              <Logo
-                style={{ height: 40, gap: 14, transform: 'translateX(-2px)' }}
-              />
+              <img className="logo-img" src={QuizLogo} alt="" style={{ width: '40%' }} />
             </div>
             <ClientLeftMenu />
 
