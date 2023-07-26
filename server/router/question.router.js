@@ -16,6 +16,11 @@ router.post(
   catchAsync(question.createQuestion),
 );
 
+router.post(
+  '/import',
+  catchAsync(question.importQuestions),
+);
+
 router.delete(
   '/:questionId',
   validateQuestionId,

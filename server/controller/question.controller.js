@@ -3,24 +3,17 @@ const Collection = require('../model/collection');
 const { InternalServerError } = require('../constant/errorMessage');
 const { StatusCodes } = require('../constant/statusCodes');
 
-module.exports.createQuestion = async (req, res, next) => {
+module.exports.importQuestions = async (req, res, next) => {
   const { collectionId } = req.params;
+  const { newQuestions } = req.body;
   try {
-    const question = new Question({ ...req.body });
-    await question.save({ new: true });
+    const createdQuestions = await Question.create(newQuestions);
 
-    const collection = await Collection
-      .findById(collectionId)
-      .populate(
-        {
-          path: 'questions',
-          match: { deleted: false },
-        },
-      );
+    for (const question of createdQuestions) {
+      await Collection.findByIdAndUpdate(collectionId, { $push: { questions: question._id } });
+    }
 
-    collection.questions.push(question);
-
-    await collection.save({ new: true });
+    const collection = await Collection.findById(collectionId).populate('questions');
 
     return res.status(StatusCodes.OK).send({ success: true, data: collection });
   } catch (error) {
@@ -105,5 +98,30 @@ module.exports.getQuestionById = async (req, res) => {
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ message: InternalServerError.INTERNAL_SERVER_ERROR, error });
+  }
+};
+
+module.exports.createQuestion = async (req, res, next) => {
+  const { collectionId } = req.params;
+  try {
+    const question = new Question({ ...req.body });
+    await question.save({ new: true });
+
+    const collection = await Collection
+      .findById(collectionId)
+      .populate(
+        {
+          path: 'questions',
+          match: { deleted: false },
+        },
+      );
+
+    collection.questions.push(question);
+
+    await collection.save({ new: true });
+
+    return res.status(StatusCodes.OK).send({ success: true, data: collection });
+  } catch (error) {
+    next(error);
   }
 };

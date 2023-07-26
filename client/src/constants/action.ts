@@ -27,6 +27,7 @@ export enum QuestionAction {
   UPDATE_FLUSH_QUESTION = 'update_flush_question',
   DUPLICATE_QUESTION = 'duplicate_question',
   GET_QUESTIONS = 'get_question',
+  IMPORT_QUESTIONS = 'import_questions',
 }
 
 export enum QuizAction {

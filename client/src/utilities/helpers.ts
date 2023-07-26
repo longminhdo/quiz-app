@@ -12,21 +12,9 @@ export function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-export function forceProductionMode() {
-  return false;
-}
-
 export function onlySpaces(text) {
   return text.trim().length === 0;
 }
-
-export const removeDuplicates = (array: any[]) => {
-  if (array.length < 2) {
-    return array;
-  }
-
-  return array.filter((v, i, a) => a.findIndex((v2) => v2.id === v.id) === i);
-};
 
 export const nonAccentVietnamese = (str: string) => {
   str = str.toLowerCase();

@@ -28,6 +28,10 @@ const QuestionListTab: React.FC = () => {
     childRef?.current?.createNewQuestion && childRef.current.createNewQuestion();
   };
 
+  const handleImportQuestions = () => {
+    childRef?.current?.importNewQuestions && childRef.current.importNewQuestions();
+  };
+
   // effect for fetching
   useEffect(() => {
     if (!collectionId) {
@@ -70,7 +74,7 @@ const QuestionListTab: React.FC = () => {
 
   return (
     <>
-      <QuestionListToolbar handleAddQuestion={handleAddQuestion} setFilter={setFilter} filter={filter} />
+      <QuestionListToolbar handleImportQuestions={handleImportQuestions} handleAddQuestion={handleAddQuestion} setFilter={setFilter} filter={filter} />
       <QuestionListFilter setFilter={setFilter} filter={filter} />
       <QuestionList tableLoading={loading} initialQuestions={collection?.questions || []} ref={childRef} filter={filter} />
     </>

@@ -83,6 +83,11 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
     }, 50);
   };
 
+  const importNewQuestions = () => {
+    actionRef.current = 'CREATE';
+    setSelectedQuestion(undefined);
+  };
+
   const handleQuestionDelete = useCallback(async(question) => {
     if (!collectionId) {
       messageApi.error(NO_COLLECTION_ID);
@@ -263,6 +268,7 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
 
   useImperativeHandle(ref, () => ({
     createNewQuestion,
+    importNewQuestions,
   }));
 
   useEffect(() => {

@@ -25,6 +25,19 @@ export const createQuestion = ({ newQuestion, collectionId }: { newQuestion: Que
   };
 };
 
+export const importQuestions = ({ newQuestions, collectionId }: { newQuestions: Array<Question>; collectionId: string }) => {
+  const data = {
+    newQuestions,
+  };
+
+  return {
+    type: QuestionAction.CREATE_QUESTION,
+    promise: POST(`/collections/${collectionId}/questions/import`, {
+      body: data,
+    }),
+  };
+};
+
 export const updateQuestion = ({ newQuestion, collectionId }: { newQuestion: Question; collectionId: string }) => {
   const questionId = newQuestion._id;
   const data = {

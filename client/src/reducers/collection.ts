@@ -15,6 +15,7 @@ export const collectionReducer = (state = INITIAL_STATE, action: any): Collectio
     case CollectionAction.ADD_COLLABORATOR:
     case QuestionAction.UPDATE_QUESTION:
     case QuestionAction.CREATE_QUESTION:
+    case QuestionAction.IMPORT_QUESTIONS:
     case QuestionAction.DELETE_QUESTION:
     case QuestionAction.DUPLICATE_QUESTION: {
       const collection = action.payload.data;
