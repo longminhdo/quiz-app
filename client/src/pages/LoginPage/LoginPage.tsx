@@ -1,11 +1,13 @@
 import React, { useCallback } from 'react';
-import { Button, Form, Input, Divider } from 'antd';
-import { UserOutlined, LockOutlined } from '@ant-design/icons';
-import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import { getSSOToken } from '@/actions/authentication';
+import HustLogo from '@/assets/images/hust-logo.png';
+import QuizLogo from '@/assets/images/quiz-logo.png';
+import Background from '@/assets/images/login-background.jpg';
+import MyTextButton from '@/components/common/MyTextButton/MyTextButton';
+import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './LoginPage.scss';
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const [run] = useDispatchAsyncAction();
 
   const handleSSOLogin = useCallback(async () => {
@@ -14,68 +16,22 @@ const LoginPage = () => {
   }, [run]);
 
   return (
-    <Form
-      name="normal_login"
-      className="login-form"
-      initialValues={{
-        remember: true,
-      }}
-    >
-      <div className="title">HUST Quiz</div>
-      <Form.Item
-        name="username"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Username!',
-          },
-        ]}
-      >
-        <Input
-          disabled
-          prefix={<UserOutlined className="site-form-item-icon" />}
-          placeholder="Username"
-        />
-      </Form.Item>
-      <Form.Item
-        name="password"
-        rules={[
-          {
-            required: true,
-            message: 'Please input your Password!',
-          },
-        ]}
-      >
-        <Input
-          disabled
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Item>
-
-      <Form.Item>
-        <Button
-          disabled
-          type="primary"
-          htmlType="submit"
-          className="login-form-button"
-        >
-          Login
-        </Button>
-      </Form.Item>
-      <Divider>or</Divider>
-      <Form.Item>
-        <Button
-          type="default"
-          htmlType="button"
-          className="login-form-button-sso"
+    <div className="login-page">
+      <div className="login-container">
+        <p>Sign in to continue</p>
+        <img src={QuizLogo} alt="" />
+        <MyTextButton
           onClick={handleSSOLogin}
+          className="login-btn"
         >
-          Login with HUST account
-        </Button>
-      </Form.Item>
-    </Form>
+          <img src={HustLogo} alt="" />
+          Sign in with HUST account
+        </MyTextButton>
+      </div>
+
+      <img className="background-img" src={Background} alt="" />
+      <div className="dim-transparent" />
+    </div>
   );
 };
 

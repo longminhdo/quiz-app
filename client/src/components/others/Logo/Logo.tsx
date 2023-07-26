@@ -2,7 +2,7 @@ import React from 'react';
 import HustLogo from '@/assets/images/hust-logo.png';
 import './Logo.scss';
 
-const Logo = ({ style, fullLogo = false } : {style?: object, fullLogo?: boolean}) => {
+const Logo: React.FC<{style?: object, fullLogo?: boolean}> = ({ style, fullLogo = false }) => {
   const handleLogoClick = () => {
     window.open('https://hust.edu.vn/');
   };
