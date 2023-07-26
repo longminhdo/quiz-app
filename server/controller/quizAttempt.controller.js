@@ -1,11 +1,12 @@
+const dayjs = require('dayjs');
 const { isEqual } = require('lodash');
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
-const QuizAttempt = require('../model/quizAttempt');
-const Quiz = require('../model/quiz');
 const { shuffleArray } = require('../utils/helper.js');
-const AppError = require('../helper/AppError.js');
 const { OptionType } = require('../constant/option.js');
+const AppError = require('../helper/AppError.js');
+const Quiz = require('../model/quiz');
+const QuizAttempt = require('../model/quizAttempt');
 
 const MAX_GRADE = 10;
 
@@ -130,13 +131,72 @@ module.exports.getQuizAttempts = async (req, res, next) => {
 module.exports.getQuizAttemptById = async (req, res, next) => {
   try {
     const { quizAttemptId } = req.params;
+    const currentDate = dayjs().unix();
     const found = await QuizAttempt.findById(quizAttemptId).populate('shuffledQuestions quiz');
+    console.log(found);
+    if (found?.endedAt && currentDate > found?.endedAt) {
+      const { completedQuestions, shuffledQuestions } = found;
+      const pointPerQuestion = shuffledQuestions?.length > 0 ? MAX_GRADE / shuffledQuestions.length : 0;
+      let grade = 0;
 
-    if (found.submitted) {
-      return res.status(StatusCodes.BAD_REQUEST).send({
-        success: false,
-        data: 'The quiz is closed for joining.',
+      completedQuestions.forEach(item => {
+        const foundQuestion = shuffledQuestions.find(q => item.question === q._id);
+
+        if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length > 1) {
+          const keys = foundQuestion.keys;
+          const pointPerOption = pointPerQuestion / foundQuestion.keys.length;
+          let tmpPoint = 0;
+
+          item.response.forEach(r => {
+            if (keys.includes(r)) {
+              tmpPoint += pointPerOption;
+            } else {
+              tmpPoint -= pointPerOption;
+            }
+          });
+
+          if (tmpPoint <= 0) {
+            tmpPoint = 0;
+          }
+
+          if (tmpPoint !== pointPerQuestion) {
+            item.correct = false;
+          } else {
+            item.correct = true;
+          }
+
+          grade += tmpPoint;
+        }
+
+        if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length === 1) {
+          if (isEqual(foundQuestion.keys, item.response)) {
+            grade += pointPerQuestion;
+            item.correct = true;
+          } else {
+            item.correct = false;
+          }
+        }
+
+        if (foundQuestion.type === OptionType.TEXT) {
+          if (isEqual(foundQuestion.keys, item.response)) {
+            item.correct = true;
+            grade += pointPerQuestion;
+          } else {
+            item.correct = false;
+          }
+        }
+
+        console.log('first', grade);
       });
+
+      const submitContent = { ...found._doc, submitted: true, completedQuestions, grade };
+
+      const submittedQuiz = await QuizAttempt.findByIdAndUpdate(quizAttemptId, submitContent, { new: true })
+        .populate('quiz');
+
+      console.log('final', submitContent);
+
+      return res.status(StatusCodes.OK).send({ success: true, data: submittedQuiz });
     }
 
     return res.status(StatusCodes.OK).send({ success: true, data: found });

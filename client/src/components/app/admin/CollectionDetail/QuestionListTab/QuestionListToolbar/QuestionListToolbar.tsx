@@ -2,6 +2,7 @@ import { DownloadOutlined, FormOutlined, SearchOutlined, UploadOutlined } from '
 import { Button, Input } from 'antd';
 import React from 'react';
 import './QuestionListToolbar.scss';
+import { exportExcelFile } from '@/utilities/helpers';
 
 interface QuestionListToolbarInterface {
   handleAddQuestion?: any;
@@ -15,9 +16,13 @@ const QuestionListToolbar: React.FC<QuestionListToolbarInterface> = ({ handleAdd
     setFilter(prev => ({ ...prev, search: searchValue }));
   };
 
-  // TODO: export
   const handleExport = () => {
     console.log('export');
+    exportExcelFile({
+      data: [['title', 'level', 'image', 'type', 'option1', 'option2', 'option3', 'option4', 'option5', 'keys']],
+      title: 'import_question–template',
+      sheetName: 'Sheet 1',
+    });
   };
 
   // TODO: import
@@ -42,7 +47,7 @@ const QuestionListToolbar: React.FC<QuestionListToolbarInterface> = ({ handleAdd
 
         <Button onClick={handleExport}>
           <DownloadOutlined />
-          <span>Export</span>
+          <span>Download template</span>
         </Button>
 
         <Button onClick={handleImport}>

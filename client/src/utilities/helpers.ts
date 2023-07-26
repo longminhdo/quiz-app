@@ -71,32 +71,6 @@ export function text2File(text, filename) {
   document.body.removeChild(element);
 }
 
-export const exportExcelFile = ({
-  data,
-  title,
-  sheetName,
-  width,
-}: {
-  data: Array<any>;
-  title: string;
-  sheetName: string;
-  width?: number;
-}) => {
-  /*data under the format of
-    [
-      ["A1", "B1", "C1"],
-      ["A2", "B2", "C2"],
-      ["A3", "B3", "C3"]
-    ]
-  */
-
-  const ws = XLSX.utils.aoa_to_sheet(data);
-  if (width) ws['!cols'] = [{ wch: width }]; // set column A width to 10 characters
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, nonAccentVietnamese(sheetName));
-  XLSX.writeFile(wb, `${title}.xlsx`);
-};
-
 export const deepCompare = (obj1, obj2) => {
   // If the objects have different types or lengths, they are not equal
   if (typeof obj1 !== typeof obj2 || Object.keys(obj1).length !== Object.keys(obj2).length) {
@@ -219,4 +193,46 @@ export const removeEmptyKeys = (obj) => {
   );
 
   return result;
+};
+
+export const readExcelFile = (file: File, callback?: any) => {
+  const reader = new FileReader();
+  const rABS = !!reader.readAsBinaryString;
+  reader.onload = async (e) => {
+    const bstr = e?.target?.result;
+    const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array' });
+    const wsname = wb.SheetNames[0];
+    const ws = wb.Sheets[wsname];
+    const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+    callback(data);
+  };
+  if (rABS) reader.readAsBinaryString(file);
+  else reader.readAsArrayBuffer(file);
+};
+
+export const exportExcelFile = ({
+  data,
+  title,
+  sheetName,
+  width,
+}: {
+  data: Array<any>;
+  title: string;
+  sheetName: string;
+  width?: number;
+}) => {
+  /*data under the format of
+    [
+      ["A1", "B1", "C1"],
+      ["A2", "B2", "C2"],
+      ["A3", "B3", "C3"]
+    ]
+  */
+
+  const ws = XLSX.utils.aoa_to_sheet(data);
+  if (width) ws['!cols'] = [{ wch: width }]; // set column A width to 10 characters
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, nonAccentVietnamese(sheetName));
+  XLSX.writeFile(wb, `${title}.xlsx`);
 };
