@@ -5,24 +5,11 @@ const Schema = mongoose.Schema;
 
 const quizAttempt = new Schema(
   {
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: 'User',
-    },
-    quiz: {
-      type: Schema.Types.ObjectId,
-      ref: 'Quiz',
-    },
-    shuffledQuestions: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Question',
-    }],
     completedQuestions: [{
       question: String,
       response: [String],
       correct: Boolean,
     }],
-    grade: Number, // grade is calculated after submitting
     submitted: {
       type: Boolean,
       default: false,

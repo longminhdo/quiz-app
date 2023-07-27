@@ -6,6 +6,7 @@ const AppError = require('../helper/AppError');
 const Answer = require('../model/answer');
 const QuizAttempt = require('../model/quizAttempt');
 const { StatusCodes } = require('../constant/statusCodes');
+const UserQuiz = require('../model/userQuiz');
 
 // for edit and delete question
 exports.validateQuestionId = async (req, res, next) => {
@@ -117,3 +118,25 @@ exports.validateQuizAttemptId = async (req, res, next) => {
 
   return next();
 };
+
+// validate user quiz id
+exports.validateUserQuizId = async (req, res, next) => {
+  const { userQuizId } = req.params;
+
+  if (!ObjectId.isValid(userQuizId)) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Quiz Attempt ID Type'));
+  }
+
+  const userQuiz = await UserQuiz.findById(userQuizId);
+
+  if (!userQuiz) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz attempt is not found or does not exist'));
+  }
+
+  if (userQuiz.deleted) {
+    return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz attempt is not found or does not exist'));
+  }
+
+  return next();
+};
+
