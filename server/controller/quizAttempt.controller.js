@@ -185,8 +185,6 @@ module.exports.getQuizAttemptById = async (req, res, next) => {
             item.correct = false;
           }
         }
-
-        console.log('first', grade);
       });
 
       const submitContent = { ...found._doc, submitted: true, completedQuestions, grade };
