@@ -1,33 +1,33 @@
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
+import AssignmentsTab from '@/components/app/admin/QuizList/AssignmentsTab';
+import QuizzesTab from '@/components/app/admin/QuizList/QuizzesTab';
 import MyCard from '@/components/common/MyCard/MyCard';
 import './QuizListPage.scss';
-import MyQuizzesTab from '@/components/app/admin/QuizList/MyQuizzesTab';
-import SharedWithMeTab from '@/components/app/admin/QuizList/SharedWithMeTab';
 
 const QUIZ_LIST_PAGE_TABS = {
-  MY_QUIZZES: 'my-quizzes',
-  SHARED_WITH_ME: 'shared-with-me',
+  QUIZZES: 'quizzes',
+  ASSIGNMENTS: 'assignments',
 };
 
 const quizzesTabs: Array<any> = [
   {
-    label: 'My quizzes',
-    path: QUIZ_LIST_PAGE_TABS.MY_QUIZZES,
+    label: 'Quizzes',
+    path: QUIZ_LIST_PAGE_TABS.QUIZZES,
   },
   {
-    label: 'Shared with me',
-    path: QUIZ_LIST_PAGE_TABS.SHARED_WITH_ME,
+    label: 'Assignments',
+    path: QUIZ_LIST_PAGE_TABS.ASSIGNMENTS,
   },
 ];
 
 const QuizListPage: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState(QUIZ_LIST_PAGE_TABS.MY_QUIZZES);
+  const [selectedTab, setSelectedTab] = useState(QUIZ_LIST_PAGE_TABS.QUIZZES);
 
   return (
     <div className="quiz-list-page">
       <Tabs
-        defaultActiveKey={QUIZ_LIST_PAGE_TABS.MY_QUIZZES}
+        defaultActiveKey={QUIZ_LIST_PAGE_TABS.QUIZZES}
         onChange={(tab) => setSelectedTab(tab)}
         type="card"
         items={quizzesTabs.map(({ path, label }) => ({
@@ -37,8 +37,8 @@ const QuizListPage: React.FC = () => {
       />
 
       <MyCard className="card-content">
-        {selectedTab === QUIZ_LIST_PAGE_TABS.MY_QUIZZES ? (<MyQuizzesTab />) : null}
-        {selectedTab === QUIZ_LIST_PAGE_TABS.SHARED_WITH_ME ? (<SharedWithMeTab />) : null}
+        {selectedTab === QUIZ_LIST_PAGE_TABS.QUIZZES ? (<QuizzesTab />) : null}
+        {selectedTab === QUIZ_LIST_PAGE_TABS.ASSIGNMENTS ? (<AssignmentsTab />) : null}
       </MyCard>
     </div>
   );

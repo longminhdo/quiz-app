@@ -6,7 +6,11 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './QuizListToolbar.scss';
 
-const QuizListToolbar: React.FC = () => {
+interface QuizListToolbarProps {
+  newBtnTitle?: string;
+}
+
+const QuizListToolbar: React.FC<QuizListToolbarProps> = ({ newBtnTitle }) => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -31,7 +35,7 @@ const QuizListToolbar: React.FC = () => {
   return (
     <div className="quizzes-list-toolbar">
       <Input
-        placeholder="Search collections"
+        placeholder="Search"
         prefix={<SearchOutlined />}
         allowClear
         value={search}
@@ -39,11 +43,11 @@ const QuizListToolbar: React.FC = () => {
       />
       <Button type="primary" onClick={handleNewQuizClick}>
         <FormOutlined />
-        New quiz
+        {newBtnTitle || 'New quiz'}
       </Button>
 
       <Modal
-        title="New collection"
+        title="New quiz"
         open={isOpen}
         wrapClassName="quiz-builder-modal"
         destroyOnClose

@@ -7,8 +7,9 @@ import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Quiz } from '@/types/quiz';
+import { QuizType } from '@/constants';
 
-const MyQuizzesTab: React.FC = () => {
+const AssignmentsTab: React.FC = () => {
   const [quizzes, setQuizzes] = useState<Array<Quiz>>([]);
   const [total, setTotal] = useState<number>(0);
 
@@ -27,7 +28,7 @@ const MyQuizzesTab: React.FC = () => {
         try {
           const params = { ...currentParams };
           params?.timestamp && delete params.timestamp;
-          const response = await run(getQuizzes({ ...params }));
+          const response = await run(getQuizzes({ ...params, type: QuizType.ASSIGNMENT }));
           if (response?.statusCode === 200) {
             setQuizzes(response.data.data || []);
             setTotal(response.data.pagination?.total);
@@ -42,10 +43,10 @@ const MyQuizzesTab: React.FC = () => {
 
   return (
     <>
-      <QuizListToolbar />
+      <QuizListToolbar newBtnTitle="New assignment" />
       <QuizList data={quizzes} total={total} tableLoading={loading} />
     </>
   );
 };
 
-export default MyQuizzesTab;
+export default AssignmentsTab;

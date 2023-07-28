@@ -51,13 +51,14 @@ module.exports.updateQuiz = async (req, res, next) => {
 module.exports.getQuizzes = async (req, res, next) => {
   try {
     const { _id } = req.userData;
-    const { offset = 1, limit = 10, sort = '', search, createdIn } = req.query;
+    const { offset = 1, limit = 10, sort = '', search, createdIn, type } = req.query;
 
     const sortOptions = parseSortOption(sort);
     const skipCount = (Number(offset) - 1) * Number(limit);
-    const searchOptions = { title: { $regex: search, $options: 'i' }, createdIn: { $regex: createdIn } };
+    const searchOptions = { title: { $regex: search, $options: 'i' }, createdIn: { $regex: createdIn }, quizType: type };
 
     !search && delete searchOptions.title;
+    !type && delete searchOptions.quizType;
     !createdIn && delete searchOptions.createdIn;
 
     const quizzes = await Quiz.find({ owner: _id, ...searchOptions })
