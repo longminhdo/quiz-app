@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs');
 const { UserQuizStatus } = require('../constant/userQuizStatus');
+const { QuizType } = require('../constant/quizType');
 
 const Schema = mongoose.Schema;
 
@@ -14,12 +15,16 @@ const userQuizSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Quiz',
     },
+    type: {
+      type: String,
+      default: QuizType.MINI_TEST,
+    },
     shuffledQuestions: [{
       type: Schema.Types.ObjectId,
       ref: 'Question',
     }],
     status: {
-      type: Boolean,
+      type: String,
       default: UserQuizStatus.OPEN,
     },
     attempts: [

@@ -1,14 +1,13 @@
 import { Question } from '@/types/question';
+import { User } from '@/types/user';
 
 export interface QuizConfigs {
-  startTime?: string;
-  endTime?: string;
-  duration?: number;
+  startTime?: number | string;
+  endTime?: number | string;
   quizType: string;
   resultVisible: boolean;
   multipleAttempts: boolean;
-  assignTo: Array<string>;
-  acceptingResponse: boolean;
+  assignTo: Array<string | User>;
 }
 
 export interface QuizBase {

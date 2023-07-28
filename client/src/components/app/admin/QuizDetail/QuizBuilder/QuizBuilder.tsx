@@ -2,6 +2,7 @@ import { Button, Col, Collapse, Form, Input, Radio, Row, Select, Spin, message }
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import { getFlushCollectionById, getFlushCollections } from '@/actions/collection';
 import { createQuiz, updateQuiz } from '@/actions/quiz';
 import ManualQuizForm from '@/components/app/admin/QuizDetail/QuizBuilder/ManualQuizForm/ManualQuizForm';
@@ -97,8 +98,8 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
 
   useEffect(() => {
     const disableCondition1 = isEmpty(localQuiz?.questions) || !localQuiz?.title;
-    const disableCondition2 = localQuiz?.quizType === QuizType.ASSIGNMENT && !(localQuiz?.startTime && localQuiz?.endTime);
-    const disableCondition3 = localQuiz?.quizType === QuizType.TEST && !localQuiz?.duration;
+    const disableCondition2 = !(localQuiz?.startTime && localQuiz?.endTime);
+    const disableCondition3 = localQuiz?.quizType === QuizType.ASSIGNMENT && isEmpty(localQuiz?.assignTo);
 
     const willDisable = disableCondition1 || disableCondition3 || disableCondition2;
 
@@ -108,7 +109,7 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
     }
 
     setDisabled(false);
-  }, [localQuiz?.title, localQuiz?.questions, localQuiz?.duration, localQuiz?.startTime, localQuiz?.endTime, localQuiz?.quizType]);
+  }, [localQuiz?.title, localQuiz?.questions, localQuiz?.startTime, localQuiz?.endTime, localQuiz?.quizType, localQuiz?.assignTo]);
 
   const handleModeChange = (e) => {
     setMode(e.target.value);
@@ -120,6 +121,8 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
       title: localQuiz?.title || '',
       questions: localQuiz?.questions?.map(q => q?._id),
       createdIn: collectionId || localQuiz?.createdIn,
+      startTime: dayjs(localQuiz?.startTime).unix(),
+      endTime: dayjs(localQuiz?.endTime).unix(),
     };
 
     if (payload?.quizType === QuizType.TEST) {

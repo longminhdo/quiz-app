@@ -32,7 +32,7 @@ const AnalyticsTabItem = () => (
 const ConfigurationTabItem = () => (
   <div>
     <SettingOutlined />
-    Settings
+    Configurations
   </div>
 );
 
@@ -52,7 +52,6 @@ const collectionTabs: Array<any> = [
 
 ];
 
-// TODO: quiz detail page
 const QuizDetailPage: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(QUIZ_TAB_PATHS.QUESTIONS);
 

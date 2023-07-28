@@ -7,14 +7,17 @@ const { OptionType } = require('../constant/option.js');
 const AppError = require('../helper/AppError.js');
 const Quiz = require('../model/quiz.js');
 const QuizAttempt = require('../model/quizAttempt.js');
+const UserQuiz = require('../model/userQuiz.js');
+const { UserQuizStatus } = require('../constant/userQuizStatus.js');
+const { QuizType } = require('../constant/quizType.js');
 
 const MAX_GRADE = 10;
 
 module.exports.join = async (req, res, next) => {
   try {
-    // TODO: Join
     const { userData } = req;
     const { code } = req.body;
+    const userId = userData._id;
 
     const quiz = await Quiz.findOne({ code });
 
@@ -22,38 +25,38 @@ module.exports.join = async (req, res, next) => {
       return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
     }
 
-    const found = await QuizAttempt
-      .findOne({ quiz: quiz._id, owner: userData._id, deleted: false })
+    const userQuizFound = await UserQuiz
+      .findOne({ quiz: quiz._id, owner: userId, deleted: false })
       .sort({ createdAt: -1 });
 
-    if (!found || (found.submitted && quiz.multipleAttempts)) {
-      const newQuizAttempt = new QuizAttempt({
-        quiz: quiz._id,
-        owner: userData._id,
-        shuffledQuestions: shuffleArray(quiz.questions),
-      });
-
-      await newQuizAttempt.save();
-
-      return res.status(StatusCodes.CREATED).send({
+    if (userQuizFound) {
+      return res.status(StatusCodes.OK).send({
         success: true,
         data: {
-          attemptId: newQuizAttempt._id,
+          userQuizId: userQuizFound._id,
         },
       });
     }
 
-    if (found.submitted) {
-      return res.status(StatusCodes.BAD_REQUEST).send({
-        success: false,
-        data: 'The quiz is closed for joining.',
-      });
-    }
+    const newQuizAttempt = new QuizAttempt();
+
+    const createdAttempt = await newQuizAttempt.save();
+
+    const newUserQuiz = new UserQuiz({
+      owner: userId,
+      quiz: quiz._id,
+      attempts: [createdAttempt._id],
+      status: UserQuizStatus.DOING,
+      shuffledQuestions: shuffleArray(quiz.questions),
+      type: QuizType.TEST,
+    });
+
+    const createdUserQuiz = await newUserQuiz.save();
 
     return res.status(StatusCodes.CREATED).send({
       success: true,
       data: {
-        attemptId: found._id,
+        userQuizId: createdUserQuiz._id,
       },
     });
   } catch (error) {
@@ -61,43 +64,35 @@ module.exports.join = async (req, res, next) => {
   }
 };
 
-module.exports.assign = async (req, res, next) => {
-  try {
-    // TODO: assign
-  } catch (error) {
-    next(error);
-  }
-};
-
 module.exports.getUserQuizzes = async (req, res, next) => {
   try {
-    // TODO: get user quizzes
-    const { _id } = req.userData;
-    const { offset = 1, limit = 10, sort = '', search, submitted } = req.query;
+    const { _id: userId } = req.userData;
+    const { offset = 1, limit = 10, sort = '', search, submitted, type, status } = req.query;
 
     const sortOptions = parseSortOption(sort);
     const skipCount = (Number(offset) - 1) * Number(limit);
-    const searchOptions = { title: { $regex: search, $options: 'i' }, submitted };
-    const defaultOptions = { owner: _id, deleted: { $ne: true } };
+    const searchOptions = { title: { $regex: search, $options: 'i' }, submitted, type, status };
+    const defaultOptions = { owner: userId, deleted: { $ne: true } };
 
+    !type && delete searchOptions.type;
+    !status && delete searchOptions.status;
     !search && delete searchOptions.title;
     submitted === undefined && delete searchOptions.submitted;
 
-
-    const quizAttempts = await QuizAttempt.find({ ...defaultOptions, ...searchOptions })
+    const userQuizzes = await UserQuiz.find({ ...defaultOptions, ...searchOptions })
       .sort(sortOptions)
       .skip(skipCount)
       .limit(Number(limit))
       .populate('quiz');
 
-    const totalQuizzes = await QuizAttempt.countDocuments({ ...defaultOptions, ...searchOptions });
+    const totalUserQuizzes = await UserQuiz.countDocuments({ ...defaultOptions, ...searchOptions });
 
     return res.status(StatusCodes.OK).send({
       success: true,
       data: {
-        data: quizAttempts,
+        data: userQuizzes,
         pagination: {
-          total: totalQuizzes,
+          total: totalUserQuizzes,
           offset: Number(offset),
           limit: Number(limit),
         },
@@ -110,13 +105,17 @@ module.exports.getUserQuizzes = async (req, res, next) => {
 
 module.exports.getUserQuizById = async (req, res, next) => {
   try {
-    // TODO: get user quiz by id
-    const { quizAttemptId } = req.params;
+    const { userQuizId } = req.params;
     const currentDate = dayjs().unix();
-    const found = await QuizAttempt.findById(quizAttemptId).populate('shuffledQuestions quiz');
-    console.log(found);
-    if (found?.endedAt && currentDate > found?.endedAt) {
-      const { completedQuestions, shuffledQuestions } = found;
+    const userQuizFound = await UserQuiz.findById(userQuizId).populate('shuffledQuestions quiz attempts');
+    const currentQuiz = userQuizFound.quiz;
+    const endDate = currentQuiz.endTime;
+    const lastAttemptId = userQuizFound.attempts[userQuizFound.attempts.length - 1];
+    const currentAttempt = await QuizAttempt.findById(lastAttemptId);
+
+    if (endDate && currentDate > endDate) {
+      const { completedQuestions } = currentAttempt;
+      const { shuffledQuestions } = userQuizFound;
       const pointPerQuestion = shuffledQuestions?.length > 0 ? MAX_GRADE / shuffledQuestions.length : 0;
       let grade = 0;
 
@@ -168,17 +167,16 @@ module.exports.getUserQuizById = async (req, res, next) => {
         }
       });
 
-      const submitContent = { ...found._doc, submitted: true, completedQuestions, grade };
+      const attemptUpdateContent = { submitted: true, completedQuestions };
+      await QuizAttempt.findByIdAndUpdate(lastAttemptId, attemptUpdateContent, { new: true });
 
-      const submittedQuiz = await QuizAttempt.findByIdAndUpdate(quizAttemptId, submitContent, { new: true })
-        .populate('quiz');
+      const userQuizUpdateContent = { status: UserQuizStatus.CLOSED, grade };
+      const updatedUserQuiz = await UserQuiz.findByIdAndUpdate(userQuizId, userQuizUpdateContent, { new: true }).populate('attempts');
 
-      console.log('final', submitContent);
-
-      return res.status(StatusCodes.OK).send({ success: true, data: submittedQuiz });
+      return res.status(StatusCodes.OK).send({ success: true, data: updatedUserQuiz });
     }
 
-    return res.status(StatusCodes.OK).send({ success: true, data: found });
+    return res.status(StatusCodes.OK).send({ success: true, data: userQuizFound });
   } catch (error) {
     next(error);
   }

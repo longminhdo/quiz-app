@@ -20,7 +20,6 @@ const QuestionListTab: React.FC = () => {
   const { currentQuiz } = useTypedSelector((state) => state.quiz);
   const [run, loading] = useDispatchAsyncAction();
   const { quizId } = useParams();
-  const navigate = useNavigate();
 
   // effect for fetching
   useEffect(() => {
@@ -31,7 +30,11 @@ const QuestionListTab: React.FC = () => {
     (async () => {
       const res = await run(getQuizById(quizId));
       if (!res?.success) {
-        navigate('/');
+        const url = window.location.href;
+        const parts = url.split('/');
+        const newUrl = parts.slice(0, -1).join('/');
+
+        window.location.replace(newUrl);
       }
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps

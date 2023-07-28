@@ -11,6 +11,7 @@ import { Quiz } from '@/types/quiz';
 import { convertTime, copyToClipboard } from '@/utilities/helpers';
 import { formatCode } from '@/utilities/quizHelpers';
 import './QuizList.scss';
+import { QuizType } from '@/constants';
 
 const MODAL_TYPES = {
   DELETE: 'delete',
@@ -101,26 +102,44 @@ const QuizList: React.FC<CDQuizListProps> = ({ data, total, tableLoading }) => {
       ),
     },
     {
+      title: 'Type',
+      dataIndex: 'quizType',
+      width: 140,
+      render: (type) => {
+        const str = type || '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      },
+    },
+    {
       title: 'Code',
       dataIndex: 'code',
       width: 200,
-      render: (code, record) => (code
-        ? (
-          <Tag
-            onClick={() => handleCodeTagClick(formatCode(code))}
-            color="green"
-            style={{ userSelect: 'none', fontSize: 14, cursor: 'pointer' }}
-          >
-            {code}
-          </Tag>
-        ) : (
+      render: (code, record) => {
+        if (record.quizType === QuizType.ASSIGNMENT) {
+          return null;
+        }
+
+        if (code) {
+          return (
+            <Tag
+              onClick={() => handleCodeTagClick(formatCode(code))}
+              color="green"
+              style={{ userSelect: 'none', fontSize: 14, cursor: 'pointer' }}
+            >
+              {code}
+            </Tag>
+          );
+        }
+
+        return (
           <Button
             loading={record._id === isGenerating}
             onClick={() => handleGenerateCode(record._id)}
           >
             Generate code
           </Button>
-        )),
+        );
+      },
     },
     {
       title: 'Amount',

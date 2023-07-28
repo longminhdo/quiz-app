@@ -30,7 +30,7 @@ router.get(
 // GET /userQuizzes/:userQuizId
 router.get('/:userQuizId',
   validateUserQuizId,
-  catchAsync(quizAttempt.getQuizAttemptById),
+  catchAsync(userQuiz.getUserQuizById),
 );
 
 module.exports = router;

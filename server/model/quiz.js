@@ -26,23 +26,12 @@ const quizSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
-    acceptingResponse: {
-      type: Boolean,
-      default: true,
-    },
     quizType: {
       type: String,
       default: QuizType.MINI_TEST,
     },
-    duration: Number, // Duration in minutes
-    startTime: {
-      type: Date,
-      get: formatDateTime,
-    },
-    endTime: {
-      type: Date,
-      get: formatDateTime,
-    },
+    startTime: Number,
+    endTime: Number,
     resultVisible: {
       type: Boolean,
       default: false,

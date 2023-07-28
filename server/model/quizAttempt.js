@@ -18,7 +18,6 @@ const quizAttempt = new Schema(
       type: Boolean,
       default: false,
     },
-    endedAt: Number,
     createdAt: Number,
     updatedAt: Number,
   },

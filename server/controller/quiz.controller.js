@@ -1,13 +1,29 @@
+const { QuizType } = require('../constant/quizType.js');
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
 const Quiz = require('../model/quiz');
+const UserQuiz = require('../model/userQuiz.js');
+const { shuffleArray } = require('../utils/helper.js');
 
 module.exports.createQuiz = async (req, res, next) => {
   try {
     const { userData, body } = req;
     const quiz = new Quiz({ owner: userData._id, ...body });
 
+    const { quizType, assignTo } = body;
+
     await quiz.save();
+
+    if (quizType === QuizType.ASSIGNMENT) {
+      const userQuizzesData = assignTo.map(user => ({
+        owner: user,
+        quiz: quiz._id,
+        shuffledQuestions: shuffleArray(quiz.questions),
+        type: QuizType.ASSIGNMENT,
+      }));
+
+      UserQuiz.insertMany(userQuizzesData);
+    }
 
     return res.status(StatusCodes.CREATED).send({
       success: true,
