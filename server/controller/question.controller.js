@@ -1,3 +1,4 @@
+const isEmpty = require('lodash/isEmpty');
 const Question = require('../model/question');
 const Collection = require('../model/collection');
 const { InternalServerError } = require('../constant/errorMessage');
@@ -104,6 +105,19 @@ module.exports.getQuestionById = async (req, res) => {
 module.exports.createQuestion = async (req, res, next) => {
   const { collectionId } = req.params;
   try {
+    const keys = req.body?.keys || [];
+    const options = req.body?.options || [];
+
+    if (isEmpty(keys)) {
+      return res.status(StatusCodes.BAD_REQUEST)
+        .json({ data: 'Keys can not be empty.' });
+    }
+
+    if (options.length > 5) {
+      return res.status(StatusCodes.BAD_REQUEST)
+        .json({ data: 'Question can not have more than five options.' });
+    }
+
     const question = new Question({ ...req.body });
     await question.save({ new: true });
 
