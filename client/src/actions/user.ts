@@ -1,5 +1,5 @@
 import { UserAction } from 'src/constants/action';
-import { GET } from '@/utilities/request';
+import { GET, POST } from '@/utilities/request';
 
 export const getCurrentUser = () => ({
   type: UserAction.GET_CURRENT_USER,
@@ -10,9 +10,9 @@ export const flushUser = () => ({
   type: UserAction.FLUSH_USER,
 });
 
-export const getStudents = (query) => ({
+export const getStudents = (payload) => ({
   type: UserAction.GET_CURRENT_USER,
-  promise: GET('/users/students', {
-    params: query,
+  promise: POST('/users/students', {
+    body: payload,
   }),
 });

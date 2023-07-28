@@ -8,7 +8,7 @@ const router = express.Router();
 router.use(validateAuthentication);
 
 // GET /users
-router.get('/students', catchAsync(user.getStudents));
+router.post('/students', catchAsync(user.getStudents));
 
 // GET/current user info
 router.get('/', catchAsync(user.getUserInfo));
