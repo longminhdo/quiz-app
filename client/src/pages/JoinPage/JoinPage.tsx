@@ -1,6 +1,6 @@
 import { HomeFilled } from '@ant-design/icons';
 import { Button, Input } from 'antd';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { joinQuiz } from '@/actions/quizAttempt';
 import MyTextButton from '@/components/common/MyTextButton/MyTextButton';
@@ -16,12 +16,14 @@ const JoinPage: React.FC = () => {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
 
+  const codeRef = useRef<any>();
+
   const [run, loading] = useDispatchAsyncAction();
   const navigate = useNavigate();
 
   const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
-  const handleJoinClick = async () => {
+  const join = async () => {
     const res = await run(joinQuiz(code));
 
     if (res?.statusCode === 201) {
@@ -31,10 +33,26 @@ const JoinPage: React.FC = () => {
     }
 
     setError(res?.data);
+    codeRef.current.focus();
+  };
+
+  const handleJoinClick = () => {
+    join();
   };
 
   const handleHomeClick = () => {
     navigate(routePaths.HOME);
+  };
+
+  const handleKeyup = (event) => {
+    if (event.key === 'Enter' || event.keyCode === 13) {
+      join();
+    }
+  };
+
+  const handleCodeChange = (e) => {
+    setCode(e.target.value);
+    setError('');
   };
 
   return (
@@ -45,7 +63,7 @@ const JoinPage: React.FC = () => {
       <div className="card-container">
         <h1>JOIN NEW QUIZ</h1>
         <div className="input-wrapper">
-          <Input placeholder="Quiz Pin" value={code} onChange={(e) => setCode(e.target.value)} />
+          <Input ref={codeRef} placeholder="Quiz Pin" value={code} onKeyUp={handleKeyup} onChange={handleCodeChange} />
           {error && <p className="error-message">{error}</p>}
         </div>
         <Button className="enter-btn" onClick={handleJoinClick} loading={loading}>Enter</Button>
