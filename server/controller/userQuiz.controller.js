@@ -192,3 +192,19 @@ module.exports.getUserQuizById = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.updateUserQuiz = async (req, res, next) => {
+  try {
+    const { userQuizId } = req.params;
+    const body = req.body;
+
+    console.log('herereee', body, userQuizId);
+    return;
+    // const updatedQuiz = await UserQuiz.findByIdAndUpdate(userQuizId, body, { new: true })
+    //   .populate('shuffledQuestions quiz attempts');
+
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedQuiz });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -2,7 +2,7 @@ import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import moment from 'moment';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserQuizById } from '@/actions/userQuiz';
+import { getUserQuizById, updateAttempt, updateFlushUserQuiz } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
@@ -66,7 +66,7 @@ const QuizPage: React.FC = () => {
       return;
     }
 
-    const currentAttempt = currentUserQuiz.attempts[currentUserQuiz.attempts.length - 1];
+    const currentAttempt = cloneDeep(currentUserQuiz.attempts[currentUserQuiz.attempts.length - 1]);
 
     let flag = 0;
     const shuffledQuestions = currentUserQuiz?.shuffledQuestions || [];
@@ -80,7 +80,7 @@ const QuizPage: React.FC = () => {
     setLocalUserQuiz({ ...currentUserQuiz, currentAttempt });
     setCurrentQuestion({ question: shuffledQuestions[flag], index: flag });
     if (isFirstRender) {
-      userQuizRef.current = cloneDeep(currentUserQuiz);
+      userQuizRef.current = cloneDeep({ ...currentUserQuiz, currentAttempt });
     }
   // this effect only runs when currentUserQuiz changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -89,12 +89,12 @@ const QuizPage: React.FC = () => {
   useEffect(() => {
     clearTimeout(debounceRef.current);
     if (isFirstRender || isEqual(localUserQuiz, userQuizRef.current) || isEmpty(localUserQuiz)) {
+      clearTimeout(debounceRef.current);
       return;
     }
 
     const debounce = setTimeout(() => {
-      console.log(localUserQuiz);
-      // run(updateFlushQuizAttempt(localUserQuiz));
+      localUserQuiz?.currentAttempt && run(updateAttempt(localUserQuiz.currentAttempt));
     }, 300);
 
     userQuizRef.current = cloneDeep(localUserQuiz);

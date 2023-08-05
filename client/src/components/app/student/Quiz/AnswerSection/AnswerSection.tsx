@@ -12,7 +12,6 @@ interface AnswerSectionProps {
 }
 
 const AnswerSection: React.FC<AnswerSectionProps> = ({ currentQuestion, currentResponse, onChange }) => {
-  console.log({ currentQuestion, currentResponse });
   if (currentQuestion?.question?.type === QuestionType.MULTIPLE_CHOICE) {
     return (
       <div className="answer-section answer-section-multiple-choice">

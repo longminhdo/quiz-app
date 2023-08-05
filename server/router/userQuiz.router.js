@@ -1,5 +1,4 @@
 const express = require('express');
-const quizAttempt = require('../controller/quizAttempt.controller');
 const userQuiz = require('../controller/userQuiz.controller');
 const catchAsync = require('../helper/catchAsync');
 const validateAuthentication = require('../middleware/validateAuthentication');
@@ -31,6 +30,13 @@ router.get(
 router.get('/:userQuizId',
   validateUserQuizId,
   catchAsync(userQuiz.getUserQuizById),
+);
+
+// PUT /userQuizzes/:userQuizId
+router.put(
+  '/:userQuizId',
+  validateUserQuizId,
+  catchAsync(userQuiz.updateUserQuiz),
 );
 
 module.exports = router;
