@@ -31,6 +31,7 @@ export enum QuestionAction {
 }
 
 export enum QuizAction {
+  REMOVE_ASSIGN = 'remove_assign',
   GET_QUIZZES = 'get_quizzes',
   GET_QUIZ_BY_ID = 'get_quiz_by_id',
   DELETE_QUIZ = 'delete_quiz',
@@ -59,4 +60,14 @@ export enum AuthenticationAction {
 export enum UserAction {
   GET_CURRENT_USER = 'get_current_user',
   FLUSH_USER = 'flush_user',
+}
+
+export enum UserQuizAction {
+  JOIN = 'join',
+  GET_USER_QUIZZES = 'get_user_quizzes',
+  GET_USER_QUIZ_BY_ID = 'get_user_quiz_by_id',
+  SUBMIT = 'submit',
+  UPDATE_USER_QUIZ = 'update_user_quiz',
+  UPDATE_FLUSH_USER_QUIZ = 'update_flush_user_quiz',
+  FLUSH_USER_QUIZ = 'flush_user_quiz',
 }

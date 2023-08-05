@@ -60,6 +60,7 @@ exports.createUserInfoToken = async (req, res, next) => {
     }
 
     const encodedData = {
+      fullName: data.fullName || 'Name',
       id: data.id,
       email: data.email || data.userName,
       departmentId: data.departmentId,

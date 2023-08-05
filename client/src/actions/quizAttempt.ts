@@ -13,13 +13,6 @@ export const getQuizAttemptById = (quizAttemptId) => ({
   promise: GET(`/quizAttempts/${quizAttemptId}`),
 });
 
-export const joinQuiz = (code) => ({
-  type: QuizAttemptAction.JOIN,
-  promise: POST('/quizAttempts/join', {
-    body: { code },
-  }),
-});
-
 export const updateQuizAttempt = (newQuizAttempt) => {
   const { _id, ...rest } = newQuizAttempt;
   const data = rest;

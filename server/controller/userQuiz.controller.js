@@ -17,46 +17,57 @@ module.exports.join = async (req, res, next) => {
   try {
     const { userData } = req;
     const { code } = req.body;
-    const userId = userData._id;
+    const ownerId = userData._id;
+    const now = dayjs().unix();
 
-    const quiz = await Quiz.findOne({ code });
+    const quizFound = await Quiz.findOne({ code });
 
-    if (!quiz) {
+    if (!quizFound) {
       return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
     }
 
+    if (quizFound.status === UserQuizStatus.CLOSED) {
+      return next(new AppError(StatusCodes.BAD_REQUEST, 'Quiz has already closed.'));
+    }
+
+    if (now < quizFound.startTime) {
+      return next(new AppError(StatusCodes.BAD_REQUEST, 'Quiz has not started yet.'));
+    }
+
+    const quizId = quizFound._id;
+
     const userQuizFound = await UserQuiz
-      .findOne({ quiz: quiz._id, owner: userId, deleted: false })
+      .findOne({ quiz: quizId, owner: ownerId, deleted: false })
       .sort({ createdAt: -1 });
 
-    if (userQuizFound) {
+    if (!userQuizFound) {
+      const newQuizAttempt = new QuizAttempt();
+
+      const createdAttempt = await newQuizAttempt.save();
+
+      const newUserQuiz = new UserQuiz({
+        owner: ownerId,
+        quiz: quizId,
+        attempts: [createdAttempt._id],
+        status: UserQuizStatus.DOING,
+        shuffledQuestions: shuffleArray(quizFound.questions),
+        type: QuizType.TEST,
+      });
+
+      const createdUserQuiz = await newUserQuiz.save();
+
       return res.status(StatusCodes.OK).send({
         success: true,
         data: {
-          userQuizId: userQuizFound._id,
+          userQuizId: createdUserQuiz._id,
         },
       });
     }
 
-    const newQuizAttempt = new QuizAttempt();
-
-    const createdAttempt = await newQuizAttempt.save();
-
-    const newUserQuiz = new UserQuiz({
-      owner: userId,
-      quiz: quiz._id,
-      attempts: [createdAttempt._id],
-      status: UserQuizStatus.DOING,
-      shuffledQuestions: shuffleArray(quiz.questions),
-      type: QuizType.TEST,
-    });
-
-    const createdUserQuiz = await newUserQuiz.save();
-
-    return res.status(StatusCodes.CREATED).send({
+    return res.status(StatusCodes.OK).send({
       success: true,
       data: {
-        userQuizId: createdUserQuiz._id,
+        userQuizId: userQuizFound._id,
       },
     });
   } catch (error) {
@@ -181,4 +192,3 @@ module.exports.getUserQuizById = async (req, res, next) => {
     next(error);
   }
 };
-

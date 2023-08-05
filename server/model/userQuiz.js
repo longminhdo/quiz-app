@@ -17,7 +17,7 @@ const userQuizSchema = new Schema(
     },
     type: {
       type: String,
-      default: QuizType.MINI_TEST,
+      default: QuizType.TEST,
     },
     shuffledQuestions: [{
       type: Schema.Types.ObjectId,
@@ -34,6 +34,10 @@ const userQuizSchema = new Schema(
       },
     ],
     grade: Number, // grade is calculated after submitting
+    assigned: {
+      type: Boolean,
+      default: false,
+    },
     deleted: {
       type: Boolean,
       default: false,

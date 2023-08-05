@@ -11,6 +11,7 @@ interface UserState {
   role: string | null;
   avatar?: string | null;
   _id?: string | null;
+  fullName: string | null;
 }
 
 interface Token {
@@ -19,6 +20,7 @@ interface Token {
   studentId?: string;
   staffCode?: string;
   role: string;
+  fullName: string;
 }
 
 const getInitialState = () => {
@@ -31,6 +33,7 @@ const getInitialState = () => {
       studentId: null,
       staffCode: null,
       role: null,
+      fullName: null,
     };
   }
 
@@ -42,6 +45,7 @@ const getInitialState = () => {
     role: decodedToken.role,
     studentId: decodedToken.studentId || null,
     staffCode: decodedToken.staffCode || null,
+    fullName: decodedToken.fullName || null,
   };
 };
 
@@ -64,6 +68,7 @@ export const userReducer = (state = INITIAL_STATE, action): UserState => {
         role: decodedToken.role,
         studentId: decodedToken.studentId || null,
         staffCode: decodedToken.staffCode || null,
+        fullName: decodedToken.fullName || null,
       };
     }
 
@@ -81,6 +86,7 @@ export const userReducer = (state = INITIAL_STATE, action): UserState => {
         studentId: null,
         staffCode: null,
         role: null,
+        fullName: null,
       };
     }
 

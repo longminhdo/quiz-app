@@ -78,7 +78,7 @@ const QuestionListToolbar: React.FC<QuestionListToolbarInterface> = ({ handleImp
         const validation = validateQuestion(tmpQuestion);
 
         if (!validation.isValid) {
-          setError(`${validation.message} at row ${i + 1}`);
+          setError(`${validation.message} at row ${i + 2}`);
           setLoading(false);
           return;
         }

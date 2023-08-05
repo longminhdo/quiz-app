@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
+import { getSSOToken } from '@/actions/authentication';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './LoginPage.scss';
-import { getSSOToken } from '@/actions/authentication';
 
 const HustRedirect = () => {
   const [run] = useDispatchAsyncAction();

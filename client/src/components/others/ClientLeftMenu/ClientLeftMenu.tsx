@@ -26,7 +26,7 @@ const ClientLeftMenu: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { email, avatar } = useTypedSelector(state => state.user);
+  const { fullName, avatar } = useTypedSelector(state => state.user);
   const [run] = useDispatchAsyncAction();
 
   const handleLogout = useCallback(() => {
@@ -66,7 +66,7 @@ const ClientLeftMenu: React.FC = () => {
             icon={<UserOutlined />}
           />
         )}
-        <p>{email}</p>
+        <p className="full-name">{fullName}</p>
       </div>
       <Menu
         className="client-left-menu"

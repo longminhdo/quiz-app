@@ -45,3 +45,12 @@ export const generateQuizCode = (quizId: string) => ({
 export const flushQuiz = () => ({
   type: QuizAction.FLUSH_QUIZ,
 });
+
+export const removeAssign = (payload: { userId: string; quizId: string }) => ({
+  type: QuizAction.REMOVE_ASSIGN,
+  promise: POST(`/quizzes/${payload.quizId}/remove-assign`, {
+    body: {
+      userId: payload.userId,
+    },
+  }),
+});

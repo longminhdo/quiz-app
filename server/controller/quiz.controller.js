@@ -20,6 +20,7 @@ module.exports.createQuiz = async (req, res, next) => {
         quiz: quiz._id,
         shuffledQuestions: shuffleArray(quiz.questions),
         type: QuizType.ASSIGNMENT,
+        assigned: true,
       }));
 
       UserQuiz.insertMany(userQuizzesData);
@@ -133,6 +134,47 @@ module.exports.generateCode = async (req, res, next) => {
       success: true,
       data: { code: newCode },
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.removeAssign = async (req, res, next) => {
+  try {
+    const { quizId } = req.params;
+    const body = req.body;
+    const removingUserId = body.userId;
+
+    const updatedUserQuiz = UserQuiz.findOneAndUpdate(
+      {
+        owner: removingUserId,
+        quiz: quizId,
+      },
+      {
+        assigned: false,
+      },
+      {
+        new: true,
+      },
+    );
+
+    
+
+    const currentQuiz = await Quiz.findByIdAndUpdate(
+      quizId,
+      { $pull: { assignTo: removingUserId } },
+      { new: true },
+    );
+
+
+
+    return console.log({ removingUserId, quizId, currentQuiz });
+
+    // remove assign set Assigned = false
+    // const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, body, { new: true })
+    //   .populate('questions');
+
+    return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedQuiz } });
   } catch (error) {
     next(error);
   }

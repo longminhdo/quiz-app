@@ -18,8 +18,13 @@
       width: toRem(150);
     }
 
-    p {
-      font-style: italic;
+    .full-name {
+      font-weight: bolder;
+      text-transform: uppercase;
+      color: $red-color;
+      font-size: toRem(24);
+      margin-top: toRem(4);
+      padding: 0 toRem(20);
     }
   }
 

@@ -5,7 +5,7 @@ const { StatusCodes } = require('../constant/statusCodes');
 module.exports.getStudents = async (req, res, next) => {
   try {
     const currentUserId = req.userData._id;
-    const { offset = 1, limit = 10, search, forAssigning = false } = req.query;
+    const { offset = 1, limit = 10, search, forAssigning = false, skipList = [] } = req.body;
 
     const skipCount = (Number(offset) - 1) * Number(limit);
     const searchOptions = {
@@ -14,7 +14,7 @@ module.exports.getStudents = async (req, res, next) => {
         { studentId: { $regex: search, $options: 'i' } },
       ],
     };
-    const skipCurrentUser = forAssigning ? { _id: { $ne: currentUserId } } : {};
+    const skipCurrentUser = forAssigning ? { _id: { $nin: [currentUserId, ...skipList] } } : {};
 
     !search && delete searchOptions.email;
     !search && delete searchOptions.studentId;

@@ -1,13 +1,15 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Empty, Form, Radio, Row, Select, Space, Spin, Switch, Table, Tooltip, message } from 'antd';
 import dayjs from 'dayjs';
+import { isEmpty } from 'lodash';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getQuizById } from '@/actions/quiz';
+import { getQuizById, removeAssign } from '@/actions/quiz';
 import { getStudents } from '@/actions/user';
 import { DATE_FORMAT, QuizType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import { QuizConfigs } from '@/types/quiz';
 import { formatDate } from '@/utilities/helpers';
 
@@ -23,17 +25,16 @@ const defaultConfigs: QuizConfigs = {
   assignTo: [],
 };
 
-
 const ConfigurationTab: React.FC = () => {
   const [configs, setConfigs] = useState<QuizConfigs>(defaultConfigs);
-  const [initialConfigs, setInitialConfigs] = useState<QuizConfigs>(defaultConfigs);
   const [assignOptions, setAssignOptions] = useState<any>([]);
   const [userSearch, setUserSearch] = useState<string>();
   const [assigns, setAssigns] = useState<any>([]);
-  const [localLoading, setLocalLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(true);
 
   const userSearchRef = useRef<any>();
 
+  const { currentQuiz } = useTypedSelector((state) => state.quiz);
   const [run, loading] = useDispatchAsyncAction();
   const { quizId } = useParams();
 
@@ -52,28 +53,32 @@ const ConfigurationTab: React.FC = () => {
           const newUrl = parts.slice(0, -1).join('/');
 
           window.location.replace(newUrl);
-          return;
         }
-
-        const initialQuiz = res?.data;
-        const fetchedConfigs = {
-          quizType: initialQuiz.quizType,
-          startTime: dayjs.unix(Number(initialQuiz?.startTime || 0)).format(DATE_FORMAT.DATE_TIME),
-          endTime: dayjs.unix(Number(initialQuiz?.endTime || 0)).format(DATE_FORMAT.DATE_TIME),
-          resultVisible: initialQuiz.resultVisible,
-          multipleAttempts: initialQuiz.multipleAttempts,
-          assignTo: initialQuiz.assignTo,
-        };
-
-        setConfigs(fetchedConfigs);
-        setInitialConfigs(fetchedConfigs);
+        setLocalLoading(false);
       })();
     } catch (error) {
+      setLocalLoading(false);
       message.error(UNEXPECTED_ERROR_MESSAGE);
     }
-    setLocalLoading(false);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quizId, run, window.location.href]);
+
+  useEffect(() => {
+    if (isEmpty(currentQuiz)) {
+      return;
+    }
+
+    const fetchedConfigs = {
+      quizType: currentQuiz.quizType,
+      startTime: dayjs.unix(Number(currentQuiz?.startTime || 0)).format(DATE_FORMAT.DATE_TIME),
+      endTime: dayjs.unix(Number(currentQuiz?.endTime || 0)).format(DATE_FORMAT.DATE_TIME),
+      resultVisible: currentQuiz.resultVisible,
+      multipleAttempts: currentQuiz.multipleAttempts,
+      assignTo: currentQuiz.assignTo,
+    };
+
+    setConfigs(fetchedConfigs);
+  }, [currentQuiz]);
 
   useEffect(() => {
     if (!userSearch) {
@@ -84,7 +89,7 @@ const ConfigurationTab: React.FC = () => {
 
     const timeout = setTimeout(async () => {
       try {
-        const res = await run(getStudents({ limit: 10, search: userSearch, forAssigning: true }));
+        const res = await run(getStudents({ limit: 10, search: userSearch, forAssigning: true, skipList: configs.assignTo }));
 
         if (res?.success) {
           const data = res?.data?.data || [];
@@ -98,7 +103,7 @@ const ConfigurationTab: React.FC = () => {
     }, 150);
 
     userSearchRef.current = timeout;
-  }, [run, userSearch]);
+  }, [configs.assignTo, run, userSearch]);
 
   const handleAssignSearch = (search) => {
     setUserSearch(search);
@@ -119,6 +124,11 @@ const ConfigurationTab: React.FC = () => {
 
   const handleAssignClick = () => {
     console.log(assigns);
+  };
+
+  const handleRemoveAssign = (userId) => {
+    console.log(userId);
+    run(removeAssign({ userId, quizId: quizId || '' }));
   };
 
   const columns: any = useMemo(() => [
@@ -143,11 +153,11 @@ const ConfigurationTab: React.FC = () => {
       title: 'Action',
       key: 'action',
       width: 140,
-      render: () => (
+      render: (v) => (
         <Space size="middle">
           <Button
             danger
-            onClick={() => {}}
+            onClick={() => { handleRemoveAssign(v?._id); }}
           >
             <DeleteOutlined />
             Remove

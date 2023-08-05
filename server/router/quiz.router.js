@@ -44,4 +44,11 @@ router.post(
   catchAsync(quiz.generateCode),
 );
 
+// POST /quizzes/:quizId/remove-assign
+router.post(
+  '/:quizId/remove-assign',
+  validateQuizId,
+  catchAsync(quiz.removeAssign),
+);
+
 module.exports = router;

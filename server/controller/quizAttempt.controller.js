@@ -2,59 +2,65 @@ const dayjs = require('dayjs');
 const { isEqual } = require('lodash');
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils');
-const { shuffleArray } = require('../utils/helper.js');
 const { OptionType } = require('../constant/option.js');
 const AppError = require('../helper/AppError.js');
 const Quiz = require('../model/quiz');
 const QuizAttempt = require('../model/quizAttempt');
+const UserQuiz = require('../model/userQuiz');
+const { shuffleArray } = require('../utils/helper.js');
+const { QuizType } = require('../constant/quizType.js');
+const { UserQuizStatus } = require('../constant/userQuizStatus.js');
 
 const MAX_GRADE = 10;
 
+// TODO: join quiz refactor
 module.exports.join = async (req, res, next) => {
   try {
     const { userData } = req;
     const { code } = req.body;
+    const now = dayjs().unix();
 
-    const quiz = await Quiz.findOne({ code });
+    const quizFound = await Quiz.findOne({ code });
 
-    if (!quiz) {
+    if (!quizFound) {
       return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
     }
 
-    const found = await QuizAttempt
-      .findOne({ quiz: quiz._id, owner: userData._id, deleted: false })
-      .sort({ createdAt: -1 });
-
-    if (!found || (found.submitted && quiz.multipleAttempts)) {
-      const newQuizAttempt = new QuizAttempt({
-        quiz: quiz._id,
-        owner: userData._id,
-        shuffledQuestions: shuffleArray(quiz.questions),
-      });
-
-      await newQuizAttempt.save();
-
-      return res.status(StatusCodes.CREATED).send({
-        success: true,
-        data: {
-          attemptId: newQuizAttempt._id,
-        },
-      });
+    if (now < quizFound.startTime) {
+      return next(new Error('Quiz has not started yet.'));
     }
 
-    if (found.submitted) {
-      return res.status(StatusCodes.BAD_REQUEST).send({
-        success: false,
-        data: 'The quiz is closed for joining.',
-      });
+    if (now > quizFound.endTime) {
+      return next(new Error('Quiz has already closed.'));
     }
 
-    return res.status(StatusCodes.CREATED).send({
-      success: true,
-      data: {
-        attemptId: found._id,
-      },
-    });
+    const quizId = quizFound._id;
+    const ownerId = userData._id;
+
+    const userQuizFound = await UserQuiz.findOne({ quiz: quizId, owner: ownerId });
+
+    if (!userQuizFound) {
+      const newQuizAttempt = new QuizAttempt();
+
+      const newUserQuiz = new UserQuiz({
+        owner: ownerId,
+        quiz: quizId,
+        shuffledQuestions: shuffleArray(quizFound.questions),
+        attempts: [newQuizAttempt._id],
+        type: QuizType.TEST,
+        status: UserQuizStatus.DOING,
+      });
+
+      // newQuizAttempt.save();
+    }
+
+
+    // return res.status(StatusCodes.CREATED).send({
+    //   success: true,
+    //   data: {
+    //     attemptId: found._id,
+    //   },
+    // });
   } catch (error) {
     next(error);
   }

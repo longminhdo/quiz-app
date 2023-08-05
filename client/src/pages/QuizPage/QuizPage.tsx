@@ -1,9 +1,8 @@
-import dayjs from 'dayjs';
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import moment from 'moment';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getQuizAttemptById, submitQuizAttempt, updateFlushQuizAttempt, updateQuizAttempt } from '@/actions/quizAttempt';
+import { getUserQuizById } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
@@ -14,50 +13,44 @@ import LoadingScreen from '@/components/others/LoadingScreen/LoadingScreen';
 import MuteButton from '@/components/others/MuteButton/MuteButton';
 import PlayButton from '@/components/others/PlayButton/PlayButton';
 import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
-import { QuizType } from '@/constants';
-import { routePaths } from '@/constants/routePaths';
 import { AudioContext } from '@/contexts/AudioContext';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
-import { QuizAttempt } from '@/types/quizAttempt';
+import { UserQuiz } from '@/types/userQuiz';
 import './QuizPage.scss';
+import { routePaths } from '@/constants/routePaths';
+import { submitQuizAttempt } from '@/actions/quizAttempt';
 
 const QuizPage: React.FC = () => {
-  const { attemptId } = useParams();
-  const [localQuestion, setLocalQuestion] = useState<any>();
+  const { userQuizId } = useParams();
+  const [currentQuestion, setCurrentQuestion] = useState<any>();
   const [localLoading, setLocalLoading] = useState(true);
-  const [localAttempt, setLocalAttempt] = useState<QuizAttempt>();
+  const [localUserQuiz, setLocalUserQuiz] = useState<UserQuiz>();
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [willSubmit, setWillSubmit] = useState(false);
 
   const debounceRef = useRef<any>();
-  const attemptRef = useRef<QuizAttempt>();
+  const userQuizRef = useRef<UserQuiz>();
 
   const navigate = useNavigate();
 
   const [run] = useDispatchAsyncAction();
-  const { currentQuizAttempt } = useTypedSelector(state => state.quizAttempt);
+  const { currentUserQuiz } = useTypedSelector(state => state.userQuiz);
 
   const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
   useEffect(() => {
-    if (!attemptId) {
+    if (!userQuizId) {
       return;
     }
 
     (async () => {
       setLocalLoading(true);
       try {
-        const res = await run(getQuizAttemptById(attemptId));
+        const res = await run(getUserQuizById(userQuizId));
 
-        if (res?.success) {
-          const data = res?.data;
-          if (data?.quiz?.quizType === QuizType.TEST && !data?.endedAt) {
-            const endedAt = dayjs().add(data?.quiz?.duration, 'minutes').unix();
-            await run(updateQuizAttempt({ ...data, endedAt }));
-          }
-        } else {
+        if (!res?.success) {
           navigate(routePaths.JOIN);
         }
       } catch (error) {
@@ -66,15 +59,17 @@ const QuizPage: React.FC = () => {
       setLocalLoading(false);
       setIsFirstRender(false);
     })();
-  }, [attemptId, navigate, run]);
+  }, [userQuizId, navigate, run]);
 
   useEffect(() => {
-    if (!currentQuizAttempt) {
+    if (!currentUserQuiz) {
       return;
     }
 
+    const currentAttempt = currentUserQuiz.attempts[currentUserQuiz.attempts.length - 1];
+
     let flag = 0;
-    const shuffledQuestions = currentQuizAttempt?.shuffledQuestions || [];
+    const shuffledQuestions = currentUserQuiz?.shuffledQuestions || [];
     for (let i = 0; i < shuffledQuestions.length; i++) {
       if (isEmpty(shuffledQuestions[i]?.response)) {
         flag = i;
@@ -82,41 +77,44 @@ const QuizPage: React.FC = () => {
       }
     }
 
-    setLocalAttempt(currentQuizAttempt);
-    setLocalQuestion({ question: shuffledQuestions[flag], index: flag });
+    setLocalUserQuiz({ ...currentUserQuiz, currentAttempt });
+    setCurrentQuestion({ question: shuffledQuestions[flag], index: flag });
     if (isFirstRender) {
-      attemptRef.current = cloneDeep(currentQuizAttempt);
+      userQuizRef.current = cloneDeep(currentUserQuiz);
     }
-  }, [currentQuizAttempt, isFirstRender]);
+  // this effect only runs when currentUserQuiz changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUserQuiz]);
 
   useEffect(() => {
     clearTimeout(debounceRef.current);
-    if (isFirstRender || isEqual(localAttempt, attemptRef.current) || isEmpty(localAttempt)) {
+    if (isFirstRender || isEqual(localUserQuiz, userQuizRef.current) || isEmpty(localUserQuiz)) {
       return;
     }
 
     const debounce = setTimeout(() => {
-      run(updateFlushQuizAttempt(localAttempt));
+      console.log(localUserQuiz);
+      // run(updateFlushQuizAttempt(localUserQuiz));
     }, 300);
 
-    attemptRef.current = cloneDeep(localAttempt);
+    userQuizRef.current = cloneDeep(localUserQuiz);
     debounceRef.current = debounce;
-  }, [isFirstRender, localAttempt, run]);
+  }, [isFirstRender, localUserQuiz, run]);
 
   const handleNavigationChange = (index) => {
-    if (index >= currentQuizAttempt?.shuffledQuestions?.length) {
+    if (index >= currentUserQuiz?.shuffledQuestions?.length) {
       setWillSubmit(true);
       return;
     }
 
     setWillSubmit(false);
-    setLocalQuestion({ question: currentQuizAttempt?.shuffledQuestions[index], index });
+    setCurrentQuestion({ question: currentUserQuiz?.shuffledQuestions[index], index });
   };
 
   const handleAnswerChange = (value) => {
-    setLocalAttempt((prev: any) => {
+    setLocalUserQuiz((prev: any) => {
       const { question } = value;
-      const newCompletedQuestions = prev?.completedQuestions || [];
+      const newCompletedQuestions = prev?.currentAttempt?.completedQuestions || [];
       const foundIndex = newCompletedQuestions.findIndex(item => item.question === question);
 
       if (foundIndex !== -1) {
@@ -125,15 +123,16 @@ const QuizPage: React.FC = () => {
         newCompletedQuestions.push(value);
       }
 
-      return { ...prev, completedQuestions: newCompletedQuestions };
+      return { ...prev, currentAttempt: { ...prev.currentAttempt, completedQuestions: newCompletedQuestions } };
     });
   };
 
+  // TODO: handle submit new
   const handleSubmit = async () => {
     run(setLoading(true));
 
     try {
-      const res = await run(submitQuizAttempt(localAttempt));
+      const res = await run(submitQuizAttempt(localUserQuiz));
 
       if (res?.success) {
         const quiz = res?.data?.quiz;
@@ -162,10 +161,10 @@ const QuizPage: React.FC = () => {
 
     return (
       <>
-        <QuestionSection currentQuestion={localQuestion} />
+        <QuestionSection currentQuestion={currentQuestion} />
         <AnswerSection
-          currentQuestion={localQuestion}
-          currentResponse={localAttempt?.completedQuestions?.find(item => item.question === localQuestion?.question?._id)?.response || []}
+          currentQuestion={currentQuestion}
+          currentResponse={localUserQuiz?.currentAttempt?.completedQuestions?.find(item => item.question === currentQuestion?.question?._id)?.response || []}
           onChange={handleAnswerChange}
         />
       </>
@@ -175,8 +174,8 @@ const QuizPage: React.FC = () => {
   return (
     <div className="quiz-page">
       <div className="header">
-        { localQuestion && <QuizFraction current={localQuestion?.index} total={currentQuizAttempt?.shuffledQuestions?.length} />}
-        <QuizTimer initialTime={moment((currentQuizAttempt?.endedAt || 0) * 1000).diff(moment(), 'seconds')} />
+        { currentQuestion && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
+        <QuizTimer endTime={localUserQuiz?.quiz.endTime || 0} />
       </div>
       <div className="content">
         {renderContent()}
@@ -189,8 +188,8 @@ const QuizPage: React.FC = () => {
         </div>
         <div className="footer-right">
           <QuizNavigation
-            current={willSubmit ? currentQuizAttempt?.shuffledQuestions?.length : localQuestion?.index}
-            total={currentQuizAttempt?.shuffledQuestions?.length}
+            current={willSubmit ? currentUserQuiz?.shuffledQuestions?.length : currentQuestion?.index}
+            total={currentUserQuiz?.shuffledQuestions?.length}
             onChange={handleNavigationChange}
           />
         </div>

@@ -1,16 +1,18 @@
 import { Statistic } from 'antd';
 import React, { useMemo } from 'react';
 import './QuizTimer.scss';
+import moment from 'moment';
 
 const { Countdown } = Statistic;
 
 const DEFAULT_TIME_UNIT = 1000;
 
 interface QuizTimerProps {
-  initialTime: number; // unit is in second
+  endTime?: number | string; // unit is in second
 }
 
-const QuizTimer: React.FC<QuizTimerProps> = ({ initialTime }) => {
+const QuizTimer: React.FC<QuizTimerProps> = ({ endTime }) => {
+  const initialTime = useMemo(() => moment(Number(endTime) * 1000).diff(moment(), 'seconds'), [endTime]);
   const duration = useMemo(() => (initialTime || 0) * DEFAULT_TIME_UNIT, [initialTime]);
 
   return (
@@ -20,4 +22,4 @@ const QuizTimer: React.FC<QuizTimerProps> = ({ initialTime }) => {
   );
 };
 
-export default QuizTimer;
+export default React.memo(QuizTimer);
