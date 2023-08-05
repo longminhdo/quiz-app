@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const dayjs = require('dayjs');
 const { QuizType } = require('../constant/quizType');
-const { formatDateTime } = require('../utils/helper');
 
 const Schema = mongoose.Schema;
 

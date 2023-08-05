@@ -8,12 +8,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const mediaRoute = require('./router/media.router');
 const questionRoute = require('./router/question.router');
-const answerRoute = require('./router/answer.router');
 const departmentRoute = require('./router/department.router');
 const authRoute = require('./router/auth.router');
 const collectionRoute = require('./router/collection.router');
 const quizRoute = require('./router/quiz.router');
-const quizAttemptRoute = require('./router/quizAttempt.router');
 const userRoute = require('./router/user.router');
 const userQuizRoute = require('./router/userQuiz.router');
 
@@ -47,13 +45,11 @@ app.use(express.json());
 // NOTE: the order of these router is mater!
 app.use('/collections/:collectionId/questions', questionRoute);
 app.use('/media', mediaRoute);
-app.use('/answer', answerRoute);
 app.use('/auth', authRoute);
 app.use('/department', departmentRoute);
 app.use('/collections', collectionRoute);
 app.use('/quizzes', quizRoute);
 app.use('/users', userRoute);
-app.use('/quizAttempts', quizAttemptRoute);
 app.use('/userQuizzes', userQuizRoute);
 
 // Handle error

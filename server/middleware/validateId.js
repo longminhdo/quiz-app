@@ -3,7 +3,6 @@ const Collection = require('../model/collection');
 const Quiz = require('../model/quiz');
 const Question = require('../model/question');
 const AppError = require('../helper/AppError');
-const Answer = require('../model/answer');
 const QuizAttempt = require('../model/quizAttempt');
 const { StatusCodes } = require('../constant/statusCodes');
 const UserQuiz = require('../model/userQuiz');
@@ -47,15 +46,6 @@ exports.validateQuestionId = async (req, res, next) => {
   }
   return next();
 };
-
-exports.validateAnswerId = async (req, res, next) => {
-  const { id } = req.params;
-  if (!ObjectId.isValid(id)) return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Answer'));
-  const answer = await Answer.findById(id);
-  if (!answer) return next(new AppError(StatusCodes.NOT_FOUND, 'Invalid Answer'));
-  return next();
-};
-
 
 // validate collection id
 exports.validateCollectionId = async (req, res, next) => {
