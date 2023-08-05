@@ -1,8 +1,8 @@
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
-import moment from 'moment';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserQuizById, updateAttempt, updateFlushUserQuiz } from '@/actions/userQuiz';
+import { submitQuizAttempt } from '@/actions/quizAttempt';
+import { getUserQuizById, updateAttempt } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
@@ -13,14 +13,13 @@ import LoadingScreen from '@/components/others/LoadingScreen/LoadingScreen';
 import MuteButton from '@/components/others/MuteButton/MuteButton';
 import PlayButton from '@/components/others/PlayButton/PlayButton';
 import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
+import { routePaths } from '@/constants/routePaths';
 import { AudioContext } from '@/contexts/AudioContext';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
 import { UserQuiz } from '@/types/userQuiz';
 import './QuizPage.scss';
-import { routePaths } from '@/constants/routePaths';
-import { submitQuizAttempt } from '@/actions/quizAttempt';
 
 const QuizPage: React.FC = () => {
   const { userQuizId } = useParams();
@@ -67,11 +66,12 @@ const QuizPage: React.FC = () => {
     }
 
     const currentAttempt = cloneDeep(currentUserQuiz.attempts[currentUserQuiz.attempts.length - 1]);
-
+    const currentCompletedQuestions = currentAttempt?.completedQuestions || [];
     let flag = 0;
     const shuffledQuestions = currentUserQuiz?.shuffledQuestions || [];
     for (let i = 0; i < shuffledQuestions.length; i++) {
-      if (isEmpty(shuffledQuestions[i]?.response)) {
+      const tmp = shuffledQuestions[i];
+      if (!currentCompletedQuestions?.find(item => item?.question === tmp._id)) {
         flag = i;
         break;
       }
@@ -82,7 +82,6 @@ const QuizPage: React.FC = () => {
     if (isFirstRender) {
       userQuizRef.current = cloneDeep({ ...currentUserQuiz, currentAttempt });
     }
-  // this effect only runs when currentUserQuiz changes
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUserQuiz]);
 
