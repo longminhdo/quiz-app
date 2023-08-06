@@ -1,10 +1,10 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Empty, Form, Radio, Row, Select, Space, Spin, Switch, Table, Tooltip, message } from 'antd';
 import dayjs from 'dayjs';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getQuizById, removeAssign } from '@/actions/quiz';
+import { assign, getQuizById, removeAssign } from '@/actions/quiz';
 import { getStudents } from '@/actions/user';
 import { DATE_FORMAT, QuizType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
@@ -31,6 +31,7 @@ const ConfigurationTab: React.FC = () => {
   const [userSearch, setUserSearch] = useState<string>();
   const [assigns, setAssigns] = useState<any>([]);
   const [localLoading, setLocalLoading] = useState(true);
+  const [removing, setRemoving] = useState<Array<string>>([]);
 
   const userSearchRef = useRef<any>();
 
@@ -122,13 +123,26 @@ const ConfigurationTab: React.FC = () => {
     setConfigs((prev: any) => ({ ...prev, multipleAttempts: checked }));
   };
 
-  const handleAssignClick = () => {
-    console.log(assigns);
+  const handleAssign = async () => {
+    setLocalLoading(true);
+    await run(assign({ quizId: quizId || '', assignTo: assigns }));
+    setAssigns([]);
+    setLocalLoading(false);
   };
 
-  const handleRemoveAssign = useCallback((userId) => {
-    console.log(userId);
-    run(removeAssign({ userId, quizId: quizId || '' }));
+  const handleRemoveAssign = useCallback(async (userId) => {
+    setRemoving(prev => {
+      const tmp = cloneDeep(prev);
+      tmp.push(userId);
+      return tmp;
+    });
+
+    await run(removeAssign({ userId, quizId: quizId || '' }));
+
+    setRemoving(prev => {
+      const tmp = cloneDeep(prev);
+      return tmp.filter(item => item !== userId);
+    });
   }, [quizId, run]);
 
   const columns: any = useMemo(() => [
@@ -152,11 +166,12 @@ const ConfigurationTab: React.FC = () => {
     {
       title: 'Action',
       key: 'action',
-      width: 140,
+      width: 180,
       render: (v) => (
         <Space size="middle">
           <Button
             danger
+            loading={removing.includes(v?._id)}
             onClick={() => { handleRemoveAssign(v?._id); }}
           >
             <DeleteOutlined />
@@ -165,7 +180,7 @@ const ConfigurationTab: React.FC = () => {
         </Space>
       ),
     },
-  ], [handleRemoveAssign]);
+  ], [handleRemoveAssign, removing]);
 
   return (
     <Spin spinning={localLoading}>
@@ -241,7 +256,7 @@ const ConfigurationTab: React.FC = () => {
                       </div>
                     ) : <Empty />}
                   />
-                  <Button onClick={handleAssignClick} type="primary">Assign</Button>
+                  <Button onClick={handleAssign} type="primary">Assign</Button>
                 </div>
               </Item>
             </Col>

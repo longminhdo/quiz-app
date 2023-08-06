@@ -140,7 +140,45 @@ module.exports.generateCode = async (req, res, next) => {
 };
 
 module.exports.assign = async (req, res, next) => {
+  try {
+    const { quizId } = req.params;
+    const { assignTo } = req.body;
+    const newAssignTo = [];
 
+    const currentQuiz = await Quiz.findById(quizId);
+
+    for (const assignedId of assignTo) {
+      const userQuizByItem = await UserQuiz.findOne({ owner: assignedId, quiz: quizId });
+      console.log(userQuizByItem);
+      if (userQuizByItem) {
+        await UserQuiz.findByIdAndUpdate(userQuizByItem._id, { assigned: true });
+      } else {
+        newAssignTo.push(assignedId);
+      }
+    }
+
+    console.log(newAssignTo);
+
+    const userQuizzesData = newAssignTo.map(user => ({
+      owner: user,
+      quiz: quizId,
+      shuffledQuestions: shuffleArray(currentQuiz.questions),
+      type: QuizType.ASSIGNMENT,
+      assigned: true,
+    }));
+
+    UserQuiz.insertMany(userQuizzesData);
+
+    const updatedQuiz = await Quiz.findByIdAndUpdate(
+      quizId,
+      { assignTo },
+      { new: true },
+    ).populate('questions assignTo');
+
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedQuiz });
+  } catch (error) {
+    next(error);
+  }
 };
 
 module.exports.removeAssign = async (req, res, next) => {
@@ -161,9 +199,9 @@ module.exports.removeAssign = async (req, res, next) => {
       quizId,
       { $pull: { assignTo: removingUserId } },
       { new: true },
-    );
+    ).populate('questions assignTo');
 
-    return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedQuiz } });
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedQuiz });
   } catch (error) {
     next(error);
   }

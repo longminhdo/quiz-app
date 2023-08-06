@@ -12,6 +12,7 @@ export const quizReducer = (state = INITIAL_STATE, action: any): QuizState => {
   switch (action.type) {
     case QuizAction.GET_QUIZ_BY_ID:
     case QuizAction.REMOVE_ASSIGN:
+    case QuizAction.ASSIGN:
     case QuizAction.UPDATE_QUIZ: {
       const quiz = action.payload.data;
 

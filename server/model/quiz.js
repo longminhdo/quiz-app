@@ -36,7 +36,6 @@ const quizSchema = new Schema(
       default: false,
     },
     multipleAttempts: {
-      // used for assignments, after complete quiz, students can re-entry the quiz
       type: Boolean,
       default: false,
     },

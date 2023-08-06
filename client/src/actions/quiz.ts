@@ -54,3 +54,12 @@ export const removeAssign = (payload: { userId: string; quizId: string }) => ({
     },
   }),
 });
+
+export const assign = (payload: { assignTo: Array<string>; quizId: string }) => ({
+  type: QuizAction.ASSIGN,
+  promise: POST(`/quizzes/${payload.quizId}/assign`, {
+    body: {
+      assignTo: payload.assignTo,
+    },
+  }),
+});

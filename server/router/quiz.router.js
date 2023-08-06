@@ -51,4 +51,10 @@ router.post(
   catchAsync(quiz.removeAssign),
 );
 
+router.post(
+  '/:quizId/assign',
+  validateQuizId,
+  catchAsync(quiz.assign),
+);
+
 module.exports = router;
