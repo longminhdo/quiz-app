@@ -59,7 +59,6 @@ const OptionDetail = ({
     setOptionLocalData((prev) => ({ ...prev, content: newContent }));
   };
 
-  // TODO: update question with debounce
   useEffect(() => {
     setQuestion((prev: any) => {
       const newOptions = [...prev.options];
