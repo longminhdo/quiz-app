@@ -182,28 +182,22 @@ module.exports.getUserQuizById = async (req, res, next) => {
       await QuizAttempt.findByIdAndUpdate(lastAttemptId, attemptUpdateContent, { new: true });
 
       const userQuizUpdateContent = { status: UserQuizStatus.CLOSED, grade };
-      const updatedUserQuiz = await UserQuiz.findByIdAndUpdate(userQuizId, userQuizUpdateContent, { new: true }).populate('attempts');
+      const updatedUserQuiz = await UserQuiz.findByIdAndUpdate(userQuizId, userQuizUpdateContent, { new: true }).populate('shuffledQuestions quiz attempts');
+
+      return res.status(StatusCodes.OK).send({ success: true, data: updatedUserQuiz });
+    }
+
+    if (!currentAttempt) {
+      const newQuizAttempt = new QuizAttempt();
+      const createdAttempt = await newQuizAttempt.save();
+      const updatedUserQuiz = await UserQuiz
+        .findByIdAndUpdate(userQuizId, { attempts: [createdAttempt._id], status: UserQuizStatus.DOING }, { new: true })
+        .populate('shuffledQuestions quiz attempts');
 
       return res.status(StatusCodes.OK).send({ success: true, data: updatedUserQuiz });
     }
 
     return res.status(StatusCodes.OK).send({ success: true, data: userQuizFound });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports.updateUserQuiz = async (req, res, next) => {
-  try {
-    const { userQuizId } = req.params;
-    const body = req.body;
-
-    console.log('herereee', body, userQuizId);
-    return;
-    // const updatedQuiz = await UserQuiz.findByIdAndUpdate(userQuizId, body, { new: true })
-    //   .populate('shuffledQuestions quiz attempts');
-
-    return res.status(StatusCodes.OK).send({ success: true, data: updatedQuiz });
   } catch (error) {
     next(error);
   }

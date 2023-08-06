@@ -63,5 +63,6 @@ export const DAY_TO_MINUTE = 1440;
 export const QuizStatus = {
   DOING: 'doing',
   OPEN: 'open',
+  CLOSED: 'closed',
   DONE: 'done',
 };

@@ -32,11 +32,4 @@ router.get('/:userQuizId',
   catchAsync(userQuiz.getUserQuizById),
 );
 
-// PUT /userQuizzes/:userQuizId
-router.put(
-  '/:userQuizId',
-  validateUserQuizId,
-  catchAsync(userQuiz.updateUserQuiz),
-);
-
 module.exports = router;

@@ -1,10 +1,10 @@
 import { Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getQuizAttempts } from '@/actions/quizAttempt';
+import { getUserQuizzes } from '@/actions/userQuiz';
 import ClientQuizList from '@/components/app/student/Home/ClientQuizList/ClientQuizList';
+import { QuizStatus } from '@/constants';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './HomePage.scss';
-import { QuizStatus } from '@/constants';
 
 const HomePage: React.FC = () => {
   const [onGoing, setOnGoing] = useState<any>([]);
@@ -14,15 +14,26 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      const onGoingParams = { limit: 4, submitted: false };
+      const onGoingParams = { limit: 4, status: QuizStatus.DOING };
+      const assignedParams = { limit: 4, status: QuizStatus.OPEN };
 
-      const res = await Promise.all([run(getQuizAttempts(onGoingParams))]);
+      const res = await Promise.all([
+        run(getUserQuizzes(onGoingParams)),
+        run(getUserQuizzes(assignedParams)),
+      ]);
 
-      res.forEach(r => {
-        if (r.success) {
-          setOnGoing(r?.data?.data || []);
-        }
-      });
+
+      const [onGoingRes, assignedRes] = res;
+
+      console.log(res, assignedRes);
+
+      if (onGoingRes.success) {
+        setOnGoing(onGoingRes.data.data);
+      }
+
+      if (assignedRes.success) {
+        setAssigned(assignedRes.data.data);
+      }
     })();
   }, [run]);
 
@@ -34,12 +45,10 @@ const HomePage: React.FC = () => {
           <ClientQuizList
             data={onGoing}
             title="On going"
-            status={QuizStatus.DOING}
           />
           <ClientQuizList
             data={assigned}
             title="Assigned"
-            status={QuizStatus.DOING}
           />
         </div>
       </div>

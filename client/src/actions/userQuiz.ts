@@ -1,5 +1,5 @@
 import { UserQuizAction } from 'src/constants/action';
-import { GET, PUT, POST, DELETE } from '@/utilities/request';
+import { GET, PUT, POST } from '@/utilities/request';
 import { QuizAttempt } from '@/types/quizAttempt';
 
 export const joinQuiz = (code) => ({
@@ -39,3 +39,10 @@ export const updateAttempt = (newAttempt: QuizAttempt) => {
     }),
   };
 };
+
+export const getUserQuizzes = (query) => ({
+  type: UserQuizAction.GET_USER_QUIZZES,
+  promise: GET('/userQuizzes', {
+    params: query,
+  }),
+});

@@ -27,14 +27,12 @@ const getTagColor = (status) => {
 
 const QuizCard: React.FC<QuizCardProps> = ({ data, status }) => {
   const quiz = data?.quiz || {};
-  const attemptId = data?._id || '';
-
-  console.log();
+  const userQuizId = data?._id || '';
 
   const navigate = useNavigate();
 
   const handleCardClick = () => {
-    navigate(routePaths.QUIZ.replace(':attemptId', attemptId), { replace: true });
+    navigate(routePaths.QUIZ.replace(':userQuizId', userQuizId), { replace: true });
   };
 
   return (
