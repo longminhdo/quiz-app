@@ -16,6 +16,9 @@
     .user-avatar {
       height: toRem(150);
       width: toRem(150);
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .full-name {

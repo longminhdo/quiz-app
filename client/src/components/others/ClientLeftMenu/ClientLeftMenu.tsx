@@ -64,6 +64,7 @@ const ClientLeftMenu: React.FC = () => {
           <Avatar
             className="user-avatar"
             icon={<UserOutlined />}
+            style={{ fontSize: 96 }}
           />
         )}
         <p className="full-name">{fullName}</p>
