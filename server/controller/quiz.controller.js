@@ -139,40 +139,29 @@ module.exports.generateCode = async (req, res, next) => {
   }
 };
 
+module.exports.assign = async (req, res, next) => {
+
+};
+
 module.exports.removeAssign = async (req, res, next) => {
   try {
     const { quizId } = req.params;
     const body = req.body;
     const removingUserId = body.userId;
 
-    const updatedUserQuiz = UserQuiz.findOneAndUpdate(
-      {
-        owner: removingUserId,
-        quiz: quizId,
-      },
-      {
-        assigned: false,
-      },
-      {
-        new: true,
-      },
+    await UserQuiz.findOneAndUpdate(
+      { owner: removingUserId, quiz: quizId },
+      { assigned: false },
+      { new: true },
     );
 
-    
+    // TODO: delete all attempts
 
-    const currentQuiz = await Quiz.findByIdAndUpdate(
+    const updatedQuiz = await Quiz.findByIdAndUpdate(
       quizId,
       { $pull: { assignTo: removingUserId } },
       { new: true },
     );
-
-
-
-    return console.log({ removingUserId, quizId, currentQuiz });
-
-    // remove assign set Assigned = false
-    // const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, body, { new: true })
-    //   .populate('questions');
 
     return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedQuiz } });
   } catch (error) {

@@ -2,7 +2,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Empty, Form, Radio, Row, Select, Space, Spin, Switch, Table, Tooltip, message } from 'antd';
 import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getQuizById, removeAssign } from '@/actions/quiz';
 import { getStudents } from '@/actions/user';
@@ -126,10 +126,10 @@ const ConfigurationTab: React.FC = () => {
     console.log(assigns);
   };
 
-  const handleRemoveAssign = (userId) => {
+  const handleRemoveAssign = useCallback((userId) => {
     console.log(userId);
     run(removeAssign({ userId, quizId: quizId || '' }));
-  };
+  }, [quizId, run]);
 
   const columns: any = useMemo(() => [
     {
@@ -165,7 +165,7 @@ const ConfigurationTab: React.FC = () => {
         </Space>
       ),
     },
-  ], []);
+  ], [handleRemoveAssign]);
 
   return (
     <Spin spinning={localLoading}>

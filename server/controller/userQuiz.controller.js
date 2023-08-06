@@ -20,7 +20,7 @@ module.exports.join = async (req, res, next) => {
     const ownerId = userData._id;
     const now = dayjs().unix();
 
-    const quizFound = await Quiz.findOne({ code });
+    const quizFound = await Quiz.findOne({ code, deleted: false });
 
     if (!quizFound) {
       return next(new AppError(StatusCodes.NOT_FOUND, 'The quiz is not found or does not exist'));
