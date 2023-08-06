@@ -1,7 +1,7 @@
 import { Col, DatePicker, Empty, Form, Radio, Row, Select, Spin, Switch, message } from 'antd';
+import dayjs from 'dayjs';
 import { isEmpty, isEqual } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
-import dayjs from 'dayjs';
 import { getStudents } from '@/actions/user';
 import { BuilderType, DATE_FORMAT, QuizType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
@@ -27,14 +27,18 @@ interface QuizBuilderConfigurationsProps {
   initialQuiz?: Quiz;
   setQuizConfigs?: any;
   builderType?: string;
+  quizType?: string;
 }
 
 const QuizBuilderConfigurations: React.FC<QuizBuilderConfigurationsProps> = ({
   initialQuiz,
   setQuizConfigs,
   builderType,
+  quizType,
 }) => {
-  const [configs, setConfigs] = useState<QuizConfigs>(defaultConfigs);
+  const [configs, setConfigs] = useState<QuizConfigs>(
+    () => (quizType === QuizType.TEST ? defaultConfigs : { ...defaultConfigs, quizType: QuizType.ASSIGNMENT }),
+  );
   const [assignOptions, setAssignOptions] = useState<any>([]);
   const [userSearch, setUserSearch] = useState<string>();
 

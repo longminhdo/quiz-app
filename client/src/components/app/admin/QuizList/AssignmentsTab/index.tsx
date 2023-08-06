@@ -3,11 +3,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import { getQuizzes } from '@/actions/quiz';
 import QuizList from '@/components/app/admin/QuizList/QuizList/QuizList';
 import QuizListToolbar from '@/components/app/admin/QuizList/QuizListToolbar/QuizListToolbar';
+import { QuizType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import { Quiz } from '@/types/quiz';
-import { QuizType } from '@/constants';
 
 const AssignmentsTab: React.FC = () => {
   const [quizzes, setQuizzes] = useState<Array<Quiz>>([]);
@@ -43,7 +43,7 @@ const AssignmentsTab: React.FC = () => {
 
   return (
     <>
-      <QuizListToolbar newBtnTitle="New assignment" />
+      <QuizListToolbar quizType={QuizType.ASSIGNMENT} newBtnTitle="New assignment" />
       <QuizList data={quizzes} total={total} tableLoading={loading} />
     </>
   );

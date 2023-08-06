@@ -2,15 +2,17 @@ import { FormOutlined, SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import QuizBuilder from '@/components/app/admin/QuizDetail/QuizBuilder/QuizBuilder';
+import { QuizType } from '@/constants';
 import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './QuizListToolbar.scss';
 
 interface QuizListToolbarProps {
   newBtnTitle?: string;
+  quizType?: string;
 }
 
-const QuizListToolbar: React.FC<QuizListToolbarProps> = ({ newBtnTitle }) => {
+const QuizListToolbar: React.FC<QuizListToolbarProps> = ({ newBtnTitle, quizType = QuizType.TEST }) => {
   const [search, setSearch] = useState<string>(() => new URLSearchParams(window.location.search).get('search') || '');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -47,14 +49,14 @@ const QuizListToolbar: React.FC<QuizListToolbarProps> = ({ newBtnTitle }) => {
       </Button>
 
       <Modal
-        title="New quiz"
+        title={quizType === QuizType.TEST ? 'New quiz' : 'New Assignment'}
         open={isOpen}
         wrapClassName="quiz-builder-modal"
         destroyOnClose
         closable={false}
         footer={false}
       >
-        <QuizBuilder setIsOpen={setIsOpen} quizPool={currentCollection?.questions || []} />
+        <QuizBuilder quizType={quizType} setIsOpen={setIsOpen} quizPool={currentCollection?.questions || []} />
       </Modal>
     </div>
   );

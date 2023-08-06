@@ -1,8 +1,8 @@
 import { Button, Col, Collapse, Form, Input, Radio, Row, Select, Spin, message } from 'antd';
+import dayjs from 'dayjs';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
 import { getFlushCollectionById, getFlushCollections } from '@/actions/collection';
 import { createQuiz, updateQuiz } from '@/actions/quiz';
 import ManualQuizForm from '@/components/app/admin/QuizDetail/QuizBuilder/ManualQuizForm/ManualQuizForm';
@@ -30,9 +30,16 @@ interface QuizBuilderProps {
   quizPool?: Array<Question>
   builderType?: string;
   initialQuiz?: Quiz;
+  quizType?: string;
 }
 
-const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizPool, builderType = BuilderType.CREATE }) => {
+const QuizBuilder: React.FC<QuizBuilderProps> = ({
+  initialQuiz,
+  setIsOpen,
+  quizPool,
+  builderType = BuilderType.CREATE,
+  quizType = QuizType.TEST,
+}) => {
   const [mode, setMode] = useState(QUIZ_CREATE_MODE.MANUAL);
   const [localQuizPool, setLocalQuizPool] = useState<Array<Question>>([]);
   const [disabled, setDisabled] = useState<boolean>(true);
@@ -242,6 +249,7 @@ const QuizBuilder: React.FC<QuizBuilderProps> = ({ initialQuiz, setIsOpen, quizP
                   initialQuiz={initialQuiz}
                   builderType={builderType}
                   setQuizConfigs={(configs) => setLocalQuiz((prev: any) => ({ ...prev, ...configs }))}
+                  quizType={quizType}
                 />
               </Panel>
             </Collapse>
