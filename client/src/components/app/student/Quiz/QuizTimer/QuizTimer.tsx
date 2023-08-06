@@ -1,7 +1,7 @@
 import { Statistic } from 'antd';
+import moment from 'moment';
 import React, { useMemo } from 'react';
 import './QuizTimer.scss';
-import moment from 'moment';
 
 const { Countdown } = Statistic;
 
