@@ -190,7 +190,7 @@ const QuizPage: React.FC = () => {
         </div>
 
         <div className="right">
-          { currentUserQuiz && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
+          { currentUserQuiz && !isFinished && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
           { currentUserQuiz && localUserQuiz?.type === QuizType.TEST && <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />}
           { currentUserQuiz && localUserQuiz?.type === QuizType.ASSIGNMENT && <Deadline endTime={localUserQuiz?.quiz?.endTime || 0} />}
         </div>
