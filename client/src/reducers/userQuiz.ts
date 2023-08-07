@@ -11,6 +11,7 @@ const INITIAL_STATE: any = {
 export const userQuizReducer = (state = INITIAL_STATE, action: any): UserQuizState => {
   switch (action.type) {
     case UserQuizAction.GET_USER_QUIZ_BY_ID:
+    case UserQuizAction.SUBMIT:
     case UserQuizAction.UPDATE_USER_QUIZ: {
       const userQuiz = action.payload.data;
 

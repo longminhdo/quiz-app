@@ -15,9 +15,17 @@ const QuizTimer: React.FC<QuizTimerProps> = ({ endTime }) => {
   const initialTime = useMemo(() => moment(Number(endTime) * 1000).diff(moment(), 'seconds'), [endTime]);
   const duration = useMemo(() => (initialTime || 0) * DEFAULT_TIME_UNIT, [initialTime]);
 
+  const getTimeFormat = () => {
+    if (duration > 3600000) {
+      return 'HH:mm:ss';
+    }
+
+    return 'mm:ss';
+  };
+
   return (
     <div className="quiz-timer">
-      <Countdown className="timer" value={Date.now() + duration} format="mm:ss" />
+      <Countdown className="timer" value={Date.now() + duration} format={getTimeFormat()} />
     </div>
   );
 };

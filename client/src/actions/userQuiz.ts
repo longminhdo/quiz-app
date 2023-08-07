@@ -50,3 +50,14 @@ export const getUserQuizzes = (query) => ({
 export const flushUserQuiz = () => ({
   type: UserQuizAction.FLUSH_USER_QUIZ,
 });
+
+export const submit = (submittingUserQuiz) => {
+  const { _id, ...rest } = submittingUserQuiz;
+
+  return {
+    type: UserQuizAction.SUBMIT,
+    promise: POST(`/userQuizzes/${_id}/submit`, {
+      body: rest,
+    }),
+  };
+};

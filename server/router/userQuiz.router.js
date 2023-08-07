@@ -32,4 +32,10 @@ router.get('/:userQuizId',
   catchAsync(userQuiz.getUserQuizById),
 );
 
+// POST /userQuizzes/:userQuizId/submit
+router.post('/:userQuizId/submit',
+  validateUserQuizId,
+  catchAsync(userQuiz.submit),
+);
+
 module.exports = router;

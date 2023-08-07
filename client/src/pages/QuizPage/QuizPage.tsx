@@ -2,9 +2,10 @@ import { message } from 'antd';
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { flushUserQuiz, getUserQuizById, updateAttempt } from '@/actions/userQuiz';
+import { flushUserQuiz, getUserQuizById, submit, updateAttempt } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import CompletedScreen from '@/components/app/student/Quiz/CompletedScreen/CompletedScreen';
+import Deadline from '@/components/app/student/Quiz/Deadline/Deadline';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
 import QuizNavigation from '@/components/app/student/Quiz/QuizNavigation/QuizNavigation';
@@ -15,7 +16,7 @@ import LoadingScreen from '@/components/others/LoadingScreen/LoadingScreen';
 import MuteButton from '@/components/others/MuteButton/MuteButton';
 import PlayButton from '@/components/others/PlayButton/PlayButton';
 import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
-import { QuizStatus } from '@/constants';
+import { QuizStatus, QuizType } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import { routePaths } from '@/constants/routePaths';
 import { AudioContext } from '@/contexts/AudioContext';
@@ -145,17 +146,13 @@ const QuizPage: React.FC = () => {
     });
   };
 
-  // TODO: handle submit new
   const handleSubmit = async () => {
     run(setLoading(true));
-
     try {
-      console.log('submit');
+      await run(submit(localUserQuiz));
     } catch (error) {
-      navigate(routePaths.HOME);
       run(setLoading(false));
     }
-
     run(setLoading(false));
   };
 
@@ -184,6 +181,7 @@ const QuizPage: React.FC = () => {
     );
   };
 
+
   return (
     <div className="quiz-page">
       <div className="header">
@@ -192,8 +190,9 @@ const QuizPage: React.FC = () => {
         </div>
 
         <div className="right">
-          { currentQuestion && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
-          <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />
+          { currentUserQuiz && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
+          { currentUserQuiz && localUserQuiz?.type === QuizType.TEST && <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />}
+          { currentUserQuiz && localUserQuiz?.type === QuizType.ASSIGNMENT && <Deadline endTime={localUserQuiz?.quiz?.endTime || 0} />}
         </div>
       </div>
       <div className="content">

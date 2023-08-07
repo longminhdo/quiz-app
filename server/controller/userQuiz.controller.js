@@ -1,5 +1,5 @@
 const dayjs = require('dayjs');
-const { isEqual } = require('lodash');
+const { isEqual, cloneDeep } = require('lodash');
 const { StatusCodes } = require('../constant/statusCodes.js');
 const { parseSortOption } = require('../helper/utils.js');
 const { shuffleArray } = require('../utils/helper.js');
@@ -12,6 +12,61 @@ const { UserQuizStatus } = require('../constant/userQuizStatus.js');
 const { QuizType } = require('../constant/quizType.js');
 
 const MAX_GRADE = 10;
+
+const examine = ({ completedQuestions, shuffledQuestions }) => {
+  const shuffledQuestionsClone = cloneDeep(shuffledQuestions);
+  const newCompletedQuestions = cloneDeep(completedQuestions);
+  const pointPerQuestion = shuffledQuestionsClone?.length > 0 ? MAX_GRADE / shuffledQuestionsClone.length : 0;
+  let grade = 0;
+  newCompletedQuestions.forEach(item => {
+    const foundQuestion = shuffledQuestionsClone.find(q => item.question === q._id);
+    if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length > 1) {
+      const keys = foundQuestion.keys;
+      const pointPerOption = pointPerQuestion / foundQuestion.keys.length;
+      let tmpPoint = 0;
+
+      item.response.forEach(r => {
+        if (keys.includes(r)) {
+          tmpPoint += pointPerOption;
+        } else {
+          tmpPoint -= pointPerOption;
+        }
+      });
+
+      if (tmpPoint <= 0) {
+        tmpPoint = 0;
+      }
+
+      if (tmpPoint !== pointPerQuestion) {
+        item.correct = false;
+      } else {
+        item.correct = true;
+      }
+
+      grade += tmpPoint;
+    }
+
+    if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length === 1) {
+      if (isEqual(foundQuestion.keys, item.response)) {
+        grade += pointPerQuestion;
+        item.correct = true;
+      } else {
+        item.correct = false;
+      }
+    }
+
+    if (foundQuestion.type === OptionType.TEXT) {
+      if (isEqual(foundQuestion.keys, item.response)) {
+        item.correct = true;
+        grade += pointPerQuestion;
+      } else {
+        item.correct = false;
+      }
+    }
+  });
+
+  return { newCompletedQuestions, grade };
+};
 
 module.exports.join = async (req, res, next) => {
   try {
@@ -124,58 +179,12 @@ module.exports.getUserQuizById = async (req, res, next) => {
     const currentAttempt = await QuizAttempt.findById(lastAttemptId);
 
     if (endDate && currentDate > endDate) {
-      const completedQuestions = currentAttempt?.completedQuestions || [];
-      const shuffledQuestions = userQuizFound?.shuffledQuestions || [];
-      const pointPerQuestion = shuffledQuestions?.length > 0 ? MAX_GRADE / shuffledQuestions.length : 0;
-      let grade = 0;
-      completedQuestions.forEach(item => {
-        const foundQuestion = shuffledQuestions.find(q => item.question === q._id);
-        if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length > 1) {
-          const keys = foundQuestion.keys;
-          const pointPerOption = pointPerQuestion / foundQuestion.keys.length;
-          let tmpPoint = 0;
-
-          item.response.forEach(r => {
-            if (keys.includes(r)) {
-              tmpPoint += pointPerOption;
-            } else {
-              tmpPoint -= pointPerOption;
-            }
-          });
-
-          if (tmpPoint <= 0) {
-            tmpPoint = 0;
-          }
-
-          if (tmpPoint !== pointPerQuestion) {
-            item.correct = false;
-          } else {
-            item.correct = true;
-          }
-
-          grade += tmpPoint;
-        }
-
-        if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length === 1) {
-          if (isEqual(foundQuestion.keys, item.response)) {
-            grade += pointPerQuestion;
-            item.correct = true;
-          } else {
-            item.correct = false;
-          }
-        }
-
-        if (foundQuestion.type === OptionType.TEXT) {
-          if (isEqual(foundQuestion.keys, item.response)) {
-            item.correct = true;
-            grade += pointPerQuestion;
-          } else {
-            item.correct = false;
-          }
-        }
+      const { newCompletedQuestions, grade } = examine({
+        completedQuestions: currentAttempt?.completedQuestions || [],
+        shuffledQuestions: userQuizFound?.shuffledQuestions || [],
       });
 
-      const attemptUpdateContent = { submitted: true, completedQuestions };
+      const attemptUpdateContent = { submitted: true, newCompletedQuestions };
       await QuizAttempt.findByIdAndUpdate(lastAttemptId, attemptUpdateContent, { new: true });
 
       const userQuizUpdateContent = { status: UserQuizStatus.CLOSED, grade };
@@ -195,6 +204,37 @@ module.exports.getUserQuizById = async (req, res, next) => {
     }
 
     return res.status(StatusCodes.OK).send({ success: true, data: userQuizFound });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.submit = async (req, res, next) => {
+  try {
+    const { body } = req;
+    const { userQuizId } = req.params;
+    const currentUserQuizFound = await UserQuiz.findById(userQuizId).populate('shuffledQuestions attempts');
+
+    const submittedCompletedQuestions = body?.currentAttempt?.completedQuestions || [];
+    const shuffledQuestions = currentUserQuizFound?.shuffledQuestions?.map(item => ({ ...item?._doc, _id: item?._doc?._id?.toString() })) || [];
+    const { newCompletedQuestions, grade } = examine({
+      completedQuestions: submittedCompletedQuestions,
+      shuffledQuestions,
+    });
+
+    const foundAttempts = currentUserQuizFound?.attempts || [];
+    const currentAttempt = foundAttempts.find(item => !item?.submitted);
+    const currentAttemptId = currentAttempt._id;
+
+    const submitContent = { submitted: true, completedQuestions: newCompletedQuestions };
+    const userQuizUpdateContent = { grade, status: UserQuizStatus.DONE };
+
+    await QuizAttempt.findByIdAndUpdate(currentAttemptId, submitContent, { new: true });
+
+    const updatedUserQuiz = await UserQuiz.findByIdAndUpdate(userQuizId, userQuizUpdateContent, { new: true })
+      .populate('shuffledQuestions quiz attempts');
+
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedUserQuiz });
   } catch (error) {
     next(error);
   }
