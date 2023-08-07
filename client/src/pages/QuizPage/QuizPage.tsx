@@ -2,7 +2,7 @@ import { message } from 'antd';
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getUserQuizById, updateAttempt } from '@/actions/userQuiz';
+import { flushUserQuiz, getUserQuizById, updateAttempt } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import CompletedScreen from '@/components/app/student/Quiz/CompletedScreen/CompletedScreen';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
@@ -43,6 +43,11 @@ const QuizPage: React.FC = () => {
   const { currentUserQuiz } = useTypedSelector(state => state.userQuiz);
 
   const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
+
+
+  useEffect(() => () => {
+    run(flushUserQuiz());
+  }, [run]);
 
   useEffect(() => {
     if (!userQuizId) {

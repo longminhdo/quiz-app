@@ -46,3 +46,7 @@ export const getUserQuizzes = (query) => ({
     params: query,
   }),
 });
+
+export const flushUserQuiz = () => ({
+  type: UserQuizAction.FLUSH_USER_QUIZ,
+});
