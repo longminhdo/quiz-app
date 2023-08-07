@@ -149,7 +149,10 @@ const QuizPage: React.FC = () => {
   const handleSubmit = async () => {
     run(setLoading(true));
     try {
-      await run(submit(localUserQuiz));
+      const res = await run(submit(localUserQuiz));
+      if (res?.success) {
+        setWillSubmit(false);
+      }
     } catch (error) {
       run(setLoading(false));
     }
@@ -161,12 +164,12 @@ const QuizPage: React.FC = () => {
       return <LoadingScreen />;
     }
 
-    if (willSubmit) {
-      return <SubmitConfirmation onSubmit={handleSubmit} />;
-    }
-
     if (isFinished) {
       return <CompletedScreen />;
+    }
+
+    if (willSubmit) {
+      return <SubmitConfirmation onSubmit={handleSubmit} />;
     }
 
     return (
