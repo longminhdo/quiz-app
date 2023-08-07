@@ -1,11 +1,10 @@
 import { Tag } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { routePaths } from '@/constants/routePaths';
 import QuizCover from '@/assets/images/quiz-cover.jpg';
+import { QuizStatus } from '@/constants';
+import { routePaths } from '@/constants/routePaths';
 import './QuizCard.scss';
-import { DATE_FORMAT, QuizStatus } from '@/constants';
-import { convertTime } from '@/utilities/helpers';
 
 interface QuizCardProps {
   data?: any;
@@ -14,12 +13,13 @@ interface QuizCardProps {
 
 const getTagColor = (status) => {
   switch (status) {
-    case QuizStatus.DOING:
-      return 'error';
+    case QuizStatus.CLOSED:
     case QuizStatus.DONE:
-      return 'success';
-    case QuizStatus.OPEN:
+      return 'error';
+    case QuizStatus.DOING:
       return 'warning';
+    case QuizStatus.OPEN:
+      return 'success';
     default:
       return '';
   }
@@ -44,9 +44,7 @@ const QuizCard: React.FC<QuizCardProps> = ({ data, status }) => {
         <div className="info-main">
           <div className="item-status">
             <Tag>
-              Deadline
-              {' '}
-              {convertTime(data?.endedAt, DATE_FORMAT.DATE)}
+              {quiz?.quizType}
             </Tag>
             <Tag style={{ fontWeight: 600, textTransform: 'uppercase' }} color={getTagColor(status)}>{status}</Tag>
           </div>

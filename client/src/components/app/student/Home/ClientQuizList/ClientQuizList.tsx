@@ -1,3 +1,4 @@
+import { RightOutlined } from '@ant-design/icons';
 import { Col, Empty, Row } from 'antd';
 import { isEmpty } from 'lodash';
 import React from 'react';
@@ -10,10 +11,19 @@ interface QuizListProps {
 }
 
 const ClientQuizList: React.FC<QuizListProps> = ({ data, title }) => {
-  console.log('first', data);
+  const handleSeeMore = () => {
+    console.log('see more');
+  };
+
   return (
     <div className="client-quiz-list">
-      <h2 className="quiz-list-title">{title}</h2>
+      <div className="client-quiz-list-header">
+        <h2 className="quiz-list-title">{title}</h2>
+        <div className="see-more-button" onClick={handleSeeMore}>
+          <span> See more</span>
+          <RightOutlined />
+        </div>
+      </div>
       <div className={`list-container ${isEmpty(data) ? 'empty' : ''}`}>
         {isEmpty(data)
           ? (

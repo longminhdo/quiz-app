@@ -9,23 +9,23 @@ import './HomePage.scss';
 const HomePage: React.FC = () => {
   const [onGoing, setOnGoing] = useState<any>([]);
   const [assigned, setAssigned] = useState<any>([]);
+  const [finished, setFinished] = useState<any>([]);
 
   const [run, loading] = useDispatchAsyncAction();
 
   useEffect(() => {
     (async () => {
-      const onGoingParams = { limit: 4, status: QuizStatus.DOING };
-      const assignedParams = { limit: 4, status: QuizStatus.OPEN };
+      const onGoingParams = { limit: 4, statuses: [QuizStatus.DOING] };
+      const assignedParams = { limit: 4, statuses: [QuizStatus.OPEN] };
+      const finishedParams = { limit: 4, statuses: [QuizStatus.CLOSED, QuizStatus.DONE] };
 
       const res = await Promise.all([
         run(getUserQuizzes(onGoingParams)),
         run(getUserQuizzes(assignedParams)),
+        run(getUserQuizzes(finishedParams)),
       ]);
 
-
-      const [onGoingRes, assignedRes] = res;
-
-      console.log(res, assignedRes);
+      const [onGoingRes, assignedRes, finishedRes] = res;
 
       if (onGoingRes.success) {
         setOnGoing(onGoingRes.data.data);
@@ -33,6 +33,10 @@ const HomePage: React.FC = () => {
 
       if (assignedRes.success) {
         setAssigned(assignedRes.data.data);
+      }
+
+      if (finishedRes.success) {
+        setFinished(finishedRes.data.data);
       }
     })();
   }, [run]);
@@ -49,6 +53,10 @@ const HomePage: React.FC = () => {
           <ClientQuizList
             data={assigned}
             title="Assigned"
+          />
+          <ClientQuizList
+            data={finished}
+            title="Finished"
           />
         </div>
       </div>

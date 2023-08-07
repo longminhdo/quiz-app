@@ -78,15 +78,14 @@ module.exports.join = async (req, res, next) => {
 module.exports.getUserQuizzes = async (req, res, next) => {
   try {
     const { _id: userId } = req.userData;
-    const { offset = 1, limit = 10, sort = '', search, submitted, type, status } = req.query;
-
+    const { offset = 1, limit = 10, sort = '', search, submitted, type, statuses } = req.query;
     const sortOptions = parseSortOption(sort);
     const skipCount = (Number(offset) - 1) * Number(limit);
-    const searchOptions = { title: { $regex: search, $options: 'i' }, submitted, type, status };
+    const searchOptions = { title: { $regex: search, $options: 'i' }, submitted, type, status: { $in: statuses?.split(',') } };
     const defaultOptions = { owner: userId, deleted: { $ne: true } };
 
     !type && delete searchOptions.type;
-    !status && delete searchOptions.status;
+    !statuses && delete searchOptions.status;
     !search && delete searchOptions.title;
     submitted === undefined && delete searchOptions.submitted;
 

@@ -1,18 +1,22 @@
+import { message } from 'antd';
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { message } from 'antd';
 import { getUserQuizById, updateAttempt } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
+import CompletedScreen from '@/components/app/student/Quiz/CompletedScreen/CompletedScreen';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
 import QuizFraction from '@/components/app/student/Quiz/QuizFraction/QuizFraction';
 import QuizNavigation from '@/components/app/student/Quiz/QuizNavigation/QuizNavigation';
 import QuizTimer from '@/components/app/student/Quiz/QuizTimer/QuizTimer';
 import SubmitConfirmation from '@/components/app/student/Quiz/SubmitConfirmation/SubmitConfirmation';
+import ClientHomeButton from '@/components/others/ClientHomeButton/ClientHomeButton';
 import LoadingScreen from '@/components/others/LoadingScreen/LoadingScreen';
 import MuteButton from '@/components/others/MuteButton/MuteButton';
 import PlayButton from '@/components/others/PlayButton/PlayButton';
 import SettingsButton from '@/components/others/SettingsButton/SettingsButton';
+import { QuizStatus } from '@/constants';
+import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import { routePaths } from '@/constants/routePaths';
 import { AudioContext } from '@/contexts/AudioContext';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
@@ -20,7 +24,6 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
 import { UserQuiz } from '@/types/userQuiz';
 import './QuizPage.scss';
-import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 
 const QuizPage: React.FC = () => {
   const { userQuizId } = useParams();
@@ -29,6 +32,7 @@ const QuizPage: React.FC = () => {
   const [localUserQuiz, setLocalUserQuiz] = useState<UserQuiz>();
   const [isFirstRender, setIsFirstRender] = useState(true);
   const [willSubmit, setWillSubmit] = useState(false);
+  const [isFinished, setIsFinished] = useState(false);
 
   const debounceRef = useRef<any>();
   const userQuizRef = useRef<UserQuiz>();
@@ -65,6 +69,11 @@ const QuizPage: React.FC = () => {
 
   useEffect(() => {
     if (!currentUserQuiz) {
+      return;
+    }
+
+    if ([QuizStatus.CLOSED, QuizStatus.DONE].includes(currentUserQuiz.status)) {
+      setIsFinished(true);
       return;
     }
 
@@ -154,6 +163,10 @@ const QuizPage: React.FC = () => {
       return <SubmitConfirmation onSubmit={handleSubmit} />;
     }
 
+    if (isFinished) {
+      return <CompletedScreen />;
+    }
+
     return (
       <>
         <QuestionSection currentQuestion={currentQuestion} />
@@ -169,8 +182,14 @@ const QuizPage: React.FC = () => {
   return (
     <div className="quiz-page">
       <div className="header">
-        { currentQuestion && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
-        <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />
+        <div className="left">
+          <ClientHomeButton />
+        </div>
+
+        <div className="right">
+          { currentQuestion && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
+          <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />
+        </div>
       </div>
       <div className="content">
         {renderContent()}

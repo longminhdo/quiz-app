@@ -3,6 +3,25 @@
 .client-quiz-list {
   padding: 0 toRem(32);
 
+  .client-quiz-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .see-more-button {
+      display: flex;
+      align-items: center;
+      gap: toRem(4);
+
+      &:hover {
+        color: $red-color;
+        text-decoration: underline;
+        cursor: pointer;
+        @include select-restricted;
+      }
+    }
+  }
+
   .quiz-list-title {
     margin-bottom: toRem(8);
   }
