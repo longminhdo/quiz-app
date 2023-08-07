@@ -44,7 +44,7 @@
     }
   }
 
-  @media (max-width: 991px) {
+  @media (max-width: toRem(1304)) {
     align-items: flex-start;
 
     .content-wrapper {
