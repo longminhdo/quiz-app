@@ -125,14 +125,12 @@ module.exports.getUserQuizById = async (req, res, next) => {
     const currentAttempt = await QuizAttempt.findById(lastAttemptId);
 
     if (endDate && currentDate > endDate) {
-      const { completedQuestions } = currentAttempt;
-      const { shuffledQuestions } = userQuizFound;
+      const completedQuestions = currentAttempt?.completedQuestions || [];
+      const shuffledQuestions = userQuizFound?.shuffledQuestions || [];
       const pointPerQuestion = shuffledQuestions?.length > 0 ? MAX_GRADE / shuffledQuestions.length : 0;
       let grade = 0;
-
       completedQuestions.forEach(item => {
         const foundQuestion = shuffledQuestions.find(q => item.question === q._id);
-
         if (foundQuestion.type === OptionType.MULTIPLE_CHOICE && foundQuestion.keys.length > 1) {
           const keys = foundQuestion.keys;
           const pointPerOption = pointPerQuestion / foundQuestion.keys.length;
