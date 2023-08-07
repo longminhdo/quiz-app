@@ -1,7 +1,7 @@
 import { cloneDeep, isEmpty, isEqual } from 'lodash';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { submitQuizAttempt } from '@/actions/quizAttempt';
+import { message } from 'antd';
 import { getUserQuizById, updateAttempt } from '@/actions/userQuiz';
 import AnswerSection from '@/components/app/student/Quiz/AnswerSection/AnswerSection';
 import QuestionSection from '@/components/app/student/Quiz/QuestionSection/QuestionSection';
@@ -20,6 +20,7 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
 import { UserQuiz } from '@/types/userQuiz';
 import './QuizPage.scss';
+import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 
 const QuizPage: React.FC = () => {
   const { userQuizId } = useParams();
@@ -50,9 +51,11 @@ const QuizPage: React.FC = () => {
         const res = await run(getUserQuizById(userQuizId));
 
         if (!res?.success) {
+          message.error(UNEXPECTED_ERROR_MESSAGE);
           navigate(routePaths.JOIN);
         }
       } catch (error) {
+        message.error(UNEXPECTED_ERROR_MESSAGE);
         navigate(routePaths.JOIN);
       }
       setLocalLoading(false);
@@ -65,7 +68,9 @@ const QuizPage: React.FC = () => {
       return;
     }
 
-    const currentAttempt = cloneDeep(currentUserQuiz.attempts[currentUserQuiz.attempts.length - 1]);
+    const currentAttempt = currentUserQuiz?.attempts
+      ? cloneDeep(currentUserQuiz.attempts[currentUserQuiz.attempts.length - 1])
+      : {};
     const currentCompletedQuestions = currentAttempt?.completedQuestions || [];
     let flag = 0;
     const shuffledQuestions = currentUserQuiz?.shuffledQuestions || [];
@@ -131,16 +136,7 @@ const QuizPage: React.FC = () => {
     run(setLoading(true));
 
     try {
-      const res = await run(submitQuizAttempt(localUserQuiz));
-
-      if (res?.success) {
-        const quiz = res?.data?.quiz;
-        if (!quiz?.resultVisible) {
-          navigate(routePaths.HOME);
-          run(setLoading(false));
-          return;
-        }
-      }
+      console.log('submit');
     } catch (error) {
       navigate(routePaths.HOME);
       run(setLoading(false));
@@ -174,7 +170,7 @@ const QuizPage: React.FC = () => {
     <div className="quiz-page">
       <div className="header">
         { currentQuestion && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
-        <QuizTimer endTime={localUserQuiz?.quiz.endTime || 0} />
+        <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />
       </div>
       <div className="content">
         {renderContent()}
