@@ -6,6 +6,7 @@ const appReducer = createSlice({
     loading: false,
     syncing: false,
     windowWidth: window.innerWidth,
+    breakpoint: 'lg',
   },
   reducers: {
     setLoading: (state, action: { payload: boolean }) => {
@@ -17,8 +18,11 @@ const appReducer = createSlice({
     setWindowWidth: (state, action: { payload: number }) => {
       state.windowWidth = action.payload;
     },
+    setBreakpoint: (state, action: { payload: string }) => {
+      state.breakpoint = action.payload;
+    },
   },
 });
 
-export const { setLoading, setSyncing, setWindowWidth } = appReducer.actions;
+export const { setLoading, setSyncing, setWindowWidth, setBreakpoint } = appReducer.actions;
 export default appReducer.reducer;

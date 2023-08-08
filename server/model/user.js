@@ -25,6 +25,15 @@ const userSchema = new Schema(
     departmentId: String,
     studentId: String,
     staffCode: String,
+    birthday: Number,
+    studentYear: String,
+    phoneNumber: String,
+    className: String,
+    schoolName: String,
+    gender: Number,
+    createdAt: Number,
+    updatedAt: Number,
+    year: Number,
   },
   {
     timestamps: {

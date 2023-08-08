@@ -1,4 +1,53 @@
 @import '@/assets/styles/global.scss';
 
 .profile-page {
+  padding: toRem(32);
+  padding-bottom: toRem(60);
+
+  .page-title {
+    font-size: toRem(28);
+    color: $red-color;
+    margin-bottom: toRem(20);
+  }
+
+  .page-content {
+    display: flex;
+    gap: toRem(40);
+    padding: 0 toRem(32);
+    margin-top: toRem(32);
+
+    @media (max-width: toRem(960)) {
+      flex-direction: column;
+      padding: 0;
+      gap: 0;
+
+      .avatar-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+      }
+
+      .ant-descriptions-title {
+        text-align: center;
+      }
+    }
+
+    .ant-descriptions-title {
+      font-size: toRem(32);
+      color: $red-color;
+    }
+
+    .ant-descriptions-item-label {
+      font-weight: 600;
+      color: $main-black-color;
+    }
+
+    .user-avatar {
+      height: toRem(190);
+      width: toRem(190);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
 }

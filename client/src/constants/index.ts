@@ -66,3 +66,8 @@ export const QuizStatus = {
   CLOSED: 'closed',
   DONE: 'done',
 };
+
+export const GenderEnums = {
+  0: 'Female',
+  1: 'Male',
+};

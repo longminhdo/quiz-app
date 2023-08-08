@@ -9,4 +9,11 @@
     color: $red-color;
     margin-bottom: toRem(20);
   }
+
+  .page-content {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(32);
+    padding: 0 toRem(32);
+  }
 }

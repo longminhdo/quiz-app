@@ -60,10 +60,18 @@ exports.createUserInfoToken = async (req, res, next) => {
     }
 
     const encodedData = {
-      fullName: data.fullName || 'Name',
+      fullName: data.fullName,
       id: data.id,
       email: data.email || data.userName,
-      departmentId: data.departmentId,
+      departmentId: data?.departmentId,
+      birthday: data?.birthdate,
+      studentYear: data?.studentYear,
+      phoneNumber: data?.phoneNumber,
+      className: data?.className,
+      avatar: data?.avatarUrl,
+      schoolName: data?.schoolName,
+      gender: data?.gender,
+      year: data?.year,
     };
 
     if (data.studentId) {

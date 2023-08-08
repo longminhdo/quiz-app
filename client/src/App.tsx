@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import QuizManagementLayout from '@/layouts/QuizManagementLayout/QuizManagementLayout';
-import { setWindowWidth } from '@/modules/redux/slices/appReducer';
+import { setBreakpoint, setWindowWidth } from '@/modules/redux/slices/appReducer';
 import RouteWrapper from '@/modules/routes/RouteWrapper';
 
 import AccessDeniedPage from '@/pages/AccessDeniedPage/AccessDeniedPage';
@@ -33,6 +33,15 @@ import useTypedSelector from './hooks/useTypedSelector';
 import SettingsPage from '@/pages/SettingsPage/SettingsPage';
 import AudioWrapper from '@/components/HOCs/AudioWrapper';
 
+const breakpoints = {
+  xs: 480,
+  sm: 576,
+  md: 768,
+  lg: 992,
+  xl: 1200,
+  xxl: 1600,
+};
+
 const MessageWrapper = ({ children }) => {
   const [, contextHolder] = message.useMessage();
 
@@ -50,6 +59,17 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
+      const windowWidth = window.innerWidth;
+      let newBreakpoint = '';
+
+      for (const breakpoint in breakpoints) {
+        if (windowWidth < breakpoints[breakpoint]) {
+          newBreakpoint = breakpoint;
+          break;
+        }
+      }
+
+      run(setBreakpoint(newBreakpoint || 'xxl'));
       run(setWindowWidth(window.innerWidth));
     };
 

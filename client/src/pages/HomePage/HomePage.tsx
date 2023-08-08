@@ -45,7 +45,7 @@ const HomePage: React.FC = () => {
     <Spin spinning={loading}>
       <div className="home-page">
         <h1 className="page-title">My quizzes</h1>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+        <div className="page-content">
           <ClientQuizList
             data={onGoing}
             title="On going"

@@ -12,6 +12,12 @@ interface UserState {
   avatar?: string | null;
   _id?: string | null;
   fullName: string | null;
+  birthday?: string | number | null;
+  studentYear?: string | number | null;
+  phoneNumber?: string | number | null;
+  className?: string | number | null;
+  gender?: string | number | null;
+  year?: string | number | null;
 }
 
 interface Token {
@@ -34,6 +40,12 @@ const getInitialState = () => {
       staffCode: null,
       role: null,
       fullName: null,
+      birthday: null,
+      studentYear: null,
+      phoneNumber: null,
+      className: null,
+      gender: null,
+      year: null,
     };
   }
 
@@ -87,6 +99,11 @@ export const userReducer = (state = INITIAL_STATE, action): UserState => {
         staffCode: null,
         role: null,
         fullName: null,
+        birthday: null,
+        studentYear: null,
+        phoneNumber: null,
+        className: null,
+        gender: null,
       };
     }
 
