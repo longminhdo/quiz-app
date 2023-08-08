@@ -6,7 +6,7 @@ const appReducer = createSlice({
     loading: false,
     syncing: false,
     windowWidth: window.innerWidth,
-    breakpoint: 'lg',
+    breakpoint: 'xs',
   },
   reducers: {
     setLoading: (state, action: { payload: boolean }) => {

@@ -1,10 +1,10 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Avatar, Descriptions, Spin } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { getCurrentUser } from '@/actions/user';
 import { GenderEnums } from '@/constants';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
-import useTypedSelector from '@/hooks/useTypedSelector';
 import { convertLabel } from '@/utilities/helpers';
 import './ProfilePage.scss';
 
@@ -53,49 +53,50 @@ const infoList = [
   },
 ];
 
-const getMaxSpan = (breakpoint) => {
-  switch (breakpoint) {
-    case 'xxl':
-    case 'xl':
-      return 3;
-    case 'md':
-    case 'lg':
-      return 2;
-    default:
-      return 1;
-  }
-};
-
 const ProfilePage: React.FC = () => {
-  const [, loading] = useDispatchAsyncAction();
-  const currentUser = useTypedSelector(state => state.user);
-  const { breakpoint } = useTypedSelector(state => state.app);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [run, loading] = useDispatchAsyncAction();
+
+  useEffect(() => {
+    (async() => {
+      const res = await run(getCurrentUser());
+
+      console.log(res);
+      if (res?.success) {
+        setCurrentUser(res?.data || {});
+      }
+    })();
+
+    return () => setCurrentUser(null);
+  }, [run]);
 
   return (
     <Spin spinning={loading}>
       <div className="profile-page">
         <h1 className="page-title">Profile</h1>
         <div className="page-content">
-          <div className="avatar-wrapper">
-            {currentUser.avatar ? (
-              <Avatar
-                className="user-avatar"
-                src={currentUser.avatar}
-              />
-            ) : (
-              <Avatar
-                className="user-avatar"
-                icon={<UserOutlined />}
-                style={{ fontSize: 96 }}
-              />
-            )}
-          </div>
+          {currentUser ? (
+            <div className="avatar-wrapper">
+              { currentUser?.avatar ? (
+                <Avatar
+                  className="user-avatar"
+                  src={currentUser.avatar}
+                />
+              ) : (
+                <Avatar
+                  className="user-avatar"
+                  icon={<UserOutlined />}
+                  style={{ fontSize: 96 }}
+                />
+              )}
+            </div>
+          ) : null}
 
-          <Descriptions title={currentUser.fullName} column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 3 }}>
+          <Descriptions title={currentUser?.fullName} column={{ xs: 1, sm: 1, md: 2, lg: 2, xl: 3 }}>
             {infoList.map(item => {
               const value = currentUser?.[item.key];
-              const span = Math.min(getMaxSpan(breakpoint), item?.span || 1);
-              if (!value) {
+              const span = item?.span || 1;
+              if (value === undefined || value === null) {
                 return null;
               }
 
