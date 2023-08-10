@@ -71,3 +71,8 @@ export const GenderEnums = {
   0: 'Female',
   1: 'Male',
 };
+
+export const UserRole = {
+  TEACHER: 'teacher',
+  STUDENT: 'student',
+};
