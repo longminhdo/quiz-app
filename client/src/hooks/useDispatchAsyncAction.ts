@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { useCallback, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -18,16 +19,16 @@ const useDispatchAsyncAction = () => {
       actionCount.current += 1;
       const response = await dispatch(action);
       const { onSuccess, onError, disableErrorToast } = options;
+
       if (response.success) {
         onSuccess?.(response.result);
       } else {
         onError?.(response.error);
         if (!response.type && !disableErrorToast) {
-          console.error(response);
+          message.error(response.data);
         }
       }
 
-      // Update `submitting` state after callback call
       actionCount.current -= 1;
       if (actionCount.current === 0) {
         setSubmitting(false);
