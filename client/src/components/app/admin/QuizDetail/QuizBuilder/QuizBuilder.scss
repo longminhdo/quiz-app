@@ -18,14 +18,14 @@
   }
 
   .quiz-builder-content {
-    min-height: calc(100vh - toRem(230));
+    min-height: calc($screen-height - toRem(230));
 
     @media (max-width: 1300px) {
-      max-height: calc(100vh - toRem(230));
+      max-height: calc($screen-height - toRem(230));
     }
 
     height: fit-content;
-    max-height: calc(100vh - toRem(230));
+    max-height: calc($screen-height - toRem(230));
     overflow-y: auto;
     &::-webkit-scrollbar {
       display: none;

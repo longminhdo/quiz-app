@@ -33,7 +33,7 @@
   width: 90% !important;
   max-width: toRem(900);
   top: toRem(60);
-  height: calc(100vh - 120px);
+  height: calc($screen-height - 120px);
 
   .ant-modal-content {
     border-radius: toRem(8) toRem(8) 0 0;
@@ -41,7 +41,7 @@
 
     .ant-modal-body {
       overflow-y: scroll;
-      height: calc(100vh - 260px);
+      height: calc($screen-height - 260px);
 
       padding: toRem(20) toRem(24);
     }

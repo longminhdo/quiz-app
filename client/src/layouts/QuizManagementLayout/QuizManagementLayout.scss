@@ -7,7 +7,7 @@ $footer-height: toRem(60);
 .quiz-management-layout {
   .sider {
     overflow: auto;
-    height: 100vh;
+    height: $screen-height;
     background: $main-white-color;
     border-inline-end: 1px solid $gray-color-0_5;
   }
@@ -25,12 +25,12 @@ $footer-height: toRem(60);
   }
 
   .site-layout {
-    min-height: 100vh;
+    min-height: $screen-height;
 
     .content-container {
       overflow: initial;
       flex: none !important;
-      height: calc(100vh - $footer-height - $nav-bar-height);
+      height: calc($screen-height - $footer-height - $nav-bar-height);
       padding: toRem(14);
       padding-bottom: 0;
 

@@ -64,9 +64,8 @@
         padding-right: toRem(24);
       }
     }
-  }
-
-  .home.list-container.empty {
-    width: calc(100vw - toRem(48));
+    .home.list-container.empty {
+      width: calc(100vw - toRem(48));
+    }
   }
 }

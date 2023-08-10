@@ -5,7 +5,7 @@
     font-family: 'Be Vietnam Pro', sans-serif !important;
   }
 
-  height: 100vh;
+  height: $screen-height;
   width: 100vw;
   position: relative;
   display: flex;
@@ -102,7 +102,7 @@
 
 .login-callback {
   display: flex;
-  height: 100vh;
+  height: $screen-height;
   width: 100vw;
   justify-content: center;
   align-items: center;

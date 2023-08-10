@@ -4,7 +4,7 @@
   margin-top: toRem(20);
 
   .ant-table-body {
-    height: calc(100vh - toRem(410));
+    height: calc($screen-height - toRem(410));
   }
 }
 

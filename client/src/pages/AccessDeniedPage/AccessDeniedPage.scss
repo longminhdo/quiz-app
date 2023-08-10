@@ -6,12 +6,12 @@
   justify-content: center;
   align-items: center;
 
-  height: 100vh;
+  height: $screen-height;
   position: relative;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 
   .access-denied-illustration {
     max-width: 40%;

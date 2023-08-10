@@ -55,6 +55,12 @@ $mobile-width: 560px;
 $tablet-width: 768px;
 $desktop-width: 1024px;
 
+:root {
+  --doc-height: 100%;
+}
+
+$screen-height: var(--doc-height);
+
 @mixin mobile {
   @media (max-width: #{$mobile-width - 1px}) {
     @content;

@@ -6,7 +6,7 @@
   }
 
   position: relative;
-  height: 100vh;
+  height: $screen-height;
   width: 100vw;
   overflow: auto;
   background-color: $background-red-color;
@@ -30,7 +30,7 @@
   .content {
     background-color: $main-white-color;
     border-radius: toRem(10);
-    height: calc(100vh - toRem(144));
+    height: calc($screen-height - toRem(144));
     margin: 0 toRem(14);
     position: relative;
   }

@@ -16,7 +16,7 @@ $m-footer-height: toRem(64);
   .sider {
     background-color: $app-background-color;
     overflow: auto;
-    height: 100vh;
+    height: $screen-height;
 
     .join-quiz-btn {
       display: flex;
@@ -57,16 +57,16 @@ $m-footer-height: toRem(64);
 
   .site-layout {
     background-color: $app-background-color;
-    min-height: 100vh;
+    min-height: $screen-height;
 
     .content-container {
       overflow: initial;
       flex: none !important;
-      height: calc(100vh - $nav-bar-height);
+      height: calc($screen-height - $nav-bar-height);
       padding: 0;
 
       @media (max-width: toRem(991)) {
-        height: calc(100vh - $m-nav-bar-height - $m-footer-height);
+        height: calc($screen-height - $m-nav-bar-height - $m-footer-height);
         padding-right: 0;
         overflow: initial;
       }
