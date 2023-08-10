@@ -74,7 +74,7 @@ const ClientLeftMenu: React.FC = () => {
         theme="light"
         mode="inline"
         items={items}
-        selectedKeys={[selectedMenu.key || '']}
+        selectedKeys={[selectedMenu?.key || '']}
       />
     </div>
   );

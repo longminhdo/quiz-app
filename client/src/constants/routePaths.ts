@@ -9,11 +9,12 @@ export const routePaths = {
   QUIZZES: '/admin/quizzes',
   QUIZ_DETAIL: '/admin/quizzes/:quizId',
 
-  JOIN: '/quiz/join',
-  QUIZ: '/quiz/:userQuizId',
-  HOME: '/quiz/home',
-  PROFILE: '/quiz/profile',
-  SETTINGS: '/quiz/settings',
+  JOIN: '/join',
+  QUIZ: '/play/:userQuizId',
+  HOME: '/home',
+  PROFILE: '/profile',
+  SETTINGS: '/settings',
+  LIST: '/list',
 
   ACCESS_DENIED: '/access-denied',
 };

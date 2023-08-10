@@ -6,6 +6,16 @@
   flex-direction: row-reverse;
   margin-bottom: toRem(20);
 
+  .quiz-detail-code {
+    @include select-restricted;
+    height: toRem(32);
+    font-size: toRem(14);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
   .ant-input-affix-wrapper {
     max-width: toRem(320);
   }

@@ -2,17 +2,17 @@ import { CheckSquareFilled, CloseSquareFilled, DeleteOutlined, EditOutlined } fr
 import { Button, Image, Modal, Space, Table, Tag, Tooltip, message } from 'antd';
 import { isEmpty, isEqual } from 'lodash';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { deleteQuestion } from '@/actions/question';
+import { updateQuiz } from '@/actions/quiz';
+import EditQuestionForm from '@/components/app/admin/QuizDetail/QuestionListTab/EditQuestionForm/EditQuestionForm';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { LevelColorEnums, QuestionLevelEnums, QuestionType, QuestionTypeEnums } from '@/constants';
 import { NO_COLLECTION_ID } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import { setLoading } from '@/modules/redux/slices/appReducer';
 import { Question } from '@/types/question';
 import { convertLabel } from '@/utilities/helpers';
 import './QuestionList.scss';
-import EditQuestionForm from '@/components/app/admin/QuizDetail/QuestionListTab/EditQuestionForm/EditQuestionForm';
 
 const defaultQuestion = {
   title: 'Untitled Question',
@@ -38,13 +38,14 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
   const [questions, setQuestions] = useState <Array<Question>>(initialQuestions || []);
   const [pagination, setPagination] = useState<any>({ page: 1, pageSize: 10 });
 
+  const { currentQuiz } = useTypedSelector((state) => state.quiz);
+
   const paginationRef = useRef<any>();
   const questionsRef = useRef<any>();
   const actionRef = useRef<any>();
   const tableRef = useRef<any>(null);
   const filterRef = useRef<any>();
 
-  const { collectionId } = useParams();
   const [messageApi] = message.useMessage();
   const [run] = useDispatchAsyncAction();
 
@@ -79,15 +80,16 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
   };
 
   const handleQuestionDelete = useCallback(async(question) => {
+    const collectionId = currentQuiz?.createdIn;
     if (!collectionId) {
       messageApi.error(NO_COLLECTION_ID);
-      return;
+    } else {
+      run(setLoading(true));
+      const newQuiz = { ...currentQuiz, questions: (currentQuiz?.questions || []).filter(q => q._id !== question._id) };
+      await run(updateQuiz(newQuiz));
+      run(setLoading(false));
     }
-
-    run(setLoading(true));
-    await run(deleteQuestion({ collectionId, questionId: question._id }));
-    run(setLoading(false));
-  }, [collectionId, messageApi, run]);
+  }, [currentQuiz, messageApi, run]);
 
   const handlePaginationChange = (page, pageSize) => {
     setPagination({ page, pageSize });
@@ -259,6 +261,7 @@ const QuestionList = forwardRef< any, QuestionListProps>(({ initialQuestions, fi
   useImperativeHandle(ref, () => ({
     createNewQuestion,
   }));
+
 
   useEffect(() => {
     const { page, pageSize } = pagination;

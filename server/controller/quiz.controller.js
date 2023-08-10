@@ -41,9 +41,9 @@ module.exports.updateQuiz = async (req, res, next) => {
     const body = req.body;
 
     const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, body, { new: true })
-      .populate('questions');
+      .populate('questions assignTo');
 
-    return res.status(StatusCodes.OK).send({ success: true, data: { data: updatedQuiz } });
+    return res.status(StatusCodes.OK).send({ success: true, data: updatedQuiz });
   } catch (error) {
     next(error);
   }
@@ -128,11 +128,12 @@ module.exports.generateCode = async (req, res, next) => {
 
     const newCode = String(newCodeNum).padStart(6, '0');
 
-    await Quiz.findByIdAndUpdate(quizId, { code: newCode }, { new: true });
+    const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, { code: newCode }, { new: true })
+      .populate('questions assignTo');
 
     return res.status(StatusCodes.OK).send({
       success: true,
-      data: { code: newCode },
+      data: updatedQuiz,
     });
   } catch (error) {
     next(error);

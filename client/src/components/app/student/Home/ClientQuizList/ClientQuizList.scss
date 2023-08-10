@@ -5,6 +5,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: toRem(8);
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: toRem(8);
+    }
 
     .see-more-button {
       display: flex;
@@ -21,7 +28,6 @@
   }
 
   .quiz-list-title {
-    margin-bottom: toRem(8);
   }
 
   .list-container {

@@ -7,9 +7,9 @@ import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './HomePage.scss';
 
 const HomePage: React.FC = () => {
-  const [onGoing, setOnGoing] = useState<any>([]);
-  const [assigned, setAssigned] = useState<any>([]);
-  const [finished, setFinished] = useState<any>([]);
+  const [onGoing, setOnGoing] = useState<any>({ list: [], total: 0 });
+  const [assigned, setAssigned] = useState<any>({ list: [], total: 0 });
+  const [finished, setFinished] = useState<any>({ list: [], total: 0 });
 
   const [run, loading] = useDispatchAsyncAction();
 
@@ -28,15 +28,15 @@ const HomePage: React.FC = () => {
       const [onGoingRes, assignedRes, finishedRes] = res;
 
       if (onGoingRes.success) {
-        setOnGoing(onGoingRes.data.data);
+        setOnGoing({ list: onGoingRes.data.data, total: onGoingRes.data.pagination.total });
       }
 
       if (assignedRes.success) {
-        setAssigned(assignedRes.data.data);
+        setAssigned({ list: assignedRes.data.data, total: assignedRes.data.pagination.total });
       }
 
       if (finishedRes.success) {
-        setFinished(finishedRes.data.data);
+        setFinished({ list: finishedRes.data.data, total: finishedRes.data.pagination.total });
       }
     })();
   }, [run]);
@@ -47,16 +47,22 @@ const HomePage: React.FC = () => {
         <h1 className="page-title">My quizzes</h1>
         <div className="page-content">
           <ClientQuizList
-            data={onGoing}
+            data={onGoing.list}
             title="On going"
+            statuses={[QuizStatus.DOING]}
+            total={onGoing.total}
           />
           <ClientQuizList
-            data={assigned}
+            data={assigned.list}
             title="Assigned"
+            statuses={[QuizStatus.OPEN]}
+            total={assigned.total}
           />
           <ClientQuizList
-            data={finished}
+            data={finished.list}
             title="Finished"
+            statuses={[QuizStatus.CLOSED, QuizStatus.DONE]}
+            total={finished.total}
           />
         </div>
       </div>

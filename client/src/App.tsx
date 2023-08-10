@@ -20,6 +20,8 @@ import QuizDetailPage from '@/pages/QuizDetailPage/QuizDetailPage';
 import QuizListPage from '@/pages/QuizListPage/QuizListPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
+import ListPage from '@/pages/ListPage/ListPage';
+import SettingsPage from '@/pages/SettingsPage/SettingsPage';
 
 import AdminRoute from '@/components/HOCs/AdminRoute';
 import UserWrapper from '@/components/HOCs/UserWrapper';
@@ -27,11 +29,11 @@ import ProtectedRoute from '@/components/common/ProtectedRoute';
 import UnprotectedRoute from '@/components/common/UnprotectedRoute';
 import { routePaths } from '@/constants/routePaths';
 
+import AudioWrapper from '@/components/HOCs/AudioWrapper';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import QuizLayout from '@/layouts/QuizLayout/QuizLayout';
+
 import useTypedSelector from './hooks/useTypedSelector';
-import SettingsPage from '@/pages/SettingsPage/SettingsPage';
-import AudioWrapper from '@/components/HOCs/AudioWrapper';
 
 const breakpoints = {
   xs: 480,
@@ -158,6 +160,18 @@ const App: React.FC = () => {
               />
 
               <Route
+                path={routePaths.LIST}
+                element={(
+                  <ProtectedRoute>
+                    <UserWrapper>
+                      <QuizLayout>
+                        <ListPage />
+                      </QuizLayout>
+                    </UserWrapper>
+                  </ProtectedRoute>
+                )}
+              />
+              <Route
                 path={routePaths.HOME}
                 element={(
                   <ProtectedRoute>
@@ -217,6 +231,7 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 )}
               />
+
 
               <Route
                 path={routePaths.LOGIN}
