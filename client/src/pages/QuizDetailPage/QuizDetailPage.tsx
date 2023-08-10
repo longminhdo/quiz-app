@@ -8,6 +8,7 @@ import MyCard from '@/components/common/MyCard/MyCard';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './QuizDetailPage.scss';
+import AnalyticsTab from '@/components/app/admin/QuizDetail/AnalyticsTab/AnalyticsTab';
 
 const QUIZ_TAB_PATHS = {
   QUESTIONS: 'questions',
@@ -80,7 +81,7 @@ const QuizDetailPage: React.FC = () => {
 
       <MyCard className="card-content">
         {selectedTab === QUIZ_TAB_PATHS.QUESTIONS ? (<QuestionListTab />) : null}
-        {/* {selectedTab === QUIZ_TAB_PATHS.ANALYTICS ? (<AnalyticsTab />) : null} */}
+        {selectedTab === QUIZ_TAB_PATHS.ANALYTICS ? (<AnalyticsTab />) : null}
         {selectedTab === QUIZ_TAB_PATHS.CONFIGURATIONS ? (<ConfigurationTab />) : null}
       </MyCard>
 

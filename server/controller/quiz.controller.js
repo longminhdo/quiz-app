@@ -207,3 +207,14 @@ module.exports.removeAssign = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports.getQuizAnalytics = async (req, res, next) => {
+  try {
+    const { quizId } = req.params;
+    const userQuizzes = await UserQuiz.find({ quiz: quizId }).populate('attempts owner');
+
+    return res.status(StatusCodes.OK).send({ success: true, data: userQuizzes });
+  } catch (error) {
+    next(error);
+  }
+};

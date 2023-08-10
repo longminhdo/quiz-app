@@ -63,3 +63,8 @@ export const assign = (payload: { assignTo: Array<string>; quizId: string }) => 
     },
   }),
 });
+
+export const getQuizAnalytics = (quizId: string) => ({
+  type: QuizAction.GET_QUIZ_ANALYTICS,
+  promise: GET(`/quizzes/${quizId}/analytics`),
+});

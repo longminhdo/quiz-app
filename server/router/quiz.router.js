@@ -57,4 +57,10 @@ router.post(
   catchAsync(quiz.assign),
 );
 
+router.get(
+  '/:quizId/analytics',
+  validateQuizId,
+  catchAsync(quiz.getQuizAnalytics),
+);
+
 module.exports = router;

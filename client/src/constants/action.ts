@@ -40,6 +40,7 @@ export enum QuizAction {
   GENERATE_QUIZ_CODE = 'generate_quiz_code',
   FLUSH_QUIZ = 'flush_quiz',
   ASSIGN = 'assign',
+  GET_QUIZ_ANALYTICS = 'get_quiz_analytics',
 }
 
 export enum QuizAttemptAction {
