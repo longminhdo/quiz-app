@@ -29,6 +29,7 @@ const useDispatchAsyncAction = () => {
         }
       }
 
+      // Update `submitting` state after callback call
       actionCount.current -= 1;
       if (actionCount.current === 0) {
         setSubmitting(false);

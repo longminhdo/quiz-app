@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ssoLogin } from '@/actions/authentication';
+import LoadingScreen from '@/components/others/LoadingScreen/LoadingScreen';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
 import './LoginPage.scss';
 
-const LoginCallback = () => {
+const LoginCallback: React.FC = () => {
   const [run] = useDispatchAsyncAction();
   const [searchParams] = useSearchParams();
   const ssoToken = searchParams.get('token');
@@ -17,7 +18,7 @@ const LoginCallback = () => {
     }
   }, [run, ssoToken]);
 
-  return null;
+  return <div className="login-callback"><LoadingScreen /></div>;
 };
 
 export default LoginCallback;

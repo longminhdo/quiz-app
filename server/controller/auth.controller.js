@@ -6,6 +6,7 @@ const { UserRole } = require('../constant/role');
 const { encrypt, decrypt } = require('../utils/crypto');
 const User = require('../model/user');
 const { SSOAuthentication } = require('../constant/errorMessage');
+const { StatusCodes } = require('../constant/statusCodes');
 
 const {
   SSO_ENCODED_STATE,
@@ -28,7 +29,8 @@ exports.createEncodedState = (req, res, next) => {
       },
       SSO_ENCODED_STATE,
     );
-    return res.status(200).send({
+    return res.status(StatusCodes.OK).send({
+      success: true,
       data: {
         url: `${SSO_DOMAIN}/ssoserver/sso?redirectUrl=${FE_BASE_URL}&clientId=${SSO_CLIENT_ID}&encodedState=${token}`,
       },
@@ -105,7 +107,7 @@ exports.createUserInfoToken = async (req, res, next) => {
       await user.save();
     }
 
-    return res.send({ data: { token: accessToken, refreshToken } });
+    return res.status(StatusCodes.OK).send({ success: true, data: { token: accessToken, refreshToken } });
   } catch (error) {
     return next(error);
   }
