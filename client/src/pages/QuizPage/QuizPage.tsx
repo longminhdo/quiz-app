@@ -208,11 +208,13 @@ const QuizPage: React.FC = () => {
           <MuteButton onClick={handleToggleMute} muted={muted} />
         </div>
         <div className="footer-right">
-          <QuizNavigation
-            current={willSubmit ? currentUserQuiz?.shuffledQuestions?.length : currentQuestion?.index}
-            total={currentUserQuiz?.shuffledQuestions?.length}
-            onChange={handleNavigationChange}
-          />
+          {(localLoading || isFinished) ? null : (
+            <QuizNavigation
+              current={willSubmit ? currentUserQuiz?.shuffledQuestions?.length : currentQuestion?.index}
+              total={currentUserQuiz?.shuffledQuestions?.length}
+              onChange={handleNavigationChange}
+            />
+          ) }
         </div>
       </div>
     </div>

@@ -1,4 +1,158 @@
 @import '@/assets/styles/global.scss';
 
 .completed-screen {
+  h2 {
+    color: $red-color;
+    text-transform: uppercase;
+    font-size: toRem(60);
+  }
+
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: toRem(20);
+
+  .result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: toRem(20);
+
+    .ant-progress-inner {
+      width: toRem(160) !important;
+      height: toRem(160) !important;
+
+      .ant-progress-text {
+        .text-content {
+          display: flex;
+          flex-direction: column;
+          gap: toRem(4);
+
+          .ratio-text {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+
+            span {
+              font-size: toRem(48);
+              font-weight: 600;
+            }
+
+            sup {
+              font-size: toRem(20);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: toRem(8);
+    flex-direction: column;
+
+    .btn {
+      width: toRem(220);
+      height: toRem(48);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: toRem(18);
+      font-weight: 600;
+    }
+
+    .go-home-btn {
+      background-color: $red-color;
+      color: $main-white-color;
+
+      span[role='img'] {
+        transform: translateY(toRem(-1));
+      }
+
+      &:hover {
+        border-color: $red-color !important;
+      }
+    }
+
+    .retry-btn {
+      cursor: pointer;
+      @include select-restricted;
+      font-size: toRem(18);
+      text-decoration: underline;
+      padding: toRem(4) toRem(20);
+
+      &:hover {
+        color: $red-color;
+        font-weight: 600;
+      }
+    }
+  }
+
+  @media (max-width: toRem(900)) {
+    h2 {
+      font-size: toRem(48);
+    }
+
+    .result {
+      .ant-progress-inner {
+        width: toRem(140) !important;
+        height: toRem(140) !important;
+
+        .ant-progress-text {
+          .text-content {
+            .ratio-text {
+              span {
+                font-size: toRem(36);
+              }
+
+              sup {
+                font-size: toRem(18);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .actions {
+      .btn {
+        width: toRem(200);
+        height: toRem(46);
+        font-size: toRem(18);
+      }
+
+      .go-home-btn {
+        background-color: $red-color;
+        color: $main-white-color;
+
+        span {
+          transform: translateY(toRem(1.3));
+        }
+
+        &:hover {
+          border-color: $red-color !important;
+        }
+      }
+
+      .retry-btn {
+        cursor: pointer;
+        @include select-restricted;
+        font-size: toRem(18);
+        text-decoration: underline;
+        padding: toRem(4) toRem(20);
+
+        &:hover {
+          color: $red-color;
+          font-weight: 600;
+        }
+      }
+    }
+  }
 }
