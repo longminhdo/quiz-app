@@ -46,7 +46,6 @@ const QuizPage: React.FC = () => {
 
   const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
-
   useEffect(() => () => {
     run(flushUserQuiz());
   }, [run]);
@@ -195,7 +194,7 @@ const QuizPage: React.FC = () => {
 
         <div className="right">
           { currentUserQuiz && !isFinished && <QuizFraction current={currentQuestion?.index} total={currentUserQuiz?.shuffledQuestions?.length} />}
-          { currentUserQuiz && localUserQuiz?.type === QuizType.TEST && <QuizTimer endTime={localUserQuiz?.quiz?.endTime || 0} />}
+          { currentUserQuiz && localUserQuiz?.type === QuizType.TEST && <QuizTimer onFinish={handleSubmit} endTime={localUserQuiz?.quiz?.endTime || 0} />}
           { currentUserQuiz && localUserQuiz?.type === QuizType.ASSIGNMENT && <Deadline endTime={localUserQuiz?.quiz?.endTime || 0} />}
         </div>
       </div>

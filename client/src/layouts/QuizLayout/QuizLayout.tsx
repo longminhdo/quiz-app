@@ -10,9 +10,9 @@ import { useNavigate } from 'react-router-dom';
 import QuizLogo from '@/assets/images/quiz-logo.png';
 import ClientHomeButton from '@/components/others/ClientHomeButton/ClientHomeButton';
 import ClientLeftMenu from '@/components/others/ClientLeftMenu/ClientLeftMenu';
+import ClientLogoutButton from '@/components/others/ClientLogoutButton/ClientLogoutButton';
 import ClientProfileButton from '@/components/others/ClientProfileButton/ClientProfileButton';
 import ClientSearchButton from '@/components/others/ClientSearchButton/ClientSearchButton';
-import ClientSettingsButton from '@/components/others/ClientSettingsButton/ClientSettingsButton';
 import MobileJoinButton from '@/components/others/MobileJoinButton/MobileJoinButton';
 import SearchQuiz from '@/components/others/SearchQuiz/SearchQuiz';
 import { routePaths } from '@/constants/routePaths';
@@ -100,7 +100,7 @@ const QuizLayout: React.FC<QuizLayoutProps> = ({ children }) => {
 
                 <div className="mobile-footer-right">
                   <ClientSearchButton className="m-footer-btn" />
-                  <ClientSettingsButton className="m-footer-btn" />
+                  <ClientLogoutButton className="m-footer-btn" />
                 </div>
 
                 <MobileJoinButton />

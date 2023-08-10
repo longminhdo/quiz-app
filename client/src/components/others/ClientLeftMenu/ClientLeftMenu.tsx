@@ -17,7 +17,7 @@ import './ClientLeftMenu.scss';
 const menuItems = [
   { label: 'Home', icon: HomeOutlined, key: routePaths.HOME },
   { label: 'Profile', icon: UserOutlined, key: routePaths.PROFILE },
-  { label: 'Settings', icon: SettingOutlined, key: routePaths.SETTINGS },
+  // { label: 'Settings', icon: SettingOutlined, key: routePaths.SETTINGS },
   { label: 'Logout', icon: ExportOutlined, key: 'logout' },
 ];
 

@@ -54,7 +54,6 @@ const ClientQuizList: React.FC<QuizListProps> = ({ data = [], title, showSeeMore
             </Row>
           )}
       </div>
-
     </div>
   );
 };
