@@ -74,3 +74,7 @@ export enum UserQuizAction {
   FLUSH_USER_QUIZ = 'flush_user_quiz',
   UPDATE_ATTEMPT = 'update_attempt',
 }
+
+export enum AnalyticsAction {
+  COUNT = 'count',
+}

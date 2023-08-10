@@ -15,6 +15,7 @@ const quizRoute = require('./router/quiz.router');
 const userRoute = require('./router/user.router');
 const userQuizRoute = require('./router/userQuiz.router');
 const quizAttemptRoute = require('./router/quizAttempt.router');
+const analyticsRoute = require('./router/analytics.router');
 
 const { MONGO_USERNAME, MONGO_PASSWORD, MONGO_HOSTNAME, LISTENING_PORT = 8080 } = process.env;
 
@@ -53,6 +54,7 @@ app.use('/quizzes', quizRoute);
 app.use('/users', userRoute);
 app.use('/userQuizzes', userQuizRoute);
 app.use('/quizAttempts', quizAttemptRoute);
+app.use('/analytics', analyticsRoute);
 
 // Handle error
 // should has 4 params so express can identify this as error handler

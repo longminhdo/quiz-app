@@ -158,8 +158,6 @@ module.exports.assign = async (req, res, next) => {
       }
     }
 
-    console.log(newAssignTo);
-
     const userQuizzesData = newAssignTo.map(user => ({
       owner: user,
       quiz: quizId,
