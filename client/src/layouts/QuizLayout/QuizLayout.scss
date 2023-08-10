@@ -3,6 +3,9 @@
 $sider-width: toRem(260);
 $nav-bar-height: toRem(80);
 
+$m-nav-bar-height: toRem(60);
+$m-footer-height: toRem(64);
+
 .quiz-layout {
   * {
     font-family: 'Be Vietnam Pro', sans-serif !important;
@@ -63,7 +66,9 @@ $nav-bar-height: toRem(80);
       padding: 0;
 
       @media (max-width: toRem(991)) {
+        height: calc(100vh - $m-nav-bar-height - $m-footer-height);
         padding-right: 0;
+        overflow: initial;
       }
 
       .content {
@@ -72,6 +77,62 @@ $nav-bar-height: toRem(80);
         overflow: auto;
         border-radius: toRem(12) 0 0 0;
       }
+    }
+  }
+
+  .mobile-header {
+    background-color: $red-color;
+    height: $m-nav-bar-height;
+    padding: 0 toRem(14);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo-container {
+      background-color: $main-white-color;
+      height: 80%;
+      padding: toRem(4) toRem(8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: toRem(4);
+
+      img {
+        height: 100%;
+      }
+    }
+  }
+
+  .mobile-footer {
+    background-color: $red-color;
+    height: $m-footer-height;
+    padding: 0 toRem(14);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    .mobile-footer-left {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      gap: toRem(8);
+    }
+
+    .mobile-footer-right {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      gap: toRem(8);
+    }
+
+    .m-footer-btn {
+      height: 68% !important;
+      width: toRem(56);
     }
   }
 }

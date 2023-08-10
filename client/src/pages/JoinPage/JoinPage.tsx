@@ -23,7 +23,7 @@ const JoinPage: React.FC = () => {
   const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
   const join = async () => {
-    const res = await run(joinQuiz(code));
+    const res = await run(joinQuiz(code), { disableErrorToast: true });
 
     if (res?.statusCode === 200) {
       const { data } = res;

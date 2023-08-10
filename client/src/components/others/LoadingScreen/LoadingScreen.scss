@@ -45,13 +45,10 @@
   }
 
   @media (max-width: toRem(1304)) {
-    align-items: flex-start;
-
     .content-wrapper {
-      margin-top: toRem(140);
       width: 80%;
       align-items: center;
-      gap: toRem(80);
+      gap: toRem(20);
 
       .logo-img {
         width: 60%;

@@ -1,18 +1,18 @@
-import { HomeFilled } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { routePaths } from '@/constants/routePaths';
 import MyTextButton from '@/components/common/MyTextButton/MyTextButton';
-import './ClientHomeButton.scss';
+import './ClientProfileButton.scss';
 
-interface ClientHomeButtonProps {
+interface ClientProfileButtonProps {
   className?: string;
 }
 
-const ClientHomeButton: React.FC<ClientHomeButtonProps> = ({ className = '' }) => {
+const ClientProfileButton: React.FC<ClientProfileButtonProps> = ({ className = '' }) => {
   const navigate = useNavigate();
   const handleHomeClick = () => {
-    navigate(routePaths.HOME);
+    navigate(routePaths.PROFILE);
   };
 
   return (
@@ -21,9 +21,9 @@ const ClientHomeButton: React.FC<ClientHomeButtonProps> = ({ className = '' }) =
       onClick={handleHomeClick}
       style={{ fontSize: 18, height: 34 }}
     >
-      <HomeFilled />
+      <UserOutlined />
     </MyTextButton>
   );
 };
 
-export default ClientHomeButton;
+export default ClientProfileButton;

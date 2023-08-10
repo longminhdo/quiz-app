@@ -1,12 +1,13 @@
 import { Spin, message } from 'antd';
-import React, { useEffect, useRef, useState } from 'react';
 import { isEqual } from 'lodash';
+import React, { useEffect, useRef, useState } from 'react';
 import { getUserQuizzes } from '@/actions/userQuiz';
 import ClientQuizList from '@/components/app/student/Home/ClientQuizList/ClientQuizList';
 import MyPagination from '@/components/common/MyPagination/MyPagination';
 import { QuizStatus } from '@/constants';
 import { UNEXPECTED_ERROR_MESSAGE } from '@/constants/message';
 import useDispatchAsyncAction from '@/hooks/useDispatchAsyncAction';
+import useTypedSelector from '@/hooks/useTypedSelector';
 import useUpdateUrlQuery from '@/hooks/useUpdateUrlQuery';
 import './ListPage.scss';
 
@@ -18,11 +19,14 @@ const ListStatus = {
 
 const ListPage: React.FC = () => {
   const [list, setList] = useState<any>([]);
-  const [run, loading] = useDispatchAsyncAction();
   const [total, setTotal] = useState<number>(0);
-  const { currentParams } = useUpdateUrlQuery();
-  const debounce = useRef<any>();
   const [title, setTitle] = useState<string>('');
+
+  const debounce = useRef<any>();
+
+  const [run, loading] = useDispatchAsyncAction();
+  const { currentParams } = useUpdateUrlQuery();
+  const { windowWidth } = useTypedSelector(state => state.app);
 
   const [messageApi] = message.useMessage();
 
@@ -45,7 +49,8 @@ const ListPage: React.FC = () => {
 
       debounce.current = setTimeout(async () => {
         try {
-          const params = { limit: 8, ...currentParams };
+          const limit = windowWidth > 991 ? 8 : 4;
+          const params = { limit, ...currentParams };
           params?.timestamp && delete params.timestamp;
           const response = await run(getUserQuizzes({ ...params }));
           if (response?.statusCode === 200) {
@@ -69,7 +74,7 @@ const ListPage: React.FC = () => {
             data={list}
             title={title}
             showSeeMore={false}
-            span={6}
+            span={windowWidth > 991 ? 6 : 12}
             total={total}
           />
           <MyPagination
@@ -77,7 +82,7 @@ const ListPage: React.FC = () => {
             total={total}
             showSizeChanger={false}
             style={{ justifyContent: 'center' }}
-            defaultPageSize={8}
+            defaultPageSize={windowWidth > 991 ? 8 : 4}
           />
         </div>
       </div>

@@ -47,4 +47,26 @@
       flex-direction: column;
     }
   }
+
+  @media (max-width: toRem(991)) {
+    .home.list-container {
+      width: calc(100vw - toRem(24));
+      overflow-x: auto;
+      padding: toRem(4);
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+
+      .list {
+        width: max-content;
+        padding-right: toRem(24);
+      }
+    }
+  }
+
+  .home.list-container.empty {
+    width: calc(100vw - toRem(48));
+  }
 }

@@ -42,6 +42,7 @@ const QuizPage: React.FC = () => {
 
   const [run] = useDispatchAsyncAction();
   const { currentUserQuiz } = useTypedSelector(state => state.userQuiz);
+  const { windowWidth } = useTypedSelector(state => state.app);
 
   const { handleToggleMute, handleTogglePlay, muted, isPlaying } = useContext(AudioContext);
 
@@ -204,8 +205,8 @@ const QuizPage: React.FC = () => {
       <div className="footer">
         <div className="footer-left">
           <SettingsButton />
-          <PlayButton onClick={handleTogglePlay} isPlaying={isPlaying} />
-          <MuteButton onClick={handleToggleMute} muted={muted} />
+          { windowWidth > 768 ? <PlayButton onClick={handleTogglePlay} isPlaying={isPlaying} /> : null}
+          { windowWidth > 768 ? <MuteButton onClick={handleToggleMute} muted={muted} /> : null}
         </div>
         <div className="footer-right">
           {(localLoading || isFinished) ? null : (

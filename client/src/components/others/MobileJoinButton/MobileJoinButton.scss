@@ -1,0 +1,18 @@
+@import '@/assets/styles/global.scss';
+
+.mobile-join-button {
+  color: $main-white-color;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  font-size: toRem(54);
+  transform: translate(-50%, -35%);
+  background-color: $red-color;
+  border-radius: 50%;
+  height: toRem(80);
+  width: toRem(80);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: toRem(3) solid $main-white-color;
+}

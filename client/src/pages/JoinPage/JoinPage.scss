@@ -32,9 +32,6 @@
     gap: toRem(8);
   }
 
-  @media (max-width: toRem(921)) {
-  }
-
   .card-container {
     @include box-shadow;
     width: 100%;
@@ -91,6 +88,42 @@
     .error-message {
       color: $error-color;
       font-size: toRem(14);
+    }
+  }
+
+  @media (max-width: toRem(991)) {
+    .card-container {
+      h1 {
+        font-size: toRem(36);
+      }
+
+      .enter-btn {
+        height: toRem(54);
+        font-size: toRem(24);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        box-sizing: border-box;
+
+        &:hover {
+          border-color: $red-color;
+        }
+      }
+
+      .input-wrapper {
+        width: 90%;
+
+        .ant-input {
+          height: toRem(54);
+          font-size: toRem(22);
+        }
+
+        .error-message {
+          color: $error-color;
+          font-size: toRem(14);
+        }
+      }
     }
   }
 }

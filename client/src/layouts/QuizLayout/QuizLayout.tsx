@@ -8,14 +8,19 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QuizLogo from '@/assets/images/quiz-logo.png';
+import ClientHomeButton from '@/components/others/ClientHomeButton/ClientHomeButton';
 import ClientLeftMenu from '@/components/others/ClientLeftMenu/ClientLeftMenu';
+import ClientProfileButton from '@/components/others/ClientProfileButton/ClientProfileButton';
+import ClientSearchButton from '@/components/others/ClientSearchButton/ClientSearchButton';
+import ClientSettingsButton from '@/components/others/ClientSettingsButton/ClientSettingsButton';
+import MobileJoinButton from '@/components/others/MobileJoinButton/MobileJoinButton';
 import SearchQuiz from '@/components/others/SearchQuiz/SearchQuiz';
 import { routePaths } from '@/constants/routePaths';
 import { ClientLayoutContext } from '@/contexts/ClientLayoutContext';
 import { MenuItem } from '@/types/layout';
 import './QuizLayout.scss';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content, Footer, Sider } = Layout;
 
 interface QuizLayoutProps {
   children: ReactElement;
@@ -70,12 +75,37 @@ const QuizLayout: React.FC<QuizLayoutProps> = ({ children }) => {
           </Sider>
 
           <Layout className="site-layout">
-            <Header className="header">
-              <SearchQuiz />
-            </Header>
+            { collapsed ? (
+              <Header className="mobile-header">
+                <div className="logo-container">
+                  <img className="logo-img" src={QuizLogo} alt="" />
+                </div>
+              </Header>
+            )
+              : (
+                <Header className="header">
+                  <SearchQuiz />
+                </Header>
+              )}
             <Content className="content-container">
               <div className="content">{children}</div>
             </Content>
+
+            { collapsed ? (
+              <Footer className="mobile-footer">
+                <div className="mobile-footer-left">
+                  <ClientHomeButton className="m-footer-btn" />
+                  <ClientProfileButton className="m-footer-btn" />
+                </div>
+
+                <div className="mobile-footer-right">
+                  <ClientSearchButton className="m-footer-btn" />
+                  <ClientSettingsButton className="m-footer-btn" />
+                </div>
+
+                <MobileJoinButton />
+              </Footer>
+            ) : null }
           </Layout>
         </Layout>
       </ClientLayoutContext.Provider>

@@ -16,4 +16,18 @@
     gap: toRem(32);
     padding: 0 toRem(32);
   }
+
+  @media (max-width: toRem(991)) {
+    padding: toRem(24);
+    padding-bottom: toRem(48);
+    overflow: hidden;
+    .page-content {
+      padding: 0;
+    }
+
+    .quiz-card {
+      width: toRem(260);
+      height: toRem(220);
+    }
+  }
 }
