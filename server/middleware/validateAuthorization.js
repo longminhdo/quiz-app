@@ -18,7 +18,7 @@ module.exports = async (req, res, next) => {
       return next();
     }
 
-    if (email !== adminEmail) {
+    if (email === adminEmail) {
       return next();
     }
 
