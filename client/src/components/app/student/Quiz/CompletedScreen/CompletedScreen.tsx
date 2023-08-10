@@ -52,6 +52,7 @@ const CompletedScreen: React.FC = () => {
           <Progress
             strokeColor="#d85140"
             gapDegree={75}
+            strokeWidth={8}
             type="circle"
             percent={statistics?.ratio}
             format={(ratio) => (
