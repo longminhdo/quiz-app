@@ -7,7 +7,6 @@ import useTypedSelector from '@/hooks/useTypedSelector';
 import { routePaths } from '@/constants/routePaths';
 import './CompletedScreen.scss';
 
-
 const CompletedScreen: React.FC = () => {
   const navigate = useNavigate();
   const { currentUserQuiz } = useTypedSelector(state => state.userQuiz);
@@ -73,7 +72,6 @@ const CompletedScreen: React.FC = () => {
           />
         </div>
       ) : null}
-
 
       <div className="actions">
         <Button className="btn go-home-btn" onClick={handleBackHome}>
