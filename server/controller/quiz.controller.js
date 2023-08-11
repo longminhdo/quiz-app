@@ -21,6 +21,7 @@ module.exports.createQuiz = async (req, res, next) => {
         shuffledQuestions: shuffleArray(quiz.questions),
         type: QuizType.ASSIGNMENT,
         assigned: true,
+        title: quiz.title,
       }));
 
       UserQuiz.insertMany(userQuizzesData);
@@ -150,7 +151,6 @@ module.exports.assign = async (req, res, next) => {
 
     for (const assignedId of assignTo) {
       const userQuizByItem = await UserQuiz.findOne({ owner: assignedId, quiz: quizId });
-      console.log(userQuizByItem);
       if (userQuizByItem) {
         await UserQuiz.findByIdAndUpdate(userQuizByItem._id, { assigned: true });
       } else {
@@ -164,6 +164,7 @@ module.exports.assign = async (req, res, next) => {
       shuffledQuestions: shuffleArray(currentQuiz.questions),
       type: QuizType.ASSIGNMENT,
       assigned: true,
+      title: currentQuiz.title,
     }));
 
     UserQuiz.insertMany(userQuizzesData);
