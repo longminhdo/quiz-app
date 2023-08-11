@@ -107,6 +107,7 @@ module.exports.join = async (req, res, next) => {
         status: UserQuizStatus.DOING,
         shuffledQuestions: shuffleArray(quizFound.questions),
         type: QuizType.TEST,
+        title: quizFound.title,
       });
 
       const createdUserQuiz = await newUserQuiz.save();
@@ -235,6 +236,39 @@ module.exports.submit = async (req, res, next) => {
       .populate('shuffledQuestions quiz attempts');
 
     return res.status(StatusCodes.OK).send({ success: true, data: updatedUserQuiz });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports.searchUserQuizzes = async (req, res, next) => {
+  try {
+    const { _id } = req.userData;
+    const { offset = 1, limit = 5, search } = req.body;
+
+    const skipCount = (Number(offset) - 1) * Number(limit);
+    const searchOptions = { title: { $regex: search, $options: 'i' } };
+
+    !search && delete searchOptions.title;
+
+    const quizzes = await UserQuiz.find({ owner: _id, ...searchOptions })
+      .populate('quiz')
+      .skip(skipCount)
+      .limit(Number(limit));
+
+    const totalQuizzes = await UserQuiz.countDocuments({ owner: _id, ...searchOptions });
+
+    return res.status(StatusCodes.OK).send({
+      success: true,
+      data: {
+        data: quizzes.map(c => ({ ...c._doc, ownerData: req.userData })),
+        pagination: {
+          total: totalQuizzes,
+          offset: Number(offset),
+          limit: Number(limit),
+        },
+      },
+    });
   } catch (error) {
     next(error);
   }

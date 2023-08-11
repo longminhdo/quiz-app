@@ -15,6 +15,7 @@ export const routePaths = {
   PROFILE: '/profile',
   SETTINGS: '/settings',
   LIST: '/list',
+  MOBILE_SEARCH: '/mobile-search',
 
   ACCESS_DENIED: '/access-denied',
 };

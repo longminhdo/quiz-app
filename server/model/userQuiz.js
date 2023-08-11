@@ -11,6 +11,7 @@ const userQuizSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    title: String,
     quiz: {
       type: Schema.Types.ObjectId,
       ref: 'Quiz',

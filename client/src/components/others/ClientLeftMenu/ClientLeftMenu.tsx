@@ -1,7 +1,6 @@
 import {
   ExportOutlined,
   HomeOutlined,
-  SettingOutlined,
   UserOutlined,
 } from '@ant-design/icons';
 import { Avatar, Menu, MenuProps } from 'antd';
@@ -17,7 +16,6 @@ import './ClientLeftMenu.scss';
 const menuItems = [
   { label: 'Home', icon: HomeOutlined, key: routePaths.HOME },
   { label: 'Profile', icon: UserOutlined, key: routePaths.PROFILE },
-  // { label: 'Settings', icon: SettingOutlined, key: routePaths.SETTINGS },
   { label: 'Logout', icon: ExportOutlined, key: 'logout' },
 ];
 

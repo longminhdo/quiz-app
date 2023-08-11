@@ -73,6 +73,7 @@ export enum UserQuizAction {
   UPDATE_FLUSH_USER_QUIZ = 'update_flush_user_quiz',
   FLUSH_USER_QUIZ = 'flush_user_quiz',
   UPDATE_ATTEMPT = 'update_attempt',
+  SEARCH = 'search_user_quizzes',
 }
 
 export enum AnalyticsAction {

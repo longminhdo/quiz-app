@@ -61,3 +61,10 @@ export const submit = (submittingUserQuiz) => {
     }),
   };
 };
+
+export const searchUserQuizzes = (query) => ({
+  type: UserQuizAction.SEARCH,
+  promise: POST('/userQuizzes/search', {
+    body: query,
+  }),
+});

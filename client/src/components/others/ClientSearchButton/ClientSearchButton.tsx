@@ -12,7 +12,7 @@ interface ClientSearchButtonProps {
 const ClientSearchButton: React.FC<ClientSearchButtonProps> = ({ className = '' }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(routePaths.SETTINGS);
+    navigate(routePaths.MOBILE_SEARCH);
   };
 
   return (

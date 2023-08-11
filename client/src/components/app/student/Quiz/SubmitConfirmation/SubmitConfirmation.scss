@@ -9,6 +9,13 @@
   flex-direction: column;
   gap: toRem(24);
 
+  @media (max-width: toRem(991)) {
+    h2 {
+      padding: 20px;
+      font-size: toRem(18);
+    }
+  }
+
   .submit-btn {
     display: flex;
     justify-content: center;

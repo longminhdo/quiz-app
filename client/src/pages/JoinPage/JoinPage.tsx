@@ -39,10 +39,6 @@ const JoinPage: React.FC = () => {
     join();
   };
 
-  const handleHomeClick = () => {
-    navigate(routePaths.HOME);
-  };
-
   const handleKeyup = (event) => {
     if (event.key === 'Enter' || event.keyCode === 13) {
       join();

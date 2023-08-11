@@ -38,4 +38,9 @@ router.post('/:userQuizId/submit',
   catchAsync(userQuiz.submit),
 );
 
+router.post(
+  '/search',
+  catchAsync(userQuiz.searchUserQuizzes),
+);
+
 module.exports = router;

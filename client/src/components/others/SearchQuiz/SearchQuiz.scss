@@ -5,6 +5,7 @@
   justify-content: flex-start;
   align-items: center;
   width: 100%;
+  position: relative;
 
   .ant-input-affix-wrapper {
     max-width: toRem(600);
@@ -27,6 +28,36 @@
 
     .ant-input-clear-icon {
       font-size: toRem(16);
+    }
+  }
+
+  .search-result-popup {
+    position: absolute;
+    z-index: 5;
+    background-color: $main-white-color;
+    top: toRem(58);
+    width: 100%;
+    max-width: toRem(600);
+    border: toRem(1.2) solid $blue-color;
+    border-radius: toRem(8);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    .search-result-item {
+      width: 100%;
+
+      display: flex;
+      max-height: toRem(48);
+      justify-content: flex-start;
+      align-items: center;
+      padding: 0 toRem(10);
+
+      &:hover {
+        cursor: pointer;
+        user-select: none;
+        background-color: $sub-red-color;
+      }
     }
   }
 }

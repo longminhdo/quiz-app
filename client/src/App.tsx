@@ -21,6 +21,7 @@ import QuizListPage from '@/pages/QuizListPage/QuizListPage';
 import QuizPage from '@/pages/QuizPage/QuizPage';
 import ReportsPage from '@/pages/ReportsPage/ReportsPage';
 import ListPage from '@/pages/ListPage/ListPage';
+import MobileSearchPage from '@/pages/MobileSearchPage/MobileSearchPage';
 import SettingsPage from '@/pages/SettingsPage/SettingsPage';
 
 import AdminRoute from '@/components/HOCs/AdminRoute';
@@ -231,7 +232,18 @@ const App: React.FC = () => {
                   </ProtectedRoute>
                 )}
               />
-
+              <Route
+                path={routePaths.MOBILE_SEARCH}
+                element={(
+                  <ProtectedRoute>
+                    <UserWrapper>
+                      <QuizLayout>
+                        <MobileSearchPage />
+                      </QuizLayout>
+                    </UserWrapper>
+                  </ProtectedRoute>
+                )}
+              />
 
               <Route
                 path={routePaths.LOGIN}

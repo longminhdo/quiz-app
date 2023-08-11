@@ -1,0 +1,23 @@
+@import '@/assets/styles/global.scss';
+
+.mobile-search-page {
+  padding: toRem(20);
+  padding-bottom: toRem(60);
+
+  .page-title {
+    font-size: toRem(28);
+    color: $red-color;
+    margin-bottom: toRem(20);
+  }
+
+  .page-content {
+    display: flex;
+    flex-direction: column;
+    gap: toRem(32);
+    padding: 0 toRem(32);
+  }
+
+  .search-result-item {
+    height: toRem(46);
+  }
+}

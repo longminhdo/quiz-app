@@ -58,7 +58,6 @@ $desktop-width: 1024px;
 :root {
   --doc-height: 100%;
 }
-
 $screen-height: var(--doc-height);
 
 @mixin mobile {
